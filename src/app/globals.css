@@ -239,5 +239,5 @@ input, textarea, select {
 
 ::-webkit-scrollbar { width: 10px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--background); }
-::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 10px; border: 2px solid var(--background); }
+::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 0; border: 2px solid var(--background); }
 ::-webkit-scrollbar-thumb:hover { background: #a1a1a6; }

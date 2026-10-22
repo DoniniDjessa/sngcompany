@@ -1,8 +1,8 @@
-import Link from "next/link"
-import { Check, ChevronRight, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
+import { Check, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
 import ActivityTiles from "@/components/site/ActivityTiles"
 import CmsImage from "@/components/site/CmsImage"
 import Counter from "@/components/site/Counter"
+import HeroCarousel from "@/components/site/HeroCarousel"
 import QuoteForm from "@/components/site/QuoteForm"
 import { telHref } from "@/lib/content"
 import { getContent } from "@/lib/content-server"
@@ -10,44 +10,13 @@ import styles from "./site.module.css"
 
 const WHY_ICONS = [Users, Shield, Clock, TrendingUp]
 
-/** Words rise one by one from behind a mask */
-function Words({ text, from = 0 }: { text: string; from?: number }) {
-  return (
-    <>
-      {text.split(" ").map((w, i) => (
-        <span key={i} className={styles.word}>
-          <span style={{ ["--w" as string]: from + i }}>{w}</span>{" "}
-        </span>
-      ))}
-    </>
-  )
-}
-
 export default async function Home() {
   const { home: h, company } = await getContent()
-  const firstLine = h.hero.title1.split(" ").length
 
   return (
     <main className={styles.main}>
-      {/* --- HERO --- */}
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>{h.hero.eyebrow}</p>
-          <h1 className={styles.mainTitle}>
-            <Words text={h.hero.title1} />
-            <br />
-            <span className={styles.titleMuted}><Words text={h.hero.title2} from={firstLine} /></span>
-          </h1>
-          <p className={styles.heroDesc}>{h.hero.text}</p>
-          <div className={styles.heroActions}>
-            <Link href="/#services" className="btn-primary">Découvrir nos services</Link>
-            <Link href="/contact" className="link-more">Nous contacter <ChevronRight /></Link>
-          </div>
-        </div>
-        <div className={styles.heroMedia}>
-          <CmsImage src={h.hero.image} alt={company.name} priority sizes="(max-width: 1100px) 100vw, 1100px" className={styles.cover} />
-        </div>
-      </section>
+      {/* --- HERO CAROUSEL --- */}
+      <HeroCarousel slides={h.hero.slides} />
 
       {/* --- ACTIVITIES --- */}
       <section id="services" className={styles.activities}>

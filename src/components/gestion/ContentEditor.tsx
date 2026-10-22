@@ -195,6 +195,7 @@ function ListField({ field, value, onChange }: { field: Extract<FieldDef, { type
     onChange(next)
   }
   const blank = Object.fromEntries(field.fields.map((f) => [f.key, ""]))
+  const titleKey = (field.fields.find((f) => f.type === "text") ?? field.fields[0]).key
   return (
     <div className="list-field">
       <div className="list-head">
@@ -205,16 +206,18 @@ function ListField({ field, value, onChange }: { field: Extract<FieldDef, { type
         <div key={i} className="list-item">
           <div className="list-item-head">
             <span className="list-num">{i + 1}</span>
-            <span className="cell-main list-title">{String(item[field.fields[0].key] || `${field.itemLabel} ${i + 1}`)}</span>
+            <span className="cell-main list-title">{String(item[titleKey] || `${field.itemLabel} ${i + 1}`)}</span>
             <button type="button" className="bo-icon-btn" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Monter"><ChevronDown style={{ transform: "rotate(180deg)" }} /></button>
             <button type="button" className="bo-icon-btn" disabled={i === value.length - 1} onClick={() => move(i, 1)} aria-label="Descendre"><ChevronDown /></button>
             <button type="button" className="bo-icon-btn danger" onClick={() => onChange(value.filter((_, j) => j !== i))} aria-label="Supprimer"><Trash /></button>
           </div>
           <div className="form-grid">
             {field.fields.map((f) => (
-              <div key={f.key} className={f.type === "textarea" ? "full" : ""}>
-                <label className="form-label">{f.label}</label>
-                {f.type === "textarea" ? (
+              <div key={f.key} className={f.type === "text" ? "" : "full"}>
+                <label className="form-label" htmlFor={`${field.key}-${i}-${f.key}`}>{f.label}</label>
+                {f.type === "image" ? (
+                  <ImageField id={`${field.key}-${i}-${f.key}`} value={String(item[f.key] ?? "")} onChange={(v) => onChange(value.map((it, j) => (j === i ? { ...it, [f.key]: v } : it)))} />
+                ) : f.type === "textarea" ? (
                   <textarea className="form-textarea" rows={2} value={String(item[f.key] ?? "")} onChange={(e) => onChange(value.map((it, j) => (j === i ? { ...it, [f.key]: e.target.value } : it)))} />
                 ) : (
                   <input className="form-input" value={String(item[f.key] ?? "")} onChange={(e) => onChange(value.map((it, j) => (j === i ? { ...it, [f.key]: e.target.value } : it)))} />

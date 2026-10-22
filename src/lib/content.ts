@@ -20,8 +20,19 @@ export interface CompanyContent {
   carsSiteUrl: string
 }
 
+export interface HeroSlide {
+  image: string
+  eyebrow: string
+  title: string
+  /** second line, lighter */
+  subtitle: string
+  text: string
+  cta: string
+  link: string
+}
+
 export interface HomeContent {
-  hero: { eyebrow: string; title1: string; title2: string; text: string; image: string }
+  hero: { slides: HeroSlide[] }
   stats: { value: string; label: string }[]
   about: { eyebrow: string; title: string; text: string; image: string; values: string[] }
   why: { title: string; items: { title: string; text: string }[] }
@@ -46,11 +57,44 @@ export const DEFAULT_COMPANY: CompanyContent = {
 
 export const DEFAULT_HOME: HomeContent = {
   hero: {
-    eyebrow: SITE.name,
-    title1: "Un seul partenaire.",
-    title2: "Pour tous vos besoins.",
-    text: "Location de véhicules, transport, équipements, lavage et élevage — à Abidjan et partout en Côte d'Ivoire.",
-    image: "/images/bg-car.webp",
+    slides: [
+      {
+        image: "/images/bg-car.webp",
+        eyebrow: SITE.name,
+        title: "Un seul partenaire.",
+        subtitle: "Pour tous vos besoins.",
+        text: "Location de véhicules, transport, équipements, lavage et élevage — à Abidjan et partout en Côte d'Ivoire.",
+        cta: "Découvrir nos activités",
+        link: "/#services",
+      },
+      {
+        image: "/images/luxury-toyota-camry-abidjan.png",
+        eyebrow: "Location de véhicules",
+        title: "Roulez en toute sérénité.",
+        subtitle: "Avec ou sans chauffeur.",
+        text: "Berlines, SUV et minibus récents, à la journée ou au mois, pour vos déplacements et vos événements.",
+        cta: "Voir l'offre",
+        link: "/services/location-vehicules",
+      },
+      {
+        image: "/images/van.jpeg",
+        eyebrow: "Transport & Logistique",
+        title: "Vos biens,",
+        subtitle: "livrés à temps.",
+        text: "Livraisons, déménagements et transport de marchandises, partout en Côte d'Ivoire.",
+        cta: "Découvrir",
+        link: "/services/transport-logistique",
+      },
+      {
+        image: "/images/mercedes.jpeg",
+        eyebrow: "Lavage de véhicules",
+        title: "Votre véhicule",
+        subtitle: "comme neuf.",
+        text: "Lavage express, complet et soins premium, en station ou à domicile.",
+        cta: "Découvrir",
+        link: "/services/lavage-vehicules",
+      },
+    ],
   },
   stats: [
     { value: "5", label: "métiers complémentaires" },
@@ -128,7 +172,7 @@ export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`
 // ---------------------------------------------------------------------------
 export type FieldDef =
   | { key: string; label: string; type: "text" | "textarea" | "image" | "tags"; hint?: string }
-  | { key: string; label: string; type: "list"; fields: { key: string; label: string; type: "text" | "textarea" }[]; itemLabel: string }
+  | { key: string; label: string; type: "list"; fields: { key: string; label: string; type: "text" | "textarea" | "image" }[]; itemLabel: string }
 
 export interface SectionDef {
   title: string
@@ -158,15 +202,25 @@ export const HOME_DOC: DocDef = {
   href: "/",
   sections: [
     {
-      title: "Hero",
-      description: "Le haut de la page : grand titre, texte et photo principale.",
+      title: "Carrousel (haut de page)",
+      description: "Une photo par diapositive, plein écran. Format paysage, 2400 px de large conseillé.",
       path: "hero",
       fields: [
-        { key: "eyebrow", label: "Sur-titre", type: "text" },
-        { key: "title1", label: "Titre — ligne 1", type: "text" },
-        { key: "title2", label: "Titre — ligne 2 (en gris)", type: "text" },
-        { key: "text", label: "Texte d'introduction", type: "textarea" },
-        { key: "image", label: "Photo principale", type: "image", hint: "Format paysage, 2000 px de large conseillé" },
+        {
+          key: "slides",
+          label: "Diapositives",
+          type: "list",
+          itemLabel: "diapositive",
+          fields: [
+            { key: "image", label: "Photo", type: "image" },
+            { key: "eyebrow", label: "Sur-titre", type: "text" },
+            { key: "link", label: "Lien du bouton (ex. /services/elevage)", type: "text" },
+            { key: "title", label: "Titre", type: "text" },
+            { key: "subtitle", label: "Seconde ligne (plus claire)", type: "text" },
+            { key: "cta", label: "Texte du bouton", type: "text" },
+            { key: "text", label: "Texte", type: "textarea" },
+          ],
+        },
       ],
     },
     {

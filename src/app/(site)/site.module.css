@@ -16,86 +16,8 @@
   margin-bottom: 8px;
 }
 
-/* ============ HERO ============ */
-.hero {
-  padding: 80px 22px 0;
-  text-align: center;
-}
-
-.heroContent > * {
-  opacity: 0;
-  animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-.heroContent > :nth-child(1) { animation-delay: 0.05s; }
-.heroContent > :nth-child(2) { animation: none; opacity: 1; }
-.heroContent > :nth-child(3) { animation-delay: 0.75s; }
-.heroContent > :nth-child(4) { animation-delay: 0.9s; }
-
-/* title: each word rises from behind a mask */
-.word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
-}
-
-.word > span {
-  display: inline-block;
-  transform: translateY(105%);
-  animation: wordUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  animation-delay: calc(0.15s + var(--w) * 0.07s);
-}
-
-@keyframes wordUp { to { transform: none; } }
-
-.titleMuted { color: var(--text-muted); }
-
-.mainTitle {
-  font-size: clamp(2.8rem, 7.5vw, 6rem);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1.02;
-  color: var(--text-main);
-}
-
-
-.heroDesc {
-  max-width: 680px;
-  margin: 24px auto 0;
-  font-size: clamp(1.1rem, 1.8vw, 1.45rem);
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
-
-.heroActions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 28px;
-  margin-top: 34px;
-  flex-wrap: wrap;
-}
-
-.heroMedia {
-  position: relative;
-  max-width: 1100px;
-  height: clamp(320px, 52vw, 600px);
-  margin: 64px auto 0;
-  border-radius: 28px;
-  overflow: hidden;
-  opacity: 0;
-  animation: riseIn 1.4s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
 @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @keyframes riseIn { from { opacity: 0; transform: translateY(60px) scale(0.96); } to { opacity: 1; transform: none; } }
-
-@media (prefers-reduced-motion: reduce) {
-  .heroContent > *, .heroMedia { animation: none; opacity: 1; }
-  .word > span { animation: none; transform: none; }
-}
 
 /* ============ ACTIVITIES ============ */
 .activities { padding: 120px 0 20px; }
@@ -169,7 +91,7 @@
   max-width: 1100px;
   height: clamp(280px, 45vw, 540px);
   margin: 0 auto;
-  border-radius: 28px;
+  border-radius: 0;
   overflow: hidden;
   background: var(--surface-2);
 }
@@ -246,7 +168,7 @@
 
 .featureCard {
   background: var(--card-bg);
-  border-radius: 28px;
+  border-radius: 0;
   padding: 36px 30px;
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
 }
@@ -320,7 +242,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   background: var(--surface-2);
-  border-radius: 28px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -364,7 +286,7 @@
 .contactInfo {
   background: #000;
   color: #f5f5f7;
-  border-radius: 28px;
+  border-radius: 0;
   padding: 52px 46px;
 }
 
@@ -418,7 +340,7 @@
 
 .contactForm {
   background: var(--card-bg);
-  border-radius: 28px;
+  border-radius: 0;
   padding: 52px 46px;
 }
 
@@ -534,7 +456,7 @@
   order: -1;
   width: 96px;
   height: 96px;
-  border-radius: 26px;
+  border-radius: 0;
   background: var(--ink);
   color: var(--ink-contrast);
   display: flex;
@@ -556,7 +478,7 @@
 
 .featureItem {
   background: var(--surface-2);
-  border-radius: 24px;
+  border-radius: 0;
   padding: 32px 28px;
 }
 
@@ -586,14 +508,14 @@
   max-width: 1200px;
   height: clamp(260px, 42vw, 520px);
   margin: 56px auto 0;
-  border-radius: 28px;
+  border-radius: 0;
   overflow: hidden;
   animation: curtain 1.4s 0.3s cubic-bezier(0.7, 0, 0.2, 1) both;
 }
 
 @keyframes curtain {
-  from { clip-path: inset(0 48% 0 48% round 28px); }
-  to { clip-path: inset(0 0 0 0 round 28px); }
+  from { clip-path: inset(0 48% 0 48%); }
+  to { clip-path: inset(0 0 0 0); }
 }
 
 /* prestations: numbered editorial list, no prices */
@@ -748,7 +670,7 @@
   align-items: flex-start;
   gap: 18px;
   padding: 26px;
-  border-radius: 24px;
+  border-radius: 0;
   background: var(--surface-2);
   font-weight: 700;
   font-size: 1.05rem;
@@ -784,8 +706,6 @@
 
 @media (max-width: 768px) {
   .main { padding-top: 52px; }
-  .hero { padding-top: 56px; }
-  .heroMedia { margin-top: 44px; border-radius: 20px; }
   .section, .graySection, .darkSection, .premiumSection { padding: 80px 18px; }
   .statsInner { grid-template-columns: 1fr 1fr; row-gap: 40px; }
   .statItem:nth-child(3) { border-left: none; }
@@ -796,5 +716,5 @@
   .contactInfo,
   .contactForm,
   .carBannerText { padding: 36px 26px; }
-  .aboutMedia { border-radius: 20px; }
+  .aboutMedia { border-radius: 0; }
 }

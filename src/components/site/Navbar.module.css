@@ -79,7 +79,7 @@
   padding: 10px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 18px;
+  border-radius: 0;
   box-shadow: var(--shadow-lg);
   opacity: 0;
   visibility: hidden;
@@ -100,7 +100,7 @@
   align-items: center;
   gap: 14px;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 0;
 }
 
 .dropdownItem:hover { background: var(--surface-2); }
@@ -121,7 +121,7 @@
   width: 38px;
   height: 38px;
   min-width: 38px;
-  border-radius: 10px;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;

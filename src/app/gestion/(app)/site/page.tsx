@@ -30,11 +30,11 @@ export default function SiteContentPage() {
         <Link href="/gestion/site/accueil" className="content-card wide">
           <div className="content-thumb">
             {/* eslint-disable-next-line @next/next/no-img-element -- static file or signed R2 redirect */}
-            {home.hero.image ? <img src={imgSrc(home.hero.image)} alt="" /> : <Dashboard />}
+            {home.hero.slides[0]?.image ? <img src={imgSrc(home.hero.slides[0].image)} alt="" /> : <Dashboard />}
           </div>
           <div className="content-info">
             <strong>Page d&apos;accueil</strong>
-            <span>Hero, chiffres clés, à propos, engagements, étapes, bannière, contact</span>
+            <span>Carrousel, chiffres clés, à propos, engagements, étapes, bannière, contact</span>
             <small>{when("home")}</small>
           </div>
           <ChevronRight />

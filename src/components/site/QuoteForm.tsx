@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { ArrowRight, Check } from "@/components/icons"
-import { SERVICES, serviceBySlug, type ServiceSlug } from "@/lib/services"
-import { SITE } from "@/lib/site"
+import type { ServiceSlug } from "@/lib/services"
+import { useSite } from "./SiteContext"
 import { supabase } from "@/lib/supabase"
 import styles from "./QuoteForm.module.css"
 
@@ -11,6 +11,7 @@ const EMPTY = { name: "", phone: "", email: "", wished_date: "", details: "" }
 
 // "Nous contacter" form, saved as a "demande" that the team handles in /gestion/demandes
 export default function QuoteForm({ service: initial }: { service?: ServiceSlug }) {
+  const { company, services } = useSite()
   const [service, setService] = useState<ServiceSlug>(initial ?? "location-vehicules")
   const [values, setValues] = useState(EMPTY)
   const [sentRef, setSentRef] = useState<string | null>(null)
@@ -34,7 +35,7 @@ export default function QuoteForm({ service: initial }: { service?: ServiceSlug 
     })
     setSending(false)
     if (error) {
-      setError(`L'envoi a échoué. Réessayez ou appelez-nous au ${SITE.phone}.`)
+      setError(`L'envoi a échoué. Réessayez ou appelez-nous au ${company.phone}.`)
       return
     }
     setSentRef(data as string)
@@ -47,7 +48,7 @@ export default function QuoteForm({ service: initial }: { service?: ServiceSlug 
         <span className={styles.successIcon}><Check /></span>
         <h3>Message envoyé !</h3>
         <p>
-          Votre message <strong>{sentRef}</strong> a bien été reçu. Un conseiller {SITE.name} vous rappelle sous 24h.
+          Votre message <strong>{sentRef}</strong> a bien été reçu. Un conseiller {company.name} vous rappelle sous 24h.
         </p>
         <button type="button" className="btn-outline" onClick={() => setSentRef(null)}>Nouveau message</button>
       </div>
@@ -58,7 +59,7 @@ export default function QuoteForm({ service: initial }: { service?: ServiceSlug 
     <form className={styles.form} onSubmit={submit}>
       <span className={styles.groupLabel}>Votre message concerne</span>
       <div className={styles.services} role="radiogroup" aria-label="Service concerné">
-        {SERVICES.map((s) => (
+        {services.map((s) => (
           <button
             type="button"
             key={s.slug}
@@ -92,7 +93,7 @@ export default function QuoteForm({ service: initial }: { service?: ServiceSlug 
         </label>
         <label className={`${styles.field} ${styles.full}`}>
           <span>Votre message *</span>
-          <textarea required rows={4} value={values.details} onChange={set("details")} placeholder={serviceBySlug(service)?.quoteHint} />
+          <textarea required rows={4} value={values.details} onChange={set("details")} placeholder={services.find((s) => s.slug === service)?.quoteHint} />
         </label>
       </div>
 

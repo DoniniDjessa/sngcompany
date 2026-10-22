@@ -28,9 +28,29 @@
 }
 
 .heroContent > :nth-child(1) { animation-delay: 0.05s; }
-.heroContent > :nth-child(2) { animation-delay: 0.15s; }
-.heroContent > :nth-child(3) { animation-delay: 0.3s; }
-.heroContent > :nth-child(4) { animation-delay: 0.45s; }
+.heroContent > :nth-child(2) { animation: none; opacity: 1; }
+.heroContent > :nth-child(3) { animation-delay: 0.75s; }
+.heroContent > :nth-child(4) { animation-delay: 0.9s; }
+
+/* title: each word rises from behind a mask */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.word > span {
+  display: inline-block;
+  transform: translateY(105%);
+  animation: wordUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(0.15s + var(--w) * 0.07s);
+}
+
+@keyframes wordUp { to { transform: none; } }
+
+.titleMuted { color: var(--text-muted); }
 
 .mainTitle {
   font-size: clamp(2.8rem, 7.5vw, 6rem);
@@ -40,7 +60,6 @@
   color: var(--text-main);
 }
 
-.mainTitle span { color: var(--text-muted); }
 
 .heroDesc {
   max-width: 680px;
@@ -75,6 +94,27 @@
 
 @media (prefers-reduced-motion: reduce) {
   .heroContent > *, .heroMedia { animation: none; opacity: 1; }
+  .word > span { animation: none; transform: none; }
+}
+
+/* ============ ACTIVITIES ============ */
+.activities { padding: 120px 0 20px; }
+
+.activitiesHead {
+  max-width: 1320px;
+  margin: 0 auto 36px;
+  padding: 0 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.activitiesHead p { color: var(--text-muted); font-size: 1.05rem; }
+
+@media (hover: none) {
+  .activitiesHead p { display: none; }
 }
 
 /* ============ TILES ============ */
@@ -540,103 +580,116 @@
   line-height: 1.6;
 }
 
-/* offers */
-.offers {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+/* hero photo of a service page: opens like a curtain */
+.pageHeroMedia {
+  position: relative;
+  max-width: 1200px;
+  height: clamp(260px, 42vw, 520px);
+  margin: 56px auto 0;
+  border-radius: 28px;
+  overflow: hidden;
+  animation: curtain 1.4s 0.3s cubic-bezier(0.7, 0, 0.2, 1) both;
 }
 
-.offer {
-  position: relative;
-  background: var(--surface-2);
-  border-radius: 28px;
-  padding: 44px 36px;
+@keyframes curtain {
+  from { clip-path: inset(0 48% 0 48% round 28px); }
+  to { clip-path: inset(0 0 0 0 round 28px); }
+}
+
+/* prestations: numbered editorial list, no prices */
+.prestaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.prestaHead {
+  position: sticky;
+  top: calc(var(--header-height) + 40px);
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  align-items: flex-start;
+  gap: 22px;
 }
 
-.offer:hover { transform: scale(1.02); }
+.prestations { list-style: none; border-top: 1px solid var(--card-border); }
 
-.offer h3 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--text-main);
+.prestations li { border-bottom: 1px solid var(--card-border); }
+
+.presta {
+  position: relative;
+  display: grid;
+  grid-template-columns: 70px 1fr 28px;
+  align-items: center;
+  gap: 20px;
+  padding: 30px 8px;
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.price { color: var(--text-main); }
-
-.price small {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-muted);
+/* a gray band slides in from the left on hover */
+.presta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--surface-2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1);
 }
 
-.price strong {
+.presta:hover::before { transform: scaleX(1); }
+
+.prestaNum {
   font-family: var(--font-primary);
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   font-weight: 800;
   letter-spacing: -0.04em;
-}
-
-.price span {
-  font-weight: 500;
   color: var(--text-muted);
-  margin-left: 6px;
+  opacity: 0.45;
+  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.offer ul {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
+.presta:hover .prestaNum { opacity: 1; transform: translateX(10px); }
 
-.offer li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-secondary);
-}
-
-.offer li svg { flex-shrink: 0; color: var(--text-main); }
-
-.offer :global(.btn-primary),
-.offer :global(.btn-outline) { justify-content: center; }
-
-.featured {
-  background: #000;
-  color: #f5f5f7;
-}
-
-.featured h3,
-.featured .price { color: #f5f5f7; }
-.featured .price small,
-.featured .price span { color: #86868b; }
-.featured li { color: #d2d2d7; }
-.featured li svg { color: #f5f5f7; }
-.featured :global(.btn-primary) { background: #f5f5f7; color: #1d1d1f; }
-
-.featuredTag {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  font-size: 0.75rem;
+.prestaText strong {
+  display: block;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #f5f5f7;
-  padding: 4px 12px;
-  border: 1px solid #424245;
-  border-radius: 980px;
+  color: var(--text-main);
+  margin-bottom: 4px;
 }
 
-.note {
-  margin-top: 22px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+.prestaText > span {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.prestaArrow {
+  font-size: 1.3rem;
+  color: var(--text-main);
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.presta:hover .prestaArrow { opacity: 1; transform: none; }
+
+@media (max-width: 1024px) {
+  .prestaGrid { grid-template-columns: 1fr; gap: 30px; }
+  .prestaHead { position: static; }
+}
+
+@media (max-width: 560px) {
+  .presta { grid-template-columns: 48px 1fr; padding: 24px 4px; }
+  .prestaNum { font-size: 1.8rem; }
+  .prestaArrow { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pageHeroMedia { animation: none; }
 }
 
 /* faq */
@@ -716,7 +769,6 @@
   .featuresList,
   .steps,
   .otherServices { grid-template-columns: repeat(2, 1fr); }
-  .offers { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; }
 }
 
 @media (max-width: 1024px) {

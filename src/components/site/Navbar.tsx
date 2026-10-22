@@ -4,8 +4,8 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { ChevronDown, Mail, Moon, Phone, Sun } from "@/components/icons"
 import { useTheme } from "@/components/theme"
-import { SERVICES } from "@/lib/services"
-import { SITE } from "@/lib/site"
+import { telHref } from "@/lib/content"
+import { useSite } from "./SiteContext"
 import Logo from "./Logo"
 import styles from "./Navbar.module.css"
 
@@ -15,6 +15,7 @@ const MENU = [
 
 export default function Navbar() {
   const { theme, toggle } = useTheme()
+  const { company, services } = useSite()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -37,7 +38,7 @@ export default function Navbar() {
       <nav className={styles.nav} aria-label="Navigation principale">
         <div className={styles.container}>
           <div className={styles.navContent}>
-            <Logo />
+            <Logo name={company.name} tagline={company.tagline} />
 
             <div className={`${styles.backdrop} ${isMenuOpen ? styles.backdropVisible : ""}`} onClick={() => setIsMenuOpen(false)} />
 
@@ -47,7 +48,7 @@ export default function Navbar() {
               <li className={`${styles.menuItem} ${styles.hasDropdown}`}>
                 <Link href="/#services">Nos Services <ChevronDown className={styles.caret} /></Link>
                 <div className={styles.dropdown}>
-                  {SERVICES.map((s) => (
+                  {services.map((s) => (
                     <Link key={s.slug} href={`/services/${s.slug}`} className={styles.dropdownItem}>
                       <span className={styles.dropdownIcon} data-tone={s.tone}><s.icon /></span>
                       <span>
@@ -62,8 +63,8 @@ export default function Navbar() {
                 <li key={item.path} className={styles.menuItem}><Link href={item.path}>{item.name}</Link></li>
               ))}
               <li className={styles.mobileContact}>
-                <a href={SITE.phoneHref}><Phone /> {SITE.phone}</a>
-                <a href={`mailto:${SITE.email}`}><Mail /> {SITE.email}</a>
+                <a href={telHref(company.phone)}><Phone /> {company.phone}</a>
+                <a href={`mailto:${company.email}`}><Mail /> {company.email}</a>
                 <Link href="/contact" className="btn-primary">Nous contacter</Link>
               </li>
             </ul>

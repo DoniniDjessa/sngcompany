@@ -145,6 +145,14 @@ export function FieldInput({ field, options, value, onChange }: {
 }) {
   const listId = useId()
   const lookupRows = useCollection(field.lookup?.collection ?? "clients")
+  if (field.type === "toggle") {
+    const on = value !== false
+    return (
+      <button type="button" role="switch" aria-checked={on} className={`switch ${on ? "on" : ""}`} onClick={() => onChange(!on)}>
+        <span className="switch-knob" /> {on ? "Oui" : "Non"}
+      </button>
+    )
+  }
   if (field.type === "photos" || field.type === "documents") {
     return <FilesField folder={field.type} value={Array.isArray(value) ? (value as string[]) : []} onChange={onChange} />
   }

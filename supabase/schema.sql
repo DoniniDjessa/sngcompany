@@ -143,3 +143,56 @@ end $$;
 
 revoke all on function sng_submit_demande(text, text, text, text, date, text) from public;
 grant execute on function sng_submit_demande(text, text, text, text, date, text) to anon, authenticated;
+
+-- =====================================================================
+-- Contenu du site (textes et images modifiables depuis Gestion › Site web)
+-- key: "company", "home", "service:<slug>" — value: document JSON fusionné avec les valeurs par défaut du code
+-- =====================================================================
+create table if not exists "sng-content" (
+  key text primary key,
+  value jsonb not null default '{}'::jsonb,
+  updated_at timestamptz default now()
+);
+alter table "sng-content" enable row level security;
+drop policy if exists sng_staff_all on "sng-content";
+create policy sng_staff_all on "sng-content" for all to authenticated using (sng_is_staff()) with check (sng_is_staff());
+drop policy if exists sng_public_read on "sng-content";
+create policy sng_public_read on "sng-content" for select to anon, authenticated using (true);
+
+-- =====================================================================
+-- Catalogue d'équipements (boutique en ligne)
+-- =====================================================================
+alter table "sng-equipements" add column if not exists description text;
+alter table "sng-equipements" add column if not exists published boolean default true;
+drop policy if exists sng_public_catalogue on "sng-equipements";
+create policy sng_public_catalogue on "sng-equipements" for select to anon, authenticated using (published = true);
+
+alter table "sng-locations-equipement" add column if not exists equipment_id uuid;
+alter table "sng-locations-equipement" add column if not exists phone text;
+alter table "sng-locations-equipement" add column if not exists email text;
+alter table "sng-locations-equipement" add column if not exists notes text;
+alter table "sng-locations-equipement" add column if not exists source text default 'backoffice';
+
+-- Commande depuis le site : vérifie la disponibilité, calcule le montant, enregistre une demande à valider
+create or replace function sng_submit_commande(
+  p_equipment_id uuid, p_quantity int, p_debut date, p_fin date,
+  p_name text, p_phone text, p_email text default null, p_site text default null, p_notes text default null
+) returns text
+language plpgsql security definer set search_path = public as $$
+declare e "sng-equipements"%rowtype; v_days int; v_ref text;
+begin
+  select * into e from "sng-equipements" where id = p_equipment_id and published = true;
+  if not found then raise exception 'Équipement introuvable'; end if;
+  if coalesce(p_quantity, 0) < 1 then raise exception 'Quantité invalide'; end if;
+  if p_quantity > coalesce(e.available, 0) then raise exception 'Stock insuffisant : % disponible(s)', coalesce(e.available, 0); end if;
+  if p_debut is null or p_fin is null or p_fin < p_debut or p_debut < current_date then raise exception 'Dates invalides'; end if;
+  if coalesce(trim(p_name), '') = '' or coalesce(trim(p_phone), '') = '' then raise exception 'Nom et téléphone requis'; end if;
+  v_days := (p_fin - p_debut) + 1;
+  insert into "sng-locations-equipement" (client, equipment, equipment_id, quantity, site, debut, fin, amount, status, phone, email, notes, source)
+  values (left(trim(p_name), 120), e.name, e.id, p_quantity, left(p_site, 200), p_debut, p_fin,
+          p_quantity * coalesce(e.price_day, 0) * v_days, 'demande', left(trim(p_phone), 40), nullif(left(trim(p_email), 160), ''), left(p_notes, 2000), 'site')
+  returning ref into v_ref;
+  return v_ref;
+end $$;
+revoke all on function sng_submit_commande(uuid, int, date, date, text, text, text, text, text) from public;
+grant execute on function sng_submit_commande(uuid, int, date, date, text, text, text, text, text) to anon, authenticated;

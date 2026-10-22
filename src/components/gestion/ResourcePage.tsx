@@ -3,6 +3,7 @@ import { useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { ChevronLeft, ChevronRight, Download, Pencil, Plus, Search, Trash } from "@/components/icons"
 import { fieldOptions, newLabel, type Column, type Field, type Resource } from "@/lib/gestion/resources"
+import { authHeader } from "@/lib/gestion/auth"
 import { toast } from "@/lib/gestion/toast"
 import { formatDate, formatXOF } from "@/lib/site"
 import { deleteRow, saveRow, useCollection, useCollectionStatus, type Row } from "@/lib/store"
@@ -53,6 +54,7 @@ export default function ResourcePage({ res }: { res: Resource }) {
 
   async function save(values: Record<string, unknown>) {
     await saveRow(res.collection, res.compute ? res.compute(values) : values)
+    if (res.revalidate) publish(res.revalidate)
     toast(values.id ? "Modifications enregistrées" : `${capitalize(res.singular)} ajouté${res.feminine ? "e" : ""}`)
     setEditing(null)
   }
@@ -60,6 +62,7 @@ export default function ResourcePage({ res }: { res: Resource }) {
   async function remove(row: Row) {
     try {
       await deleteRow(res.collection, row.id)
+      if (res.revalidate) publish(res.revalidate)
       toast("Suppression effectuée")
       setEditing(null)
     } catch (e) {
@@ -291,6 +294,11 @@ function RecordDrawer({ res, initial, onSave, onDelete, onClose }: {
       </form>
     </Drawer>
   )
+}
+
+/** Refresh the public pages that show this data (fire and forget) */
+async function publish(tag: string) {
+  fetch("/api/revalidate", { method: "POST", headers: { "Content-Type": "application/json", ...(await authHeader()) }, body: JSON.stringify({ tag }) }).catch(() => {})
 }
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)

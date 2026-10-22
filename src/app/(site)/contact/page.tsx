@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Clock, Mail, Phone } from "@/components/icons"
 import QuoteForm from "@/components/site/QuoteForm"
+import { telHref } from "@/lib/content"
+import { getContent } from "@/lib/content-server"
 import { SERVICES, type ServiceSlug } from "@/lib/services"
-import { SITE } from "@/lib/site"
 import styles from "../site.module.css"
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ type Props = { searchParams: Promise<{ service?: string }> }
 
 export default async function ContactPage({ searchParams }: Props) {
   const wanted = (await searchParams).service
+  const { company } = await getContent()
   const service = SERVICES.find((s) => s.slug === wanted)?.slug as ServiceSlug | undefined
 
   return (
@@ -38,9 +40,9 @@ export default async function ContactPage({ searchParams }: Props) {
             <h2>Parlons-en directement</h2>
             <p>Pour une urgence, appelez-nous ou écrivez-nous sur WhatsApp.</p>
             <ul>
-              <li><span><Phone /></span><div><small>Téléphone</small><a href={SITE.phoneHref}>{SITE.phone}</a></div></li>
-              <li><span><Mail /></span><div><small>E-mail</small><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div></li>
-              <li><span><Clock /></span><div><small>Horaires</small>{SITE.hours}</div></li>
+              <li><span><Phone /></span><div><small>Téléphone</small><a href={telHref(company.phone)}>{company.phone}</a></div></li>
+              <li><span><Mail /></span><div><small>E-mail</small><a href={`mailto:${company.email}`}>{company.email}</a></div></li>
+              <li><span><Clock /></span><div><small>Horaires</small>{company.hours}</div></li>
             </ul>
           </div>
           <div className={styles.contactForm}>

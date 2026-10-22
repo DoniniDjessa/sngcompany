@@ -8,7 +8,7 @@ import { signOut, useSession, type Session } from "@/lib/gestion/auth"
 import { NAV, navTrail } from "@/lib/gestion/nav"
 import { RESOURCES, newLabel } from "@/lib/gestion/resources"
 import { SITE } from "@/lib/site"
-import { getRows, load, useCollection } from "@/lib/store"
+import { getRows, load, useCollection, type Row } from "@/lib/store"
 import { Toasts } from "./ui"
 
 export default function Shell({ children }: { children: React.ReactNode }) {
@@ -51,7 +51,9 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 function Sidebar({ session, mobileOpen, onNavigate }: { session: Session; mobileOpen: boolean; onNavigate: () => void }) {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
-  const newRequests = useCollection("demandes").filter((d) => d.status === "nouvelle").length
+  const demandes = useCollection("demandes")
+  const commandes = useCollection("locations_equipement")
+  const rowsOf = { demandes, locations_equipement: commandes } as Record<string, Row[]>
 
   return (
     <aside className={`bo-sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}>
@@ -74,7 +76,7 @@ function Sidebar({ session, mobileOpen, onNavigate }: { session: Session; mobile
             {!collapsed && <div className="nav-label">{group.label}</div>}
             {group.items.map((item) => {
               const active = pathname === item.href || (item.href !== "/gestion" && pathname.startsWith(item.href + "/"))
-              const count = item.countKey === "demandes" ? newRequests : 0
+              const count = item.count ? (rowsOf[item.count.collection] ?? []).filter((r) => r.status === item.count!.status).length : 0
               return (
                 <Link
                   key={item.href}

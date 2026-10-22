@@ -15,7 +15,7 @@ export interface Option { value: string; label: string; tone?: Tone }
 export interface Field {
   key: string
   label: string
-  type?: "text" | "number" | "money" | "date" | "time" | "select" | "textarea" | "tel" | "email" | "lookup" | "photos" | "documents"
+  type?: "text" | "number" | "money" | "date" | "time" | "select" | "textarea" | "tel" | "email" | "lookup" | "photos" | "documents" | "toggle"
   options?: Option[]
   /** suggestions from another table (client name, vehicle…) */
   lookup?: { collection: CollectionName; label: (r: Row) => string }
@@ -58,6 +58,8 @@ export interface Resource {
   /** derived values recomputed on save (amount = quantity × price…) */
   compute?: (v: Record<string, unknown>) => Record<string, unknown>
   kpis?: (rows: Row[]) => Kpi[]
+  /** public data to refresh after a save (catalogue shown on the site) */
+  revalidate?: "sng-catalogue"
 }
 
 const opts = (list: [string, string, Tone?][]): Option[] => list.map(([value, label, tone]) => ({ value, label, tone }))
@@ -318,9 +320,9 @@ export const RESOURCES: Resource[] = [
   {
     slug: "equipements",
     collection: "equipements",
-    title: "Équipements",
+    title: "Équipements & catalogue",
     singular: "équipement",
-    description: "Parc de matériel à louer : énergie, BTP et événementiel.",
+    description: "Parc de matériel à louer. Les équipements « en ligne » apparaissent dans le catalogue du site, avec leur prix et leur disponibilité.",
     icon: Wrench,
     searchKeys: ["code", "name"],
     statusKey: "status",
@@ -331,13 +333,15 @@ export const RESOURCES: Resource[] = [
       { key: "category" },
       { key: "available", label: "Disponibles", className: "num", render: (r) => `${num(r.available)} / ${num(r.quantity)}` },
       { key: "price_day", className: "num" },
-      { key: "condition", hideSm: true },
+      { key: "published", label: "En ligne", render: (r) => <span className={`badge ${r.published === false ? "tone-neutral" : "tone-success"}`}>{r.published === false ? "Masqué" : "En ligne"}</span> },
       { key: "status" },
     ],
     fields: [
       { key: "name", label: "Désignation", required: true, full: true, section: "Matériel" },
       { key: "code", label: "Code", required: true, section: "Matériel" },
       { key: "category", label: "Catégorie", type: "select", section: "Matériel" },
+      { key: "description", label: "Description (affichée dans le catalogue)", type: "textarea", full: true, section: "Matériel" },
+      { key: "published", label: "Afficher dans le catalogue en ligne", type: "toggle", full: true, section: "Matériel" },
       { key: "quantity", label: "Quantité totale", type: "number", section: "Stock" },
       { key: "available", label: "Disponibles", type: "number", section: "Stock" },
       { key: "price_day", label: "Tarif / jour", type: "money", required: true, section: "Stock" },
@@ -345,7 +349,8 @@ export const RESOURCES: Resource[] = [
       { key: "status", label: "Statut", type: "select", section: "Stock" },
       { key: "photos", label: "Photos", type: "photos", full: true, section: "Photos" },
     ],
-    defaults: { status: "disponible", category: "btp", condition: "bon", quantity: 1, available: 1 },
+    defaults: { status: "disponible", category: "btp", condition: "bon", quantity: 1, available: 1, published: true },
+    revalidate: "sng-catalogue",
     kpis: (rows) => [
       { label: "Références", value: String(rows.length), tone: "primary", icon: Wrench },
       { label: "Unités en parc", value: sum(rows, "quantity").toLocaleString("fr-FR"), tone: "navy", icon: Box },
@@ -359,25 +364,29 @@ export const RESOURCES: Resource[] = [
     title: "Locations matériel",
     singular: "location de matériel",
     feminine: true,
-    description: "Sorties de matériel : client, quantités, période et montant.",
+    description: "Sorties de matériel et commandes passées depuis le catalogue du site (statut « Demande web »).",
     icon: Box,
     refPrefix: "LEQ-",
     searchKeys: ["ref", "client", "equipment"],
     statusKey: "status",
-    statuses: RENTAL_STATUS,
-    columns: [{ key: "ref" }, { key: "client" }, { key: "equipment" }, { key: "quantity", className: "num" }, { key: "debut" }, { key: "fin" }, { key: "amount", className: "num" }, { key: "status" }],
+    statuses: [{ value: "demande", label: "Demande web", tone: "warning" }, ...RENTAL_STATUS],
+    columns: [{ key: "ref" }, { key: "client", sub: "phone" }, { key: "equipment" }, { key: "quantity", className: "num" }, { key: "debut" }, { key: "fin" }, { key: "amount", className: "num" }, { key: "status" }],
     fields: [
       { key: "client", label: "Client", type: "lookup", lookup: clientLookup, required: true, full: true, section: "Location" },
       { key: "equipment", label: "Matériel", type: "lookup", lookup: { collection: "equipements", label: (r) => String(r.name) }, required: true, full: true, section: "Location" },
       { key: "quantity", label: "Quantité", type: "number", required: true, section: "Location" },
       { key: "site", label: "Lieu d'utilisation", section: "Location" },
+      { key: "phone", label: "Téléphone", type: "tel", section: "Location" },
+      { key: "email", label: "E-mail", type: "email", section: "Location" },
       { key: "debut", label: "Début", type: "date", required: true, section: "Location" },
       { key: "fin", label: "Fin", type: "date", required: true, section: "Location" },
       { key: "amount", label: "Montant", type: "money", required: true, section: "Paiement" },
       { key: "status", label: "Statut", type: "select", section: "Paiement" },
+      { key: "notes", label: "Précisions du client / notes", type: "textarea", full: true, section: "Paiement" },
     ],
     defaults: { status: "reservee", quantity: 1, debut: today },
     kpis: (rows) => [
+      { label: "Demandes web", value: String(count(rows, "status", "demande")), note: "commandes du site à confirmer", tone: "warning", icon: Inbox },
       { label: "En cours", value: String(count(rows, "status", "en_cours")), tone: "primary", icon: Box },
       { label: "Réservées", value: String(count(rows, "status", "reservee")), tone: "info", icon: FileText },
       { label: "Chiffre d'affaires", value: formatXOF(sum(rows.filter((r) => r.status !== "annulee"), "amount")), tone: "success", icon: Wallet },

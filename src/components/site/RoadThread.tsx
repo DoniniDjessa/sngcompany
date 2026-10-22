@@ -40,6 +40,7 @@ export default function RoadThread({ stations, tone }: { stations: { id: string;
       window.removeEventListener("scroll", schedule)
       window.removeEventListener("resize", schedule)
       cancelAnimationFrame(frame.current)
+      frame.current = 0 // a later run of the effect (strict mode, new page) must be able to schedule again
     }
   }, [stations])
 

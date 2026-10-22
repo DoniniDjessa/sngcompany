@@ -1,8 +1,9 @@
 "use client"
 import { useEffect, useMemo, useState } from "react"
-import { Check, Plus, Wrench, X } from "@/components/icons"
+import { Check, Plus, X } from "@/components/icons"
 import { imgSrc } from "@/lib/content"
 import type { CatalogueItem } from "@/lib/content-server"
+import { categoryIcon, categoryLabel } from "@/lib/equipment"
 import { formatXOF } from "@/lib/site"
 import { supabase } from "@/lib/supabase"
 import { useSite } from "./SiteContext"
@@ -11,7 +12,6 @@ import styles from "./Catalogue.module.css"
 // Online equipment catalogue: browse, check stock, order for given dates.
 // The order goes through sng_submit_commande(), which re-checks the stock and computes the amount.
 
-const CATEGORIES: Record<string, string> = { energie: "Énergie", btp: "BTP", evenementiel: "Événementiel" }
 const today = () => new Date().toISOString().slice(0, 10)
 const days = (a: string, b: string) => (a && b && b >= a ? Math.round((Date.parse(b) - Date.parse(a)) / 864e5) + 1 : 0)
 
@@ -31,7 +31,7 @@ export default function Catalogue({ items }: { items: CatalogueItem[] }) {
         <button role="tab" aria-selected={!category} className={!category ? styles.on : ""} onClick={() => setCategory("")}>Tout <span>{items.length}</span></button>
         {categories.map((c) => (
           <button key={c} role="tab" aria-selected={category === c} className={category === c ? styles.on : ""} onClick={() => setCategory(c)}>
-            {CATEGORIES[c] ?? c} <span>{items.filter((i) => i.category === c).length}</span>
+            {categoryLabel(c)} <span>{items.filter((i) => i.category === c).length}</span>
           </button>
         ))}
       </div>
@@ -40,6 +40,7 @@ export default function Catalogue({ items }: { items: CatalogueItem[] }) {
         {shown.map((item) => {
           const stock = item.available ?? 0
           const photo = item.photos?.[0]
+          const Icon = categoryIcon(item.category)
           return (
             <article key={item.id} className={styles.card}>
               <div className={styles.media}>
@@ -47,14 +48,15 @@ export default function Catalogue({ items }: { items: CatalogueItem[] }) {
                   // eslint-disable-next-line @next/next/no-img-element -- signed R2 redirect
                   <img src={imgSrc(photo)} alt={item.name} loading="lazy" />
                 ) : (
-                  <span className={styles.placeholder}><Wrench /></span>
+                  // no photo yet: the icon of the category, drawn large on a blueprint
+                  <span className={styles.placeholder}><Icon /></span>
                 )}
                 <span className={`${styles.stock} ${stock > 0 ? styles.inStock : styles.outStock}`}>
                   {stock > 0 ? `${stock} disponible${stock > 1 ? "s" : ""}` : "Indisponible"}
                 </span>
               </div>
               <div className={styles.body}>
-                <span className={styles.category}>{CATEGORIES[item.category ?? ""] ?? item.category}</span>
+                <span className={styles.category}><Icon /> {categoryLabel(item.category)}</span>
                 <h3>{item.name}</h3>
                 {item.description && <p>{item.description}</p>}
                 <div className={styles.footer}>
@@ -133,7 +135,7 @@ function OrderSheet({ item, onClose }: { item: CatalogueItem; onClose: () => voi
           </div>
         ) : (
           <form onSubmit={submit}>
-            <span className={styles.category}>{CATEGORIES[item.category ?? ""] ?? item.category}</span>
+            <span className={styles.category}>{categoryLabel(item.category)}</span>
             <h3 className={styles.sheetTitle}>{item.name}</h3>
             <p className={styles.sheetPrice}>{formatXOF(item.price_day)} / jour · {max} disponible{max > 1 ? "s" : ""}</p>
 

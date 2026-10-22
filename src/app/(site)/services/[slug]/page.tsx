@@ -2,13 +2,16 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight, Check } from "@/components/icons"
-import BeforeAfter from "@/components/site/BeforeAfter"
 import Catalogue from "@/components/site/Catalogue"
 import CmsImage from "@/components/site/CmsImage"
 import QuoteForm from "@/components/site/QuoteForm"
 import RentalPage from "@/components/site/elite/RentalPage"
-import StackedCards from "@/components/site/transport/StackedCards"
-import TransportHero from "@/components/site/transport/TransportHero"
+import StackedCards from "@/components/site/activity/StackedCards"
+import TransportHero from "@/components/site/activity/TransportHero"
+import EquipmentHero from "@/components/site/activity/EquipmentHero"
+import WashBooking from "@/components/site/activity/WashBooking"
+import WashHero from "@/components/site/activity/WashHero"
+import WashMap from "@/components/site/activity/WashMap"
 import { telHref } from "@/lib/content"
 import { getCatalogue, getContent, getRentalCars, getService } from "@/lib/content-server"
 import { SERVICES } from "@/lib/services"
@@ -160,6 +163,68 @@ export default async function ServicePage({ params }: Props) {
     )
   }
 
+  const catalogueSection = (
+    <section id="catalogue" data-station="Catalogue" className={`${styles.premiumSection} reveal`}>
+      <div className={styles.sectionHeaderPremium}>
+        <div>
+          <div className="badge-premium">Catalogue</div>
+          <h2 className="title-premium">Commandez votre matériel <span>en ligne.</span></h2>
+        </div>
+        <p className={styles.headerText}>Choisissez, vérifiez la disponibilité, indiquez vos dates : nous confirmons par téléphone.</p>
+      </div>
+      <Catalogue items={catalogue} />
+    </section>
+  )
+
+  if (isShop) {
+    return (
+      <main className={styles.main}>
+        <EquipmentHero service={s} items={catalogue} />
+        <section id="atouts" data-station="Nos univers">
+          <StackedCards eyebrow="Nos univers" title="Tout le matériel" muted="pour vos projets." items={s.features} icons={["bolt", "hammer", "tent", "wrench"]} />
+        </section>
+        {catalogueSection}
+        {prestationsSection}
+        {faqSection}
+        {contactSection}
+        {othersSection}
+      </main>
+    )
+  }
+
+  if (s.slug === "lavage-vehicules") {
+    return (
+      <main className={styles.main}>
+        <WashHero service={s} />
+        <section id="reserver" data-station="Réserver" className={`${styles.premiumSection} reveal`}>
+          <div className={styles.sectionHeaderPremium}>
+            <div>
+              <div className="badge-premium">Réservation</div>
+              <h2 className="title-premium">Réservez votre lavage <span>en 1 minute.</span></h2>
+            </div>
+            <p className={styles.headerText}>Choisissez la formule, le lieu et le créneau : nous confirmons par téléphone.</p>
+          </div>
+          <WashBooking formulas={s.prestations} />
+        </section>
+        <section id="station" data-station="Notre station" className={`${styles.premiumSection} reveal`}>
+          <div className={styles.sectionHeaderPremium}>
+            <div>
+              <div className="badge-premium">Nous trouver</div>
+              <h2 className="title-premium">Venez nous voir, <span>ou on vient à vous.</span></h2>
+            </div>
+          </div>
+          <WashMap company={company} />
+        </section>
+        <section id="atouts" data-station="Nos atouts">
+          <StackedCards eyebrow="Nos atouts" title="Le soin du détail," muted="à chaque lavage." items={s.features} icons={["droplets", "truck", "car", "users"]} />
+        </section>
+        {faqSection}
+        {contactSection}
+        {othersSection}
+      </main>
+    )
+  }
+
   if (s.slug === "transport-logistique") {
     return (
       <main className={styles.main}>
@@ -193,11 +258,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
         {s.image && (
           <div className={styles.pageHeroMedia}>
-            {s.slug === "lavage-vehicules" ? (
-              <BeforeAfter image={s.image} alt={s.name} />
-            ) : (
-              <CmsImage src={s.image} alt={s.name} priority sizes="(max-width: 1200px) 100vw, 1200px" className={styles.cover} />
-            )}
+            <CmsImage src={s.image} alt={s.name} priority sizes="(max-width: 1200px) 100vw, 1200px" className={styles.cover} />
           </div>
         )}
       </section>
@@ -214,20 +275,6 @@ export default async function ServicePage({ params }: Props) {
           ))}
         </div>
       </section>
-
-      {/* catalogue (équipements) */}
-      {isShop && (
-        <section id="catalogue" data-station="Catalogue" className={`${styles.premiumSection} reveal`}>
-          <div className={styles.sectionHeaderPremium}>
-            <div>
-              <div className="badge-premium">Catalogue</div>
-              <h2 className="title-premium">Commandez votre matériel <span>en ligne.</span></h2>
-            </div>
-            <p className={styles.headerText}>Choisissez, vérifiez la disponibilité, indiquez vos dates : nous confirmons par téléphone.</p>
-          </div>
-          <Catalogue items={catalogue} />
-        </section>
-      )}
 
       {prestationsSection}
       {faqSection}

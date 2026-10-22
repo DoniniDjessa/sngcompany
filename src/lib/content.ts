@@ -15,6 +15,8 @@ export interface CompanyContent {
   whatsapp: string
   email: string
   address: string
+  /** washing station, shown on the map of the washing page */
+  washAddress: string
   hours: string
   carsSiteName: string
   carsSiteUrl: string
@@ -56,6 +58,7 @@ export const DEFAULT_COMPANY: CompanyContent = {
   whatsapp: SITE.whatsapp,
   email: SITE.email,
   address: SITE.address,
+  washAddress: "Riviera Bonoumin, Abidjan, Côte d'Ivoire",
   hours: SITE.hours,
   carsSiteName: SITE.carsSiteName,
   carsSiteUrl: SITE.carsSiteUrl,
@@ -397,6 +400,7 @@ export const COMPANY_DOC: DocDef = {
         { key: "whatsapp", label: "Numéro WhatsApp", type: "text", hint: "Chiffres uniquement, avec l'indicatif : 2250102926874" },
         { key: "email", label: "E-mail", type: "text" },
         { key: "address", label: "Adresse", type: "text" },
+        { key: "washAddress", label: "Adresse de la station de lavage (carte)", type: "text", hint: "Telle qu'on la taperait dans Google Maps" },
         { key: "hours", label: "Horaires", type: "text" },
       ],
     },

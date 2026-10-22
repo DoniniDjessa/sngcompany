@@ -1,9 +1,12 @@
 "use client"
 import { useEffect, useRef } from "react"
-import { Clock, Globe, MapPin, Shield, Truck, Users, type Icon } from "@/components/icons"
-import styles from "./Transport.module.css"
+import { Car, Clock, Droplets, Globe, Hammer, MapPin, Shield, Tent, Truck, Users, Wrench, Zap, type Icon } from "@/components/icons"
+import styles from "./Activity.module.css"
 
-const ICONS: Record<string, Icon> = { users: Users, truck: Truck, pin: MapPin, globe: Globe, clock: Clock, shield: Shield }
+const ICONS: Record<string, Icon> = {
+  users: Users, truck: Truck, pin: MapPin, globe: Globe, clock: Clock, shield: Shield,
+  bolt: Zap, hammer: Hammer, tent: Tent, wrench: Wrench, droplets: Droplets, car: Car,
+}
 
 // Advantages as cards that pile up while scrolling: each card sticks a little lower than the previous one
 // and slides over it; the covered card shrinks and dims (--cover, 0 → 1, set from the scroll).

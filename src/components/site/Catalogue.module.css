@@ -76,10 +76,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
-  color: var(--text-muted);
-  opacity: 0.4;
+  font-size: 5rem;
+  color: var(--text-main);
+  background:
+    linear-gradient(var(--card-border) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, var(--card-border) 1px, transparent 1px) 0 0 / 28px 28px,
+    var(--background);
 }
+
+.placeholder svg { stroke-width: 1.2; opacity: 0.75; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.card:hover .placeholder svg { transform: scale(1.06) rotate(-4deg); }
 
 .stock {
   position: absolute;
@@ -134,15 +140,17 @@
   gap: 10px;
 }
 
+.price { white-space: nowrap; }
+
 .price strong {
   font-family: var(--font-primary);
-  font-size: 1.25rem;
+  font-size: 1.12rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-main);
 }
 
-.price span { margin-left: 4px; font-size: 0.85rem; color: var(--text-muted); }
+.price span { margin-left: 3px; font-size: 0.78rem; color: var(--text-muted); }
 
 .order {
   display: inline-flex;
@@ -335,3 +343,5 @@
 }
 
 @keyframes tick { from { transform: translateY(-8px) scale(1.3); opacity: 0; } }
+
+.body .category { display: inline-flex; align-items: center; gap: 6px; }

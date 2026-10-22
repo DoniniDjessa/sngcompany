@@ -33,6 +33,7 @@ export interface HeroSlide {
 
 export interface HomeContent {
   hero: { slides: HeroSlide[] }
+  /** key figures — not shown for now (new company), kept for later */
   stats: { value: string; label: string }[]
   about: { eyebrow: string; title: string; text: string; image: string; values: string[] }
   why: { title: string; items: { title: string; text: string }[] }
@@ -222,10 +223,6 @@ export const HOME_DOC: DocDef = {
           ],
         },
       ],
-    },
-    {
-      title: "Chiffres clés",
-      fields: [{ key: "stats", label: "Chiffres", type: "list", itemLabel: "chiffre", fields: [{ key: "value", label: "Valeur (ex. 1 500+)", type: "text" }, { key: "label", label: "Libellé", type: "text" }] }],
     },
     {
       title: "Qui sommes-nous",

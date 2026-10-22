@@ -34,7 +34,7 @@ export default function SiteContentPage() {
           </div>
           <div className="content-info">
             <strong>Page d&apos;accueil</strong>
-            <span>Carrousel, chiffres clés, à propos, engagements, étapes, bannière, contact</span>
+            <span>Carrousel, à propos, engagements, étapes, bannière, contact</span>
             <small>{when("home")}</small>
           </div>
           <ChevronRight />

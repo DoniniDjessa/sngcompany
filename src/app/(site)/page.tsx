@@ -1,7 +1,6 @@
 import { Check, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
 import ActivityTiles from "@/components/site/ActivityTiles"
 import CmsImage from "@/components/site/CmsImage"
-import Counter from "@/components/site/Counter"
 import HeroCarousel from "@/components/site/HeroCarousel"
 import QuoteForm from "@/components/site/QuoteForm"
 import { telHref } from "@/lib/content"
@@ -25,18 +24,6 @@ export default async function Home() {
           <p>Survolez une activité pour en découvrir plus.</p>
         </div>
         <ActivityTiles />
-      </section>
-
-      {/* --- FIGURES --- */}
-      <section className={`${styles.statsSection} reveal`}>
-        <div className={`${styles.statsInner} stagger`}>
-          {h.stats.map((s) => (
-            <div key={s.label} className={styles.statItem}>
-              <h3><Counter value={s.value} /></h3>
-              <p>{s.label}</p>
-            </div>
-          ))}
-        </div>
       </section>
 
       {/* --- ABOUT --- */}

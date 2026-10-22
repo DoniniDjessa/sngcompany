@@ -1,39 +1,45 @@
 .logo {
+  --h: 42px; /* visible height of the drawing */
   display: inline-flex;
   align-items: center;
-  gap: 10px;
 }
 
-.mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 0;
-  background: var(--ink);
-  color: var(--ink-contrast);
-  font-family: var(--font-primary);
-  font-weight: 900;
-  font-size: 0.62rem;
-  letter-spacing: 0.04em;
+/* The PNGs are 1024 × 476 with wide transparent margins: the drawing sits roughly between
+   x 120–905 and y 95–375. The frame shows only that part, scaled to --h. */
+.frame {
+  position: relative;
+  display: block;
+  width: calc(var(--h) * 2.8);
+  height: var(--h);
+  overflow: hidden;
 }
 
-.text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
+.frame img {
+  position: absolute;
+  left: calc(var(--h) * -0.43);
+  top: calc(var(--h) * -0.34);
+  width: calc(var(--h) * 3.66);
+  height: auto;
+  max-width: none;
 }
 
-.text strong {
-  font-family: var(--font-primary);
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text-main);
+.white { display: none; }
+
+:global([data-theme='dark']) .black { display: none; }
+:global([data-theme='dark']) .white { display: block; }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-.text small { display: none; }
+/* footer: a little larger */
+.light { --h: 54px; }
 
-.light .mark { background: var(--ink); color: var(--ink-contrast); }
-.light .text strong { color: var(--text-main); }
+@media (max-width: 480px) {
+  .logo { --h: 36px; }
+}

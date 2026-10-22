@@ -1,7 +1,7 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { CarSide } from "@/components/icons"
 import { useSite } from "./SiteContext"
 import styles from "./Extras.module.css"
@@ -59,22 +59,23 @@ export function GoToTop() {
   )
 }
 
-/** First visit of the session: a car crosses the screen and pulls the curtain off the site (~2.5 s);
- *  on a reload, a shorter pass (~1.4 s, "sng-intro-quick").
- *  Shown only when the inline script of app/layout.tsx put the "sng-intro" class on <html>. */
+/** A car crosses the screen and pulls the curtain off the site.
+ *  Full page load (first visit, reload): ~3.5 s, flagged before paint by the inline script of app/layout.tsx.
+ *  Navigation to another page: shorter pass (~2.5 s, "sng-intro-nav"). */
 export function Intro() {
+  const pathname = usePathname()
+  const firstPath = useRef(pathname)
   useEffect(() => {
     const html = document.documentElement
-    if (!html.classList.contains("sng-intro")) return
-    const quick = html.classList.contains("sng-intro-quick")
-    const done = setTimeout(() => {
-      html.classList.remove("sng-intro", "sng-intro-quick")
-      try {
-        sessionStorage.setItem("sng-intro", "1")
-      } catch {}
-    }, quick ? 1400 : 2500)
+    const nav = pathname !== firstPath.current
+    if (nav) {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
+      firstPath.current = ""
+      html.classList.add("sng-intro", "sng-intro-nav")
+    } else if (!html.classList.contains("sng-intro")) return
+    const done = setTimeout(() => html.classList.remove("sng-intro", "sng-intro-nav"), nav ? 2500 : 3500)
     return () => clearTimeout(done)
-  }, [])
+  }, [pathname])
   return (
     <div className={styles.intro} aria-hidden="true">
       <div className={styles.introCurtain}>

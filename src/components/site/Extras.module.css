@@ -148,13 +148,21 @@
 
 @keyframes carAcross { from { left: 0; } to { left: 100%; } }
 
-/* navigation to another page: same pass, shorter */
+/* navigation to another page: same pass, quick, as soon as the new page is there */
 :global(html.sng-intro-nav) .introCurtain,
 :global(html.sng-intro-nav) .introRoad,
 :global(html.sng-intro-nav) .introCar {
-  animation-duration: 2.1s;
-  animation-delay: 0.3s;
+  animation-duration: 0.75s;
+  animation-delay: 0s;
 }
+
+/* while the next page loads: curtain down, car parked, waiting */
+:global(html.sng-intro-hold) .intro { animation: introIn 0.18s ease both; }
+:global(html.sng-intro-hold) .introCurtain,
+:global(html.sng-intro-hold) .introRoad,
+:global(html.sng-intro-hold) .introCar { animation: none; }
+
+@keyframes introIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ---------- headlights (switch to night) ---------- */
 .headlights {

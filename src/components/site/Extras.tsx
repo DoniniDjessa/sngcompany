@@ -61,19 +61,46 @@ export function GoToTop() {
 
 /** A car crosses the screen and pulls the curtain off the site.
  *  Full page load (first visit, reload): ~3.5 s, flagged before paint by the inline script of app/layout.tsx.
- *  Navigation to another page: shorter pass (~2.5 s, "sng-intro-nav"). */
+ *  Navigation to another page: auto duration — a click on a link drops the curtain ("sng-intro-hold"),
+ *  it stays as long as the next page loads, then a quick pass (~0.8 s) pulls it off. */
 export function Intro() {
   const pathname = usePathname()
   const firstPath = useRef(pathname)
+
+  // click on an internal link to another page: cover the site until the new page is there
+  useEffect(() => {
+    const html = document.documentElement
+    let safety: ReturnType<typeof setTimeout> | undefined
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+      const a = (e.target as Element | null)?.closest?.("a")
+      if (!a || !a.href || a.hasAttribute("download") || (a.target && a.target !== "_self")) return
+      const url = new URL(a.href, location.href)
+      if (url.origin !== location.origin || url.pathname === location.pathname) return
+      if (url.pathname.startsWith("/gestion") || matchMedia("(prefers-reduced-motion: reduce)").matches) return
+      html.classList.add("sng-intro", "sng-intro-nav", "sng-intro-hold")
+      // the navigation never lands (error, cancelled): don't leave the site covered
+      clearTimeout(safety)
+      safety = setTimeout(() => html.classList.remove("sng-intro", "sng-intro-nav", "sng-intro-hold"), 8000)
+    }
+    document.addEventListener("click", onClick)
+    return () => {
+      document.removeEventListener("click", onClick)
+      clearTimeout(safety)
+    }
+  }, [])
+
   useEffect(() => {
     const html = document.documentElement
     const nav = pathname !== firstPath.current
     if (nav) {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
       firstPath.current = ""
+      // new page rendered: release the curtain (back/forward lands here without the hold)
+      html.classList.remove("sng-intro-hold")
       html.classList.add("sng-intro", "sng-intro-nav")
     } else if (!html.classList.contains("sng-intro")) return
-    const done = setTimeout(() => html.classList.remove("sng-intro", "sng-intro-nav"), nav ? 2500 : 3500)
+    const done = setTimeout(() => html.classList.remove("sng-intro", "sng-intro-nav"), nav ? 800 : 3500)
     return () => clearTimeout(done)
   }, [pathname])
   return (

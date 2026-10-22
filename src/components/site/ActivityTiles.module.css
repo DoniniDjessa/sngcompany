@@ -200,35 +200,35 @@
 }
 
 /* ---------- hover / keyboard focus ---------- */
-.tile:hover .img,
+.tile:is(:hover, .focus) .img,
 .tile:focus-visible .img {
   filter: grayscale(0) contrast(1) brightness(1);
   transform: scale(1.08);
 }
 
-.tile:hover .fallback,
+.tile:is(:hover, .focus) .fallback,
 .tile:focus-visible .fallback {
   transform: scale(1.08) rotate(-4deg);
   color: rgba(255, 255, 255, 0.16);
 }
 
-.tile:hover .shade,
+.tile:is(:hover, .focus) .shade,
 .tile:focus-visible .shade {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 25%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.9) 100%);
 }
 
-.tile:hover .chip,
+.tile:is(:hover, .focus) .chip,
 .tile:focus-visible .chip { opacity: 1; transform: none; }
 
-.tile:hover .more,
+.tile:is(:hover, .focus) .more,
 .tile:focus-visible .more { grid-template-rows: 1fr; }
 
-.tile:hover .moreInner > *,
+.tile:is(:hover, .focus) .moreInner > *,
 .tile:focus-visible .moreInner > * { opacity: 1; transform: none; }
 
-.tile:hover .moreInner > :nth-child(1) { transition-delay: 0.12s; }
-.tile:hover .moreInner > :nth-child(2) { transition-delay: 0.2s; }
-.tile:hover .moreInner > :nth-child(3) { transition-delay: 0.28s; }
+.tile:is(:hover, .focus) .moreInner > :nth-child(1) { transition-delay: 0.12s; }
+.tile:is(:hover, .focus) .moreInner > :nth-child(2) { transition-delay: 0.2s; }
+.tile:is(:hover, .focus) .moreInner > :nth-child(3) { transition-delay: 0.28s; }
 
 .tile:focus-visible { outline: 3px solid #0071e3; outline-offset: 3px; }
 
@@ -291,7 +291,7 @@
   opacity: 0;
 }
 
-.tile:hover .beam { animation: beam 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.15s; }
+.tile:is(:hover, .focus) .beam { animation: beam 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.15s; }
 
 @keyframes beam {
   0% { left: -60%; opacity: 0; }
@@ -311,7 +311,7 @@
   opacity: 0;
 }
 
-.tile:hover .speed { animation: speed 0.9s linear calc(var(--k) * 0.13s) infinite; }
+.tile:is(:hover, .focus) .speed { animation: speed 0.9s linear calc(var(--k) * 0.13s) infinite; }
 
 @keyframes speed {
   0% { right: -30%; opacity: 0; }
@@ -332,7 +332,7 @@
   opacity: 0;
 }
 
-.tile:hover .bubbleFx { animation: rise 2.6s ease-in calc(var(--k) * 0.22s) infinite; }
+.tile:is(:hover, .focus) .bubbleFx { animation: rise 2.6s ease-in calc(var(--k) * 0.22s) infinite; }
 
 @keyframes rise {
   0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
@@ -341,7 +341,7 @@
 }
 
 /* equipment: the wrench tightens */
-[data-fx="location-equipements"]:hover .fallback svg { animation: tighten 1.4s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+[data-fx="location-equipements"]:is(:hover, .focus) .fallback svg { animation: tighten 1.4s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
 
 @keyframes tighten {
   0%, 100% { transform: rotate(0deg); }
@@ -355,22 +355,37 @@
   stroke-dashoffset: 0;
 }
 
-[data-fx="elevage"]:hover .fallback svg path { animation: grow 1.6s cubic-bezier(0.5, 0, 0.2, 1) both; }
-[data-fx="elevage"]:hover .fallback svg path:nth-child(2) { animation-delay: 0.25s; }
-[data-fx="elevage"]:hover .fallback svg path:nth-child(3) { animation-delay: 0.55s; }
-[data-fx="elevage"]:hover .fallback svg path:nth-child(4) { animation-delay: 0.75s; }
+[data-fx="elevage"]:is(:hover, .focus) .fallback svg path { animation: grow 1.6s cubic-bezier(0.5, 0, 0.2, 1) both; }
+[data-fx="elevage"]:is(:hover, .focus) .fallback svg path:nth-child(2) { animation-delay: 0.25s; }
+[data-fx="elevage"]:is(:hover, .focus) .fallback svg path:nth-child(3) { animation-delay: 0.55s; }
+[data-fx="elevage"]:is(:hover, .focus) .fallback svg path:nth-child(4) { animation-delay: 0.75s; }
 
 @keyframes grow { from { stroke-dashoffset: 60; } to { stroke-dashoffset: 0; } }
 
-/* touch screens: no hover, so everything is shown */
+/* touch screens: the text is always readable; the tile in the middle of the screen
+   (.focus) comes to colour, zooms and plays its trade effect; photos drift with the scroll */
 @media (hover: none) {
-  .tile { cursor: pointer; }
-  .img { filter: none; }
+  .tile { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .chip { opacity: 1; transform: none; }
   .more { grid-template-rows: 1fr; }
   .moreInner > * { opacity: 1; transform: none; }
   .moreInner ul { display: none; }
   .bubble { display: none; }
+  .img { transition: filter 0.9s ease, transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .media {
+    animation: tileParallax linear both;
+    animation-timeline: view();
+  }
+  .focus .cta { animation: ctaPulse 1.6s ease-in-out 0.4s 2; }
+}
+
+@keyframes tileParallax {
+  from { transform: translateY(-14px); }
+  to { transform: translateY(14px); }
+}
+
+@keyframes ctaPulse {
+  50% { transform: scale(1.06); box-shadow: 0 0 0 8px rgba(245, 245, 247, 0.18); }
 }
 
 @media (max-width: 900px) {

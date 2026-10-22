@@ -3,9 +3,14 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 60px;
+  grid-template-areas: "head map" "lists map";
+  gap: 0 60px;
   align-items: center;
 }
+
+.head { grid-area: head; align-self: end; }
+.lists { grid-area: lists; align-self: start; }
+.mapBox { grid-area: map; }
 
 .eyebrow {
   font-size: clamp(1rem, 1.5vw, 1.25rem);
@@ -46,6 +51,7 @@
 }
 
 .chips li {
+  -webkit-tap-highlight-color: transparent;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -198,7 +204,11 @@
 }
 
 @media (max-width: 1000px) {
-  .wrap { grid-template-columns: 1fr; gap: 36px; }
+  /* title, then the map, then the lists */
+  .wrap { grid-template-columns: 1fr; grid-template-areas: "head" "map" "lists"; gap: 30px; }
+  .mapBox { margin: 0 -18px; }
+  .label { font-size: 15px; }
+  .nodeOn .label { font-size: 17px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

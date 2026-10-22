@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import { CarTop } from "@/components/icons"
+import { CarTop, SportCar } from "@/components/icons"
 import styles from "./RoadThread.module.css"
 
 // The road as the thread of the page: a vertical line fixed on the left traces itself as you scroll,
@@ -43,9 +43,21 @@ export default function RoadThread({ stations }: { stations: { id: string; label
     }
   }, [stations])
 
+  // section the reader is in: the last station already passed
+  const current = [...marks].reverse().find((m) => progress >= m.at - 0.002)
+
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
 
   return (
+    <>
+    {/* small screens: the road lies across the top, under the menu */}
+    <div className={`${styles.mobileBar} ${visible ? styles.visible : ""}`} aria-hidden="true">
+      <span key={current?.id} className={styles.mobileLabel}>{current?.label ?? ""}</span>
+      <span className={styles.mobileTrack}>
+        <span className={styles.mobileFill} style={{ transform: `scaleX(${progress})` }} />
+        <span className={styles.mobileCar} style={{ left: `${progress * 100}%` }}><SportCar /></span>
+      </span>
+    </div>
     <aside className={`${styles.road} ${visible ? styles.visible : ""}`} aria-label="Sections de la page">
       <div className={styles.track}>
         <div className={styles.fill} style={{ transform: `scaleY(${progress})` }} />
@@ -63,5 +75,6 @@ export default function RoadThread({ stations }: { stations: { id: string; label
         <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><CarTop /></span>
       </div>
     </aside>
+    </>
   )
 }

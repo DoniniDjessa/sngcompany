@@ -838,6 +838,8 @@
 }
 
 @media (max-width: 1024px) {
+  /* small screens: the form comes before the contact details */
+  .contactForm { order: -1; }
   .carBanner,
   .contactGrid,
   .faqGrid { grid-template-columns: 1fr; }

@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowRight } from "@/components/icons"
 import CmsImage from "./CmsImage"
 import { useSite } from "./SiteContext"
@@ -14,6 +14,19 @@ export default function ActivityTiles() {
   const grid = useRef<HTMLDivElement>(null)
   const bubble = useRef<HTMLSpanElement>(null)
   const [hovered, setHovered] = useState<number | null>(null)
+  // touch screens have no hover: the tile crossing the middle of the screen gets the hover look
+  const [focused, setFocused] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!window.matchMedia("(hover: none)").matches || !grid.current) return
+    const tiles = [...grid.current.querySelectorAll<HTMLElement>("[data-tile]")]
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setFocused(Number((e.target as HTMLElement).dataset.tile))),
+      { rootMargin: "-42% 0px -42% 0px" },
+    )
+    tiles.forEach((t) => observer.observe(t))
+    return () => observer.disconnect()
+  }, [])
 
   const move = (e: React.PointerEvent) => {
     if (e.pointerType !== "mouse" || !bubble.current || !grid.current) return
@@ -46,8 +59,9 @@ export default function ActivityTiles() {
               <Link
                 key={s.slug}
                 href={`/services/${s.slug}`}
-                className={styles.tile}
+                className={`${styles.tile} ${focused === i ? styles.focus : ""}`}
                 data-fx={s.slug}
+                data-tile={i}
                 style={{ ["--i" as string]: i, ["--grow" as string]: i === 0 ? 2 : 1 }}
                 onPointerEnter={() => setHovered(i)}
                 onPointerMove={tilt}

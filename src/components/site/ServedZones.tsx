@@ -54,15 +54,23 @@ export default function ServedZones({ eyebrow, title, text, abidjan, interior }:
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.copy}>
+      <div className={styles.head}>
         <p className={styles.eyebrow}>{eyebrow}</p>
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.text}>{text}</p>
+      </div>
 
+      <div className={styles.lists}>
         <h3 className={styles.listTitle}>Grand Abidjan</h3>
         <ul className={styles.chips}>
           {abidjan.map((z) => (
-            <li key={z} onPointerEnter={() => setHover(key(z))} onPointerLeave={() => setHover(null)} className={hover === key(z) ? styles.chipOn : ""}>
+            <li
+              key={z}
+              onPointerEnter={(e) => e.pointerType === "mouse" && setHover(key(z))}
+              onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)}
+              onClick={() => setHover((h) => (h === key(z) ? null : key(z)))}
+              className={hover === key(z) ? styles.chipOn : ""}
+            >
               <MapPin /> {z}
             </li>
           ))}

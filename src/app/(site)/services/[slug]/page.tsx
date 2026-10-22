@@ -6,8 +6,9 @@ import BeforeAfter from "@/components/site/BeforeAfter"
 import Catalogue from "@/components/site/Catalogue"
 import CmsImage from "@/components/site/CmsImage"
 import QuoteForm from "@/components/site/QuoteForm"
+import RentalPage from "@/components/site/elite/RentalPage"
 import { telHref } from "@/lib/content"
-import { getCatalogue, getContent, getService } from "@/lib/content-server"
+import { getCatalogue, getContent, getRentalCars, getService } from "@/lib/content-server"
 import { SERVICES } from "@/lib/services"
 import styles from "../../site.module.css"
 
@@ -30,6 +31,113 @@ export default async function ServicePage({ params }: Props) {
   const isShop = s.slug === "location-equipements"
   const catalogue = isShop ? await getCatalogue() : []
   const [first, ...rest] = s.name.split(" ")
+
+  // sections shared by every activity page (and by the vehicle rental layout)
+  const prestationsSection = (
+    <>
+      {/* prestations */}
+      <section className={`${styles.premiumSection} reveal`}>
+        <div className={styles.prestaGrid}>
+          <div className={styles.prestaHead}>
+            <div className="badge-premium">Nos prestations</div>
+            <h2 className="title-premium">{s.tagline}.</h2>
+            {s.slug === "location-vehicules" && (
+              <a href={company.carsSiteUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
+                Catalogue {company.carsSiteName} <External />
+              </a>
+            )}
+          </div>
+          <ol className={`${styles.prestations} stagger`}>
+            {s.prestations.map((p, i) => (
+              <li key={p.title}>
+                <Link href={`/contact?service=${s.slug}`} className={styles.presta}>
+                  <span className={styles.prestaNum}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.prestaText}>
+                    <strong>{p.title}</strong>
+                    <span>{p.text}</span>
+                  </span>
+                  <ArrowRight className={styles.prestaArrow} />
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    </>
+  )
+  const faqSection = (
+    <>
+      {/* FAQ */}
+      {s.faqs.length > 0 && (
+        <section className={`${styles.premiumSection} reveal`}>
+          <div className={styles.faqGrid}>
+            <div>
+              <div className="badge-premium">Questions fréquentes</div>
+              <h2 className="title-premium">Vous avez <br /><span>des questions ?</span></h2>
+              <p className={styles.headerText} style={{ marginTop: 20 }}>
+                Notre équipe vous répond au <a href={telHref(company.phone)}><strong>{company.phone}</strong></a> ou par WhatsApp.
+              </p>
+            </div>
+            <div className={styles.faqList}>
+              {s.faqs.map((f, i) => (
+                <details key={f.q} className={styles.faqItem} open={i === 0}>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </>
+  )
+  const contactSection = (
+    <>
+      <section id="contact" className={`${styles.premiumSection} reveal`}>
+        <div className={styles.contactGrid}>
+          <div className={styles.contactInfo}>
+            <p className={styles.eyebrow}>Contact</p>
+            <h2>{s.name}</h2>
+            <p>Décrivez votre besoin : un conseiller vous rappelle sous 24h avec une offre adaptée.</p>
+            <ul>{s.highlights.map((h) => <li key={h}><span><Check /></span><div>{h}</div></li>)}</ul>
+          </div>
+          <div className={styles.contactForm}>
+            <h3>Nous contacter</h3>
+            <QuoteForm service={s.slug} />
+          </div>
+        </div>
+      </section>
+    </>
+  )
+  const othersSection = (
+    <>
+      <section className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
+        <div className="badge-premium">Découvrez aussi</div>
+        <div className={`${styles.otherServices} stagger`}>
+          {others.map((o) => (
+            <Link key={o.slug} href={`/services/${o.slug}`} className={styles.otherLink}>
+              <span><o.icon /></span> {o.name}
+            </Link>
+          ))}
+        </div>
+      </section>
+    </>
+  )
+
+  if (s.slug === "location-vehicules") {
+    const cars = await getRentalCars(6)
+    return (
+      <RentalPage
+        service={s}
+        company={company}
+        cars={cars}
+        prestations={prestationsSection}
+        faq={faqSection}
+        contact={contactSection}
+        others={othersSection}
+      />
+    )
+  }
 
   return (
     <main className={styles.main}>
@@ -85,83 +193,10 @@ export default async function ServicePage({ params }: Props) {
         </section>
       )}
 
-      {/* prestations */}
-      <section className={`${styles.premiumSection} reveal`}>
-        <div className={styles.prestaGrid}>
-          <div className={styles.prestaHead}>
-            <div className="badge-premium">Nos prestations</div>
-            <h2 className="title-premium">{s.tagline}.</h2>
-            {s.slug === "location-vehicules" && (
-              <a href={company.carsSiteUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
-                Catalogue {company.carsSiteName} <External />
-              </a>
-            )}
-          </div>
-          <ol className={`${styles.prestations} stagger`}>
-            {s.prestations.map((p, i) => (
-              <li key={p.title}>
-                <Link href={`/contact?service=${s.slug}`} className={styles.presta}>
-                  <span className={styles.prestaNum}>{String(i + 1).padStart(2, "0")}</span>
-                  <span className={styles.prestaText}>
-                    <strong>{p.title}</strong>
-                    <span>{p.text}</span>
-                  </span>
-                  <ArrowRight className={styles.prestaArrow} />
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      {s.faqs.length > 0 && (
-        <section className={`${styles.premiumSection} reveal`}>
-          <div className={styles.faqGrid}>
-            <div>
-              <div className="badge-premium">Questions fréquentes</div>
-              <h2 className="title-premium">Vous avez <br /><span>des questions ?</span></h2>
-              <p className={styles.headerText} style={{ marginTop: 20 }}>
-                Notre équipe vous répond au <a href={telHref(company.phone)}><strong>{company.phone}</strong></a> ou par WhatsApp.
-              </p>
-            </div>
-            <div className={styles.faqList}>
-              {s.faqs.map((f, i) => (
-                <details key={f.q} className={styles.faqItem} open={i === 0}>
-                  <summary>{f.q}</summary>
-                  <p>{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      <section id="contact" className={`${styles.premiumSection} reveal`}>
-        <div className={styles.contactGrid}>
-          <div className={styles.contactInfo}>
-            <p className={styles.eyebrow}>Contact</p>
-            <h2>{s.name}</h2>
-            <p>Décrivez votre besoin : un conseiller vous rappelle sous 24h avec une offre adaptée.</p>
-            <ul>{s.highlights.map((h) => <li key={h}><span><Check /></span><div>{h}</div></li>)}</ul>
-          </div>
-          <div className={styles.contactForm}>
-            <h3>Nous contacter</h3>
-            <QuoteForm service={s.slug} />
-          </div>
-        </div>
-      </section>
-
-      <section className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
-        <div className="badge-premium">Découvrez aussi</div>
-        <div className={`${styles.otherServices} stagger`}>
-          {others.map((o) => (
-            <Link key={o.slug} href={`/services/${o.slug}`} className={styles.otherLink}>
-              <span><o.icon /></span> {o.name}
-            </Link>
-          ))}
-        </div>
-      </section>
+      {prestationsSection}
+      {faqSection}
+      {contactSection}
+      {othersSection}
     </main>
   )
 }

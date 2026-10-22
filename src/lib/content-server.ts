@@ -56,3 +56,34 @@ export async function getCatalogue(): Promise<CatalogueItem[]> {
   const cols = "id,code,name,category,description,price_day,quantity,available,condition,status,photos"
   return (await rest<CatalogueItem[]>(`sng-equipements?select=${cols}&published=eq.true&order=category.asc,name.asc`, "sng-catalogue", 60)) ?? []
 }
+
+export interface RentalCar {
+  id: string
+  brand: string
+  model: string
+  year: number | null
+  price_per_day: number | null
+  seats: number | null
+  transmission: string | null
+  fuel_type: string | null
+  location: string | null
+  images: string | string[] | null
+}
+
+/** First photo of a car of the SNG Elite Cars table ("images" is a JSON array or a comma-separated list) */
+export function carPhoto(car: Pick<RentalCar, "images">) {
+  const raw = car.images
+  if (Array.isArray(raw)) return raw[0] ?? ""
+  if (!raw) return ""
+  try {
+    if (raw.trim().startsWith("[")) return (JSON.parse(raw) as string[])[0] ?? ""
+  } catch {}
+  return raw.split(",")[0].trim()
+}
+
+/** Rental cars published on the SNG Elite Cars site (shared "cars" table), best rated first */
+export async function getRentalCars(limit = 6): Promise<RentalCar[]> {
+  const cols = "id,brand,model,year,price_per_day,seats,transmission,fuel_type,location,images"
+  const query = `cars?select=${cols}&available=eq.true&siteweb=eq.true&listing_type=in.(rent,both)&order=average_rating.desc.nullslast,created_at.desc&limit=${limit}`
+  return (await rest<RentalCar[]>(query, "sng-cars", 300)) ?? []
+}

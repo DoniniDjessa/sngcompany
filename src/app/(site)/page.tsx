@@ -13,6 +13,16 @@ import styles from "./site.module.css"
 
 const WHY_ICONS = [Users, Shield, Clock, TrendingUp]
 
+/** Initials of a title, small words left out: "Fiabilité & sécurité" → "FS", "Réactivité" → "R" */
+const SMALL_WORDS = new Set(["un", "une", "le", "la", "les", "l", "de", "des", "du", "d", "et", "&", "à", "au", "aux", "en", "pour", "par", "sur"])
+const initials = (title: string) =>
+  title
+    .split(/[\s'’-]+/)
+    .filter((w) => w && !SMALL_WORDS.has(w.toLowerCase()))
+    .map((w) => w[0].toUpperCase())
+    .join("")
+    .slice(0, 3)
+
 export default async function Home() {
   const { home: h, company } = await getContent()
 
@@ -75,7 +85,7 @@ export default async function Home() {
       {/* --- WHY US: sticky intro + cards that stack on top of each other while scrolling --- */}
       <section id="pourquoi" className={styles.why}>
         <div className={styles.whyGrid}>
-          <div className={`${styles.whyIntro} reveal`}>
+          <div className={styles.whyIntro}>
             <p className={styles.eyebrow}>Nos atouts</p>
             <h2 className={styles.whyTitle}>{h.why.title}</h2>
             <p className={styles.whyLead}>
@@ -88,7 +98,7 @@ export default async function Home() {
               const Icon = WHY_ICONS[i % WHY_ICONS.length]
               return (
                 <li key={w.title} className={`${styles.whyCard} ${i % 2 ? styles.whyLight : ""}`} style={{ ["--i" as string]: i }}>
-                  <span className={styles.whyNum} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.whyNum} aria-hidden="true">{initials(w.title)}</span>
                   <span className={styles.whyIcon}><Icon /></span>
                   <div className={styles.whyText}>
                     <h3>{w.title}</h3>

@@ -371,7 +371,7 @@
 }
 
 @keyframes cardRise {
-  from { opacity: 0.4; transform: translateY(60px) scale(0.94); }
+  from { opacity: 0.4; transform: translateY(40px) scale(0.95); }
   to { opacity: 1; transform: none; }
 }
 
@@ -452,8 +452,10 @@
 }
 
 @media (max-width: 1000px) {
-  .whyGrid { grid-template-columns: 1fr; gap: 40px; }
-  .whyIntro { position: static; }
+  .why { padding: 56px 18px 80px; }
+  .whyGrid { grid-template-columns: 1fr; gap: 28px; }
+  .whyIntro { position: static; gap: 12px; }
+  .whyTitle { font-size: clamp(2.2rem, 10vw, 3rem); }
   .whyCard { top: calc(var(--header-height) + 46px + var(--i) * 14px); min-height: 300px; padding: 30px 26px 26px; }
   .whyNum { font-size: 9rem; bottom: -24px; }
 }

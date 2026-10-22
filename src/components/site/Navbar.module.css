@@ -54,9 +54,9 @@
   gap: 3px;
   padding: 14px 0;
   font-size: 0.82rem;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--text-main);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .menuItem > a:hover { opacity: 1; }
@@ -67,53 +67,90 @@
   transition: transform 0.3s ease;
 }
 
-/* Services dropdown: full panel like Apple's flyout */
+/* "Nos services": mega panel, list + live preview of the hovered activity */
 .hasDropdown { position: relative; }
 
 .dropdown {
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translate(-50%, 6px);
-  width: 340px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 8px;
+  width: 660px;
   padding: 10px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 0;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.16);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  transform: translate(-50%, 10px) scale(0.98);
+  transform-origin: top center;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s;
 }
 
 .hasDropdown:hover .dropdown,
 .hasDropdown:focus-within .dropdown {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0) scale(1);
 }
 
 .hasDropdown:hover .caret { transform: rotate(180deg); }
 
-.dropdownItem {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 12px;
-  border-radius: 0;
+.megaList { padding: 6px; }
+
+.megaTitle {
+  padding: 4px 10px 10px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.dropdownItem:hover { background: var(--surface-2); }
+.dropdownItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  transition: background 0.25s ease;
+}
+
+/* items slide in one after the other when the panel opens */
+.hasDropdown:hover .dropdownItem,
+.hasDropdown:focus-within .dropdownItem {
+  animation: itemIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i) * 0.04s);
+}
+
+@keyframes itemIn { from { opacity: 0; transform: translateX(-10px); } }
+
+.itemOn { background: var(--surface-2); }
+
+.itemOn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--ink);
+}
+
+.itemText { flex: 1; min-width: 0; }
 
 .dropdownItem strong {
   display: block;
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   color: var(--text-main);
 }
 
 .dropdownItem small {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
 }
 
@@ -121,14 +158,87 @@
   width: 38px;
   height: 38px;
   min-width: 38px;
-  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
   background: var(--surface-2);
   color: var(--text-main);
+  transition: background 0.25s ease, color 0.25s ease;
 }
+
+.itemOn .dropdownIcon { background: var(--ink); color: var(--ink-contrast); }
+
+.itemArrow {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+
+.itemOn .itemArrow { opacity: 1; transform: none; }
+
+/* preview */
+.megaPreview {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.previewMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #0a0a0a;
+  overflow: hidden;
+  animation: previewIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.previewImg { object-fit: cover; }
+
+.previewIcon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.previewText {
+  padding: 14px 16px 16px;
+  animation: previewIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s both;
+}
+
+.previewText strong {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.previewText p {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.previewText span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+@keyframes previewIn { from { opacity: 0; transform: scale(1.04); } }
 
 /* actions */
 .actions {
@@ -260,6 +370,7 @@
 
   .dropdown {
     position: static;
+    display: block;
     width: auto;
     transform: none;
     opacity: 1;
@@ -269,6 +380,12 @@
     box-shadow: none;
     background: transparent;
   }
+
+  .megaPreview, .megaTitle, .itemArrow { display: none; }
+  .megaList { padding: 0; }
+  .itemOn { background: transparent; }
+  .itemOn::before { display: none; }
+  .itemOn .dropdownIcon { background: var(--surface-2); color: var(--text-main); }
 
   .hasDropdown:hover .dropdown,
   .hasDropdown:focus-within .dropdown { transform: none; }

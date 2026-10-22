@@ -6,6 +6,7 @@
   --ink: #1d1d1f;            /* buttons, icons, strong text */
   --ink-contrast: #ffffff;   /* text on --ink */
   --surface-2: #f5f5f7;      /* Apple gray sections and tiles */
+  --focus-ring: rgba(29, 29, 31, 0.08); /* soft ring around focused fields */
 
   --background: #ffffff;
   --foreground: #1d1d1f;
@@ -52,6 +53,7 @@
   --ink: #f5f5f7;
   --ink-contrast: #1d1d1f;
   --surface-2: #161617;
+  --focus-ring: rgba(245, 245, 247, 0.12);
   --background: #000000;
   --foreground: #f5f5f7;
   --card-bg: #1d1d1f;
@@ -242,3 +244,9 @@ input, textarea, select {
 ::-webkit-scrollbar-track { background: var(--background); }
 ::-webkit-scrollbar-thumb { background: #c7c7cc; border-radius: 0; border: 2px solid var(--background); }
 ::-webkit-scrollbar-thumb:hover { background: #a1a1a6; }
+
+/* keyboard focus on the public site: dark outline, no browser blue */
+:where(a, button, [role="radio"], summary):focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}

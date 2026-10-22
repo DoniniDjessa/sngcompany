@@ -2,9 +2,10 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { ChevronDown, Mail, Moon, Phone, Sun } from "@/components/icons"
+import { ArrowRight, ChevronDown, Mail, Moon, Phone, Sun } from "@/components/icons"
 import { useTheme } from "@/components/theme"
 import { telHref } from "@/lib/content"
+import CmsImage from "./CmsImage"
 import { useSite } from "./SiteContext"
 import Logo from "./Logo"
 import styles from "./Navbar.module.css"
@@ -18,6 +19,9 @@ export default function Navbar() {
   const { company, services } = useSite()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  // activity shown in the preview of the "Nos services" panel
+  const [preview, setPreview] = useState(0)
+  const shown = services[preview] ?? services[0]
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50)
@@ -47,16 +51,44 @@ export default function Navbar() {
               <li className={styles.menuItem}><Link href="/">Accueil</Link></li>
               <li className={`${styles.menuItem} ${styles.hasDropdown}`}>
                 <Link href="/#services">Nos Services <ChevronDown className={styles.caret} /></Link>
+                {/* mega panel: list on the left, preview of the hovered activity on the right */}
                 <div className={styles.dropdown}>
-                  {services.map((s) => (
-                    <Link key={s.slug} href={`/services/${s.slug}`} className={styles.dropdownItem}>
-                      <span className={styles.dropdownIcon} data-tone={s.tone}><s.icon /></span>
-                      <span>
-                        <strong>{s.name}</strong>
-                        <small>{s.tagline}</small>
-                      </span>
+                  <div className={styles.megaList}>
+                    <p className={styles.megaTitle}>Nos activités</p>
+                    {services.map((s, i) => (
+                      <Link
+                        key={s.slug}
+                        href={`/services/${s.slug}`}
+                        className={`${styles.dropdownItem} ${i === preview ? styles.itemOn : ""}`}
+                        style={{ ["--i" as string]: i }}
+                        onPointerEnter={() => setPreview(i)}
+                        onFocus={() => setPreview(i)}
+                      >
+                        <span className={styles.dropdownIcon}><s.icon /></span>
+                        <span className={styles.itemText}>
+                          <strong>{s.name}</strong>
+                          <small>{s.tagline}</small>
+                        </span>
+                        <ArrowRight className={styles.itemArrow} />
+                      </Link>
+                    ))}
+                  </div>
+                  {shown && (
+                    <Link href={`/services/${shown.slug}`} className={styles.megaPreview} tabIndex={-1} aria-hidden="true">
+                      <div key={shown.slug} className={styles.previewMedia}>
+                        {shown.image ? (
+                          <CmsImage src={shown.image} alt="" sizes="300px" className={styles.previewImg} />
+                        ) : (
+                          <span className={styles.previewIcon}><shown.icon /></span>
+                        )}
+                      </div>
+                      <div key={`t-${shown.slug}`} className={styles.previewText}>
+                        <strong>{shown.name}</strong>
+                        <p>{shown.short}</p>
+                        <span>Découvrir <ArrowRight /></span>
+                      </div>
                     </Link>
-                  ))}
+                  )}
                 </div>
               </li>
               {MENU.map((item) => (

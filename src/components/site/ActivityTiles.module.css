@@ -230,7 +230,7 @@
 .tile:is(:hover, .focus) .moreInner > :nth-child(2) { transition-delay: 0.2s; }
 .tile:is(:hover, .focus) .moreInner > :nth-child(3) { transition-delay: 0.28s; }
 
-.tile:focus-visible { outline: 3px solid #0071e3; outline-offset: 3px; }
+.tile:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 
 /* ---------- cursor bubble ---------- */
 .bubble {

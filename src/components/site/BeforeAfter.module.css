@@ -97,7 +97,7 @@
 }
 
 .range:focus-visible + .handle,
-.box:has(.range:focus-visible) .handle span { outline: 3px solid #0071e3; outline-offset: 3px; }
+.box:has(.range:focus-visible) .handle span { outline: 2px solid var(--ink); outline-offset: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   .handle span { animation: none; }

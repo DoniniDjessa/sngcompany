@@ -49,16 +49,16 @@ export default function RoadThread({ stations, tone }: { stations: { id: string;
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
 
   return (
-    <div className={tone === "orange" ? styles.orange : undefined}>
+    <>
     {/* small screens: the road lies across the top, under the menu */}
-    <div className={`${styles.mobileBar} ${visible ? styles.visible : ""}`} aria-hidden="true">
+    <div className={`${styles.mobileBar} ${tone === "orange" ? styles.orange : ""} ${visible ? styles.visible : ""}`} aria-hidden="true">
       <span key={current?.id} className={styles.mobileLabel}>{current?.label ?? ""}</span>
       <span className={styles.mobileTrack}>
         <span className={styles.mobileFill} style={{ transform: `scaleX(${progress})` }} />
         <span className={styles.mobileCar} style={{ left: `${progress * 100}%` }}><CarSide /></span>
       </span>
     </div>
-    <aside className={`${styles.road} ${visible ? styles.visible : ""}`} aria-label="Sections de la page">
+    <aside className={`${styles.road} ${tone === "orange" ? styles.orange : ""} ${visible ? styles.visible : ""}`} aria-label="Sections de la page">
       <div className={styles.track}>
         <div className={styles.fill} style={{ transform: `scaleY(${progress})` }} />
         {marks.map((m) => (
@@ -75,6 +75,6 @@ export default function RoadThread({ stations, tone }: { stations: { id: string;
         <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><CarTopFill /></span>
       </div>
     </aside>
-    </div>
+    </>
   )
 }

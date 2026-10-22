@@ -168,4 +168,4 @@
 }
 
 /* orange road (home and rental pages) */
-.orange { display: contents; --ink: #ea580c; --ink-contrast: #fff; }
+.orange { --ink: #ea580c; --ink-contrast: #fff; }

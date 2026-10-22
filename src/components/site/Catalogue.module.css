@@ -30,36 +30,62 @@
 .filters button.on { background: var(--ink); color: var(--ink-contrast); }
 .filters button.on span { color: inherit; opacity: 0.6; }
 
-/* ---------- product grid ---------- */
+/* ---------- product grid ----------
+   Card: blueprint (or photo) with the category and the code, the name, a stock meter in segments,
+   the price per day and a round "+" that opens into "Commander" when the card is hovered. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
 }
 
 .card {
+  --accent: #ea580c;
+  position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--surface-2);
-  border-radius: 0;
-  overflow: hidden;
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
-  animation: cardIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease, border-color 0.3s ease;
+  animation: cardIn 0.7s calc(var(--n) * 0.06s) cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-@keyframes cardIn { from { opacity: 0; transform: translateY(20px); } }
+@keyframes cardIn { from { opacity: 0; transform: translateY(24px); } }
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.08);
+  border-color: transparent;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
 }
+
+/* orange line drawn on top of the card on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.card:hover::before { transform: scaleX(1); }
 
 .media {
   position: relative;
-  aspect-ratio: 4 / 3;
-  background: var(--background);
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 11;
   overflow: hidden;
+  background: var(--surface-2);
+  cursor: pointer;
 }
+
+.media:disabled { cursor: default; }
 
 .media img {
   width: 100%;
@@ -68,7 +94,7 @@
   transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.card:hover .media img { transform: scale(1.06); }
+.card:hover .media img { transform: scale(1.03); }
 
 .placeholder {
   position: absolute;
@@ -76,38 +102,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 5rem;
+  font-size: 4.6rem;
   color: var(--text-main);
   background:
-    linear-gradient(var(--card-border) 1px, transparent 1px) 0 0 / 28px 28px,
-    linear-gradient(90deg, var(--card-border) 1px, transparent 1px) 0 0 / 28px 28px,
-    var(--background);
+    radial-gradient(circle at 50% 55%, var(--background) 0 30%, transparent 70%),
+    linear-gradient(var(--card-border) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--card-border) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--surface-2);
 }
 
-.placeholder svg { stroke-width: 1.2; opacity: 0.75; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.card:hover .placeholder svg { transform: scale(1.06) rotate(-4deg); }
+.placeholder svg { stroke-width: 1.1; transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.4s ease; }
+.card:hover .placeholder svg { transform: scale(1.05) rotate(-5deg); color: var(--accent); }
 
-.stock {
+.chip,
+.code {
   position: absolute;
   top: 14px;
-  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 5px 11px;
   border-radius: 980px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
-.inStock { background: rgba(255, 255, 255, 0.85); color: #1d1d1f; }
-.inStock::before { content: '●'; color: #34c759; margin-right: 6px; }
-.outStock { background: rgba(29, 29, 31, 0.85); color: #f5f5f7; }
+.chip { left: 14px; background: var(--ink); color: var(--ink-contrast); }
+.code { right: 14px; background: var(--background); color: var(--text-muted); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 
 .body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   padding: 22px 22px 20px;
 }
 
@@ -120,54 +147,110 @@
 }
 
 .body h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-family: var(--font-primary);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   color: var(--text-main);
 }
 
-.body p {
-  font-size: 0.9rem;
+.body > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.88rem;
   line-height: 1.5;
   color: var(--text-secondary);
 }
 
+/* stock meter */
+.meter { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.meter small { font-size: 0.76rem; font-weight: 600; white-space: nowrap; color: var(--text-muted); }
+
+.segments { flex: 1; display: flex; gap: 3px; }
+
+.segments i {
+  flex: 1;
+  max-width: 22px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--card-border);
+}
+
+.segments .on {
+  background: var(--accent);
+  animation: lit 0.4s calc(0.3s + var(--n) * 0.06s) ease both;
+}
+
+@keyframes lit { from { transform: scaleY(0.2); opacity: 0; } }
+
 .footer {
   margin-top: auto;
   padding-top: 16px;
+  border-top: 1px solid var(--card-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.price { white-space: nowrap; }
+.price { display: flex; flex-direction: column; white-space: nowrap; }
 
 .price strong {
   font-family: var(--font-primary);
-  font-size: 1.12rem;
+  font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-main);
 }
 
-.price span { margin-left: 3px; font-size: 0.78rem; color: var(--text-muted); }
+.price span { font-size: 0.74rem; color: var(--text-muted); }
 
+/* round "+" that opens into "Commander" when the card is hovered */
 .order {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 15px;
+  height: 44px;
+  padding: 0 14px;
   border-radius: 980px;
   background: var(--ink);
   color: var(--ink-contrast);
-  font-size: 0.85rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: background 0.25s ease, transform 0.2s ease;
 }
 
-.order:hover { opacity: 0.85; }
-.order:active { transform: scale(0.97); }
-.order:disabled { opacity: 0.3; cursor: not-allowed; }
+.order svg { flex: none; font-size: 1rem; transition: transform 0.4s ease; }
+
+.order span {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease, margin 0.45s ease;
+}
+
+.card:hover .order { background: var(--accent); color: #fff; }
+.card:hover .order svg { transform: rotate(90deg); }
+.card:hover .order span { max-width: 110px; margin-left: 8px; opacity: 1; }
+.order:active { transform: scale(0.96); }
+.order:disabled { background: var(--card-border); color: var(--text-muted); cursor: not-allowed; }
+
+/* out of stock: the card fades */
+.cardOut .media { filter: grayscale(1); opacity: 0.6; }
+.cardOut:hover { transform: none; box-shadow: none; border-color: var(--card-border); }
+.cardOut:hover::before { transform: scaleX(0); }
+
+/* touch screens: no hover, the button always shows its label */
+@media (hover: none) {
+  .order span { max-width: 110px; margin-left: 8px; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .segments .on { animation: none; }
+}
 
 /* ---------- order sheet ---------- */
 .backdrop {
@@ -344,4 +427,3 @@
 
 @keyframes tick { from { transform: translateY(-8px) scale(1.3); opacity: 0; } }
 
-.body .category { display: inline-flex; align-items: center; gap: 6px; }

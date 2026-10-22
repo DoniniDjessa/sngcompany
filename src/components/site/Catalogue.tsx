@@ -37,13 +37,18 @@ export default function Catalogue({ items }: { items: CatalogueItem[] }) {
       </div>
 
       <div className={styles.grid}>
-        {shown.map((item) => {
+        {shown.map((item, n) => {
           const stock = item.available ?? 0
+          const total = Math.max(stock, item.quantity ?? stock, 1)
           const photo = item.photos?.[0]
           const Icon = categoryIcon(item.category)
+          // stock meter: one segment per unit (10 at most)
+          const segments = Math.min(total, 10)
+          const lit = Math.round((stock / total) * segments)
+          const out = stock < 1
           return (
-            <article key={item.id} className={styles.card}>
-              <div className={styles.media}>
+            <article key={item.id} className={`${styles.card} ${out ? styles.cardOut : ""}`} style={{ ["--n" as string]: n % 6 }}>
+              <button type="button" className={styles.media} onClick={() => !out && setOrdering(item)} disabled={out} aria-label={`Commander ${item.name}`}>
                 {photo ? (
                   // eslint-disable-next-line @next/next/no-img-element -- signed R2 redirect
                   <img src={imgSrc(photo)} alt={item.name} loading="lazy" />
@@ -51,21 +56,28 @@ export default function Catalogue({ items }: { items: CatalogueItem[] }) {
                   // no photo yet: the icon of the category, drawn large on a blueprint
                   <span className={styles.placeholder}><Icon /></span>
                 )}
-                <span className={`${styles.stock} ${stock > 0 ? styles.inStock : styles.outStock}`}>
-                  {stock > 0 ? `${stock} disponible${stock > 1 ? "s" : ""}` : "Indisponible"}
-                </span>
-              </div>
+                <span className={styles.chip}><Icon /> {categoryLabel(item.category)}</span>
+                {item.code && <span className={styles.code}>{item.code}</span>}
+              </button>
+
               <div className={styles.body}>
-                <span className={styles.category}><Icon /> {categoryLabel(item.category)}</span>
                 <h3>{item.name}</h3>
                 {item.description && <p>{item.description}</p>}
+
+                <div className={styles.meter} aria-label={`${stock} sur ${total} disponibles`}>
+                  <span className={styles.segments} aria-hidden="true">
+                    {Array.from({ length: segments }, (_, k) => <i key={k} className={k < lit ? styles.on : ""} />)}
+                  </span>
+                  <small>{out ? "Indisponible" : `${stock} / ${total} disponible${stock > 1 ? "s" : ""}`}</small>
+                </div>
+
                 <div className={styles.footer}>
-                  <div className={styles.price}>
+                  <p className={styles.price}>
                     <strong>{formatXOF(item.price_day)}</strong>
-                    <span>/ jour</span>
-                  </div>
-                  <button className={styles.order} disabled={stock < 1} onClick={() => setOrdering(item)} aria-label={`Commander ${item.name}`}>
-                    <Plus /> Commander
+                    <span>par jour</span>
+                  </p>
+                  <button className={styles.order} disabled={out} onClick={() => setOrdering(item)} aria-label={`Commander ${item.name}`}>
+                    <Plus /><span>Commander</span>
                   </button>
                 </div>
               </div>

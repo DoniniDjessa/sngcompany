@@ -452,7 +452,7 @@
   display: block;
   width: var(--w);
   height: 100%;
-  background: #34c759;
+  background: #ea580c;
   transform-origin: left;
   animation: fillBar 1.2s 1s var(--ease) both;
 }

@@ -148,6 +148,11 @@ function OrderSheet({ item, onClose }: { item: CatalogueItem; onClose: () => voi
               <label className={styles.full}>Précisions<textarea rows={2} value={v.notes} onChange={set("notes")} placeholder="Livraison, montage, technicien…" /></label>
             </div>
 
+            <p className={styles.left} aria-live="polite">
+              <span key={max - v.quantity} className={styles.leftNum}>{Math.max(0, max - v.quantity)}</span>
+              {" "}en stock après votre commande
+            </p>
+
             <div className={styles.total}>
               <span>{v.quantity} × {n} jour{n > 1 ? "s" : ""}</span>
               <strong>{formatXOF(total)}</strong>

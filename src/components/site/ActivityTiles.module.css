@@ -48,8 +48,10 @@
 
 .media {
   position: absolute;
-  inset: 0;
+  inset: -16px;
   z-index: -2;
+  transform: translate3d(calc(var(--mx, 0) * -22px), calc(var(--my, 0) * -16px), 0);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .img {
@@ -123,6 +125,8 @@
 
 /* bottom: title + content that unfolds */
 .bottom {
+  transform: translate3d(calc(var(--mx, 0) * 8px), calc(var(--my, 0) * 6px), 0);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: absolute;
   left: 0;
   right: 0;
@@ -239,8 +243,10 @@
   transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.bubble span {
+.bubble > span {
   display: flex;
+  flex-direction: column;
+  gap: 2px;
   align-items: center;
   justify-content: center;
   width: 96px;
@@ -255,7 +261,106 @@
   transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1.4);
 }
 
-.grid:has(.tile:hover) .bubble span { transform: scale(1); }
+.grid:has(.tile:hover) .bubble > span { transform: scale(1); }
+
+.bubbleIcon {
+  font-size: 1.35rem;
+  animation: iconPop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+@keyframes iconPop { from { transform: scale(0.3) rotate(-20deg); opacity: 0; } }
+
+/* ---------- trade-specific hover effects ---------- */
+.fx {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* vehicles: a headlight streak sweeps across the photo */
+.beam {
+  position: absolute;
+  top: -20%;
+  left: -60%;
+  width: 45%;
+  height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-18deg);
+  opacity: 0;
+}
+
+.tile:hover .beam { animation: beam 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.15s; }
+
+@keyframes beam {
+  0% { left: -60%; opacity: 0; }
+  20% { opacity: 1; }
+  100% { left: 130%; opacity: 0; }
+}
+
+/* transport: speed lines rushing from right to left */
+.speed {
+  position: absolute;
+  right: -30%;
+  top: calc(18% + var(--k) * 13%);
+  width: calc(80px + var(--k) * 24px);
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55));
+  opacity: 0;
+}
+
+.tile:hover .speed { animation: speed 0.9s linear calc(var(--k) * 0.13s) infinite; }
+
+@keyframes speed {
+  0% { right: -30%; opacity: 0; }
+  20% { opacity: 1; }
+  100% { right: 120%; opacity: 0; }
+}
+
+/* washing: soap bubbles rise */
+.bubbleFx {
+  position: absolute;
+  bottom: -40px;
+  left: calc(6% + var(--k) * 9.5%);
+  width: calc(12px + var(--k) * 2px);
+  height: calc(12px + var(--k) * 2px);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.05) 60%);
+  opacity: 0;
+}
+
+.tile:hover .bubbleFx { animation: rise 2.6s ease-in calc(var(--k) * 0.22s) infinite; }
+
+@keyframes rise {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(calc((var(--k) - 5) * 4px), -420px) scale(1.1); opacity: 0; }
+}
+
+/* equipment: the wrench tightens */
+[data-fx="location-equipements"]:hover .fallback svg { animation: tighten 1.4s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+
+@keyframes tighten {
+  0%, 100% { transform: rotate(0deg); }
+  40% { transform: rotate(-28deg); }
+  60% { transform: rotate(-22deg); }
+}
+
+/* farming: the sprout draws itself */
+[data-fx="elevage"] .fallback svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 0;
+}
+
+[data-fx="elevage"]:hover .fallback svg path { animation: grow 1.6s cubic-bezier(0.5, 0, 0.2, 1) both; }
+[data-fx="elevage"]:hover .fallback svg path:nth-child(2) { animation-delay: 0.25s; }
+[data-fx="elevage"]:hover .fallback svg path:nth-child(3) { animation-delay: 0.55s; }
+[data-fx="elevage"]:hover .fallback svg path:nth-child(4) { animation-delay: 0.75s; }
+
+@keyframes grow { from { stroke-dashoffset: 60; } to { stroke-dashoffset: 0; } }
 
 /* touch screens: no hover, so everything is shown */
 @media (hover: none) {
@@ -275,6 +380,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .fx { display: none; }
+  .media, .bottom { transform: none; transition: none; }
   .tile { animation: none; opacity: 1; transform: none; transition: none; }
   .img, .fallback, .more, .moreInner > *, .title { transition: none; }
 }

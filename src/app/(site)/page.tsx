@@ -2,6 +2,9 @@ import { Check, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users 
 import ActivityTiles from "@/components/site/ActivityTiles"
 import CmsImage from "@/components/site/CmsImage"
 import HeroCarousel from "@/components/site/HeroCarousel"
+import { Commitments, Faq, Partners, ScrollText } from "@/components/site/HomeSections"
+import RoadThread from "@/components/site/RoadThread"
+import ServedZones from "@/components/site/ServedZones"
 import QuoteForm from "@/components/site/QuoteForm"
 import { telHref } from "@/lib/content"
 import { getContent } from "@/lib/content-server"
@@ -26,12 +29,17 @@ export default async function Home() {
         <ActivityTiles />
       </section>
 
+      {/* --- COMMITMENTS --- */}
+      <section id="engagements" className={`${styles.section} reveal`}>
+        <Commitments data={h.commitments} />
+      </section>
+
       {/* --- ABOUT --- */}
       <section id="a-propos" className={`${styles.section} reveal`}>
         <div className={styles.sectionHead}>
           <p className={styles.eyebrow}>{h.about.eyebrow}</p>
           <h2 className={styles.sectionTitle}>{h.about.title}</h2>
-          <p className={styles.sectionLead}>{h.about.text}</p>
+          <ScrollText text={h.about.text} className={styles.aboutText} />
         </div>
         {h.about.image && (
           <div className={`${styles.aboutMedia} img-reveal`}>
@@ -41,6 +49,11 @@ export default async function Home() {
         <ul className={`${styles.values} stagger`}>
           {h.about.values.map((v) => <li key={v}><Check /> {v}</li>)}
         </ul>
+      </section>
+
+      {/* --- SERVED ZONES --- */}
+      <section id="zones" className={`${styles.graySectionAlt} reveal`}>
+        <ServedZones {...h.zones} />
       </section>
 
       {/* --- WHY US --- */}
@@ -63,7 +76,7 @@ export default async function Home() {
       </section>
 
       {/* --- HOW IT WORKS --- */}
-      <section className={`${styles.darkSection} reveal`}>
+      <section id="etapes" className={`${styles.darkSection} reveal`}>
         <div className={styles.sectionHead}>
           <p className={styles.eyebrow}>{h.steps.eyebrow}</p>
           <h2 className={styles.sectionTitle}>{h.steps.title}</h2>
@@ -77,6 +90,18 @@ export default async function Home() {
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* --- PARTNERS (only once some are added) --- */}
+      {h.partners.items.length > 0 && (
+        <section className={`${styles.section} reveal`}>
+          <Partners data={h.partners} />
+        </section>
+      )}
+
+      {/* --- FAQ --- */}
+      <section id="faq" className={`${styles.graySection} reveal`}>
+        <Faq data={h.faq} />
       </section>
 
       {/* --- CAR SITE --- */}
@@ -116,6 +141,17 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      <RoadThread
+        stations={[
+          { id: "services", label: "Activités" },
+          { id: "engagements", label: "Engagements" },
+          { id: "a-propos", label: "Qui sommes-nous" },
+          { id: "zones", label: "Zones desservies" },
+          { id: "etapes", label: "Comment ça marche" },
+          { id: "faq", label: "Questions" },
+          { id: "contact", label: "Contact" },
+        ]}
+      />
     </main>
   )
 }

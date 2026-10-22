@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight, Check, External } from "@/components/icons"
+import BeforeAfter from "@/components/site/BeforeAfter"
 import Catalogue from "@/components/site/Catalogue"
 import CmsImage from "@/components/site/CmsImage"
 import QuoteForm from "@/components/site/QuoteForm"
@@ -48,7 +49,11 @@ export default async function ServicePage({ params }: Props) {
         </div>
         {s.image && (
           <div className={styles.pageHeroMedia}>
-            <CmsImage src={s.image} alt={s.name} priority sizes="(max-width: 1200px) 100vw, 1200px" className={styles.cover} />
+            {s.slug === "lavage-vehicules" ? (
+              <BeforeAfter image={s.image} alt={s.name} />
+            ) : (
+              <CmsImage src={s.image} alt={s.name} priority sizes="(max-width: 1200px) 100vw, 1200px" className={styles.cover} />
+            )}
           </div>
         )}
       </section>

@@ -19,6 +19,7 @@ export function useTheme() {
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark"
     document.documentElement.setAttribute("data-theme", next)
+    if (next === "dark") window.dispatchEvent(new Event("sng:headlights"))
     try {
       localStorage.setItem("theme", next)
     } catch {}

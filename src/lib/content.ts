@@ -40,6 +40,11 @@ export interface HomeContent {
   steps: { eyebrow: string; title: string; items: { title: string; text: string }[] }
   cars: { eyebrow: string; title: string; text: string; image: string }
   contact: { eyebrow: string; title: string; text: string }
+  commitments: { eyebrow: string; title: string; items: { value: string; label: string; text: string }[] }
+  zones: { eyebrow: string; title: string; text: string; abidjan: string[]; interior: string[] }
+  faq: { eyebrow: string; title: string; text: string; items: { q: string; a: string }[] }
+  /** hidden while the list is empty */
+  partners: { eyebrow: string; title: string; items: { name: string; logo: string }[] }
 }
 
 export const DEFAULT_COMPANY: CompanyContent = {
@@ -140,6 +145,41 @@ export const DEFAULT_HOME: HomeContent = {
     eyebrow: "Contact",
     title: "Parlons de votre projet.",
     text: "Décrivez votre besoin, nous revenons vers vous sous 24h.",
+  },
+  commitments: {
+    eyebrow: "Nos engagements",
+    title: "Des promesses, tenues.",
+    items: [
+      { value: "24 h", label: "pour vous répondre", text: "Chaque demande reçoit une réponse sous 24 heures, jours ouvrés." },
+      { value: "100 %", label: "du matériel vérifié", text: "Véhicules révisés et équipements contrôlés avant chaque sortie." },
+      { value: "7j/7", label: "joignables", text: "Un numéro direct pendant toute votre location ou mission." },
+      { value: "0", label: "frais cachés", text: "Un devis clair et détaillé, accepté avant toute intervention." },
+    ],
+  },
+  zones: {
+    eyebrow: "Zones desservies",
+    title: "Partout à Abidjan. Et au-delà.",
+    text: "Nos équipes interviennent dans toutes les communes du Grand Abidjan, et nos véhicules circulent vers les grandes villes de l'intérieur.",
+    abidjan: ["Plateau", "Cocody", "Yopougon", "Abobo", "Adjamé", "Treichville", "Marcory", "Koumassi", "Port-Bouët", "Bingerville"],
+    interior: ["Grand-Bassam", "Yamoussoukro", "Bouaké", "San-Pédro", "Daloa", "Korhogo"],
+  },
+  faq: {
+    eyebrow: "Questions fréquentes",
+    title: "Tout ce qu'il faut savoir.",
+    text: "Vous ne trouvez pas votre réponse ? Écrivez-nous, nous répondons sous 24h.",
+    items: [
+      { q: "Comment demander un service ?", a: "Par le formulaire du site, par téléphone ou sur WhatsApp. Un conseiller vous rappelle sous 24h avec une proposition claire." },
+      { q: "Intervenez-vous en dehors d'Abidjan ?", a: "Oui. Nos véhicules et nos équipes se déplacent vers les grandes villes de l'intérieur ; un supplément de déplacement peut s'appliquer." },
+      { q: "Quels moyens de paiement acceptez-vous ?", a: "Espèces, Mobile Money (Orange, MTN, Moov, Wave) et virement bancaire. Les entreprises peuvent bénéficier d'une facturation mensuelle." },
+      { q: "Peut-on combiner plusieurs services ?", a: "Bien sûr : un déménagement avec location de véhicule, un événement avec matériel et traiteur de la ferme… Vous avez un seul interlocuteur et une seule facture." },
+      { q: "Proposez-vous des contrats pour les entreprises ?", a: "Oui : mise à disposition de véhicules, livraisons régulières, abonnements de lavage de flotte et approvisionnement de la ferme, avec des tarifs dédiés." },
+      { q: "Que se passe-t-il en cas de problème pendant une location ?", a: "Appelez notre numéro direct : nous intervenons rapidement, remplaçons le véhicule ou le matériel si nécessaire." },
+    ],
+  },
+  partners: {
+    eyebrow: "Ils nous font confiance",
+    title: "Nos partenaires.",
+    items: [],
   },
 }
 
@@ -250,6 +290,57 @@ export const HOME_DOC: DocDef = {
         { key: "eyebrow", label: "Sur-titre", type: "text" },
         { key: "title", label: "Titre de la section", type: "text" },
         { key: "items", label: "Étapes", type: "list", itemLabel: "étape", fields: titleText },
+      ],
+    },
+    {
+      title: "Nos engagements",
+      path: "commitments",
+      fields: [
+        { key: "eyebrow", label: "Sur-titre", type: "text" },
+        { key: "title", label: "Titre", type: "text" },
+        {
+          key: "items",
+          label: "Engagements",
+          type: "list",
+          itemLabel: "engagement",
+          fields: [
+            { key: "value", label: "Valeur (ex. 24 h, 100 %)", type: "text" },
+            { key: "label", label: "Libellé", type: "text" },
+            { key: "text", label: "Détail", type: "textarea" },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Zones desservies",
+      description: "Les communes connues d'Abidjan sont placées sur la carte ; les autres apparaissent dans la liste.",
+      path: "zones",
+      fields: [
+        { key: "eyebrow", label: "Sur-titre", type: "text" },
+        { key: "title", label: "Titre", type: "text" },
+        { key: "text", label: "Texte", type: "textarea" },
+        { key: "abidjan", label: "Communes d'Abidjan", type: "tags", hint: "Une commune par ligne" },
+        { key: "interior", label: "Villes de l'intérieur", type: "tags", hint: "Une ville par ligne" },
+      ],
+    },
+    {
+      title: "Partenaires",
+      description: "La section n'apparaît que lorsqu'au moins un partenaire est ajouté. Logo PNG détouré conseillé.",
+      path: "partners",
+      fields: [
+        { key: "eyebrow", label: "Sur-titre", type: "text" },
+        { key: "title", label: "Titre", type: "text" },
+        { key: "items", label: "Partenaires", type: "list", itemLabel: "partenaire", fields: [{ key: "name", label: "Nom", type: "text" }, { key: "logo", label: "Logo", type: "image" }] },
+      ],
+    },
+    {
+      title: "Questions fréquentes",
+      path: "faq",
+      fields: [
+        { key: "eyebrow", label: "Sur-titre", type: "text" },
+        { key: "title", label: "Titre", type: "text" },
+        { key: "text", label: "Texte", type: "textarea" },
+        { key: "items", label: "Questions", type: "list", itemLabel: "question", fields: [{ key: "q", label: "Question", type: "text" }, { key: "a", label: "Réponse", type: "textarea" }] },
       ],
     },
     {

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { Car } from "@/components/icons"
 import { useSite } from "./SiteContext"
 import styles from "./Extras.module.css"
 
@@ -55,5 +56,48 @@ export function GoToTop() {
     >
       ↑
     </button>
+  )
+}
+
+/** First visit of the session: a car crosses the screen and pulls the curtain off the site (< 1 s).
+ *  Shown only when the inline script of app/layout.tsx put the "sng-intro" class on <html>. */
+export function Intro() {
+  useEffect(() => {
+    const html = document.documentElement
+    if (!html.classList.contains("sng-intro")) return
+    const done = setTimeout(() => {
+      html.classList.remove("sng-intro")
+      try {
+        sessionStorage.setItem("sng-intro", "1")
+      } catch {}
+    }, 1150)
+    return () => clearTimeout(done)
+  }, [])
+  return (
+    <div className={styles.intro} aria-hidden="true">
+      <div className={styles.introCurtain} />
+      <div className={styles.introRoad} />
+      {/* the car rides just ahead of the edge of the curtain */}
+      <span className={styles.introCar}><Car /></span>
+    </div>
+  )
+}
+
+/** Switching to the night theme: two headlight beams sweep across the page */
+export function Headlights() {
+  const [run, setRun] = useState(0)
+  useEffect(() => {
+    const play = () => {
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) setRun((n) => n + 1)
+    }
+    window.addEventListener("sng:headlights", play)
+    return () => window.removeEventListener("sng:headlights", play)
+  }, [])
+  if (!run) return null
+  return (
+    <div key={run} className={styles.headlights} aria-hidden="true" onAnimationEnd={(e) => e.currentTarget === e.target && setRun(0)}>
+      <span className={styles.beamLeft} />
+      <span className={styles.beamRight} />
+    </div>
   )
 }

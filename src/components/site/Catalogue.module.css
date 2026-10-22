@@ -318,3 +318,20 @@
   .wide { grid-column: 1 / -1; }
   .sheet { padding: 28px 20px 24px; }
 }
+
+/* stock left after the order, the figure ticks when the quantity changes */
+.left {
+  margin-top: 16px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.leftNum {
+  display: inline-block;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  color: var(--text-main);
+  animation: tick 0.4s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+@keyframes tick { from { transform: translateY(-8px) scale(1.3); opacity: 0; } }

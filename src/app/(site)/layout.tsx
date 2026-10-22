@@ -11,10 +11,10 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const clientServices = JSON.parse(JSON.stringify(services)) as ClientService[]
   return (
     <SiteProvider value={{ company, services: clientServices }}>
-      {/* first visit of the session: flag the intro before the page paints */}
+      {/* first visit of the session (full intro) or reload (short intro): flag it before the page paints */}
       <script
         dangerouslySetInnerHTML={{
-          __html: `(function(){try{if(!sessionStorage.getItem('sng-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('sng-intro');}catch(e){}})();`,
+          __html: `(function(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var c=document.documentElement.classList,n=performance.getEntriesByType('navigation')[0];if(!sessionStorage.getItem('sng-intro'))c.add('sng-intro');else if(n&&n.type==='reload')c.add('sng-intro','sng-intro-quick');}catch(e){}})();`,
         }}
       />
       <Navbar />

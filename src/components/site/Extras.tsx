@@ -59,23 +59,27 @@ export function GoToTop() {
   )
 }
 
-/** First visit of the session: a car crosses the screen and pulls the curtain off the site (< 1 s).
+/** First visit of the session: a car crosses the screen and pulls the curtain off the site (~2.5 s);
+ *  on a reload, a shorter pass (~1.4 s, "sng-intro-quick").
  *  Shown only when the inline script of app/layout.tsx put the "sng-intro" class on <html>. */
 export function Intro() {
   useEffect(() => {
     const html = document.documentElement
     if (!html.classList.contains("sng-intro")) return
+    const quick = html.classList.contains("sng-intro-quick")
     const done = setTimeout(() => {
-      html.classList.remove("sng-intro")
+      html.classList.remove("sng-intro", "sng-intro-quick")
       try {
         sessionStorage.setItem("sng-intro", "1")
       } catch {}
-    }, 1150)
+    }, quick ? 1400 : 2500)
     return () => clearTimeout(done)
   }, [])
   return (
     <div className={styles.intro} aria-hidden="true">
-      <div className={styles.introCurtain} />
+      <div className={styles.introCurtain}>
+        <span className={styles.introMark}>SNG</span>
+      </div>
       <div className={styles.introRoad} />
       {/* the car rides just ahead of the edge of the curtain */}
       <span className={styles.introCar}><CarSide /></span>

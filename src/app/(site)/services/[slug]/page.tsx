@@ -9,6 +9,8 @@ import RentalPage from "@/components/site/elite/RentalPage"
 import StackedCards from "@/components/site/activity/StackedCards"
 import TransportHero from "@/components/site/activity/TransportHero"
 import EquipmentHero from "@/components/site/activity/EquipmentHero"
+import FarmHero from "@/components/site/activity/FarmHero"
+import PartnerForm from "@/components/site/activity/PartnerForm"
 import WashBooking from "@/components/site/activity/WashBooking"
 import WashHero from "@/components/site/activity/WashHero"
 import WashMap from "@/components/site/activity/WashMap"
@@ -220,6 +222,26 @@ export default async function ServicePage({ params }: Props) {
         </section>
         {faqSection}
         {contactSection}
+        {othersSection}
+      </main>
+    )
+  }
+
+  // farm: the hero, the partnership request and the other activities, nothing else
+  if (s.slug === "elevage") {
+    return (
+      <main className={styles.main}>
+        <FarmHero service={s} />
+        <section id="partenariat" data-station="Partenariat" className={`${styles.premiumSection} reveal`}>
+          <div className={styles.sectionHeaderPremium}>
+            <div>
+              <div className="badge-premium">Partenariats</div>
+              <h2 className="title-premium">Grandissons <span>ensemble.</span></h2>
+            </div>
+            <p className={styles.headerText}>Restaurants, hôtels, revendeurs ou éleveurs : proposez-nous un partenariat, nous vous rappelons sous 48h.</p>
+          </div>
+          <PartnerForm products={s.prestations.map((p) => p.title)} />
+        </section>
         {othersSection}
       </main>
     )

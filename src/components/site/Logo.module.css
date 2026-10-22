@@ -1,68 +1,39 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .mark {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 0;
-  background: var(--brand-gradient);
-  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--ink);
+  color: var(--ink-contrast);
   font-family: var(--font-primary);
   font-weight: 900;
-  font-size: 1.05rem;
+  font-size: 0.62rem;
   letter-spacing: 0.04em;
-  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.mark::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 5px;
-  background: var(--primary);
 }
 
 .text {
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .text strong {
   font-family: var(--font-primary);
-  font-size: 1.35rem;
-  font-weight: 900;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--text-main);
-  letter-spacing: -0.01em;
 }
 
-.text small {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--primary);
-  letter-spacing: 0.04em;
-}
+.text small { display: none; }
 
-.light .text strong {
-  color: white;
-}
-
-.light .text small {
-  color: #94d648;
-}
-
-@media (max-width: 480px) {
-  .mark { width: 46px; height: 46px; font-size: 0.9rem; border-radius: 0; }
-  .text strong { font-size: 1.1rem; }
-  .text small { display: none; }
-}
+.light .mark { background: var(--ink); color: var(--ink-contrast); }
+.light .text strong { color: var(--text-main); }

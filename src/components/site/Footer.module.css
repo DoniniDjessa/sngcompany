@@ -1,115 +1,73 @@
+/* Apple-style footer: light gray, small print, quiet links */
 .footer {
-  background: #064e3b;
-  color: white;
-  padding: 90px 0 30px;
-  position: relative;
-  overflow: hidden;
-}
-
-.footer::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 85% 10%, rgba(30, 58, 138, 0.55), transparent 55%);
-  pointer-events: none;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  padding: 56px 0 26px;
+  font-size: 0.78rem;
+  line-height: 1.6;
 }
 
 .container {
-  max-width: var(--max-width);
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 2rem;
-  position: relative;
+  padding: 0 22px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
   gap: 40px;
-  margin-bottom: 60px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--card-border);
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 14px;
 }
 
 .description {
-  font-size: 0.95rem;
-  line-height: 1.8;
-  opacity: 0.7;
-  max-width: 360px;
+  max-width: 340px;
 }
 
 .title {
-  font-size: 1.2rem;
-  font-weight: 800;
-  position: relative;
-  padding-bottom: 15px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
-.title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 30px;
-  height: 2px;
-  background: #7dd3fc;
-}
+.list li { margin-bottom: 8px; }
 
-.list li {
-  margin-bottom: 12px;
-}
-
-.list a {
-  font-size: 0.95rem;
-  opacity: 0.65;
-  font-weight: 500;
-}
-
-.list a:hover {
-  opacity: 1;
-  color: #7dd3fc;
-  padding-left: 8px;
-}
+.list a:hover { color: var(--text-main); text-decoration: underline; }
 
 .contactList li {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  font-size: 0.95rem;
-  margin-bottom: 14px;
-  opacity: 0.85;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .contactList svg {
   flex-shrink: 0;
-  margin-top: 4px;
-  color: #94d648;
+  margin-top: 3px;
+  color: var(--text-main);
 }
 
-.contactList a:hover {
-  color: #7dd3fc;
-}
+.contactList a:hover { color: var(--text-main); text-decoration: underline; }
 
 .bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 28px;
+  padding-top: 18px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
-  font-size: 0.88rem;
-  opacity: 0.6;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .grid { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 640px) {
-  .footer { padding: 60px 0 30px; }
-  .container { padding: 0 20px; }
-  .grid { grid-template-columns: 1fr; gap: 34px; }
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; gap: 28px; }
 }

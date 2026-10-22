@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { ChevronDown, Clock, Mail, Moon, Phone, Sun } from "@/components/icons"
+import { ChevronDown, Mail, Moon, Phone, Sun } from "@/components/icons"
 import { useTheme } from "@/components/theme"
 import { SERVICES } from "@/lib/services"
 import { SITE } from "@/lib/site"
@@ -34,16 +34,6 @@ export default function Navbar() {
 
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
-      <div className={styles.topBar}>
-        <div className={styles.container}>
-          <div className={styles.topBarContent}>
-            <a href={SITE.phoneHref}><Phone /> {SITE.phone}</a>
-            <a href={`mailto:${SITE.email}`}><Mail /> {SITE.email}</a>
-            <span><Clock /> {SITE.hours}</span>
-          </div>
-        </div>
-      </div>
-
       <nav className={styles.nav} aria-label="Navigation principale">
         <div className={styles.container}>
           <div className={styles.navContent}>

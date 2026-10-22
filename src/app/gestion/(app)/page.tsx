@@ -10,7 +10,8 @@ import { formatDate, formatXOF } from "@/lib/site"
 import { useCollection, type Row } from "@/lib/store"
 
 const num = (v: unknown) => Number(v) || 0
-const TONE_COLOR: Record<string, string> = { green: "#22c55e", blue: "#26abe2", orange: "#f97316", rose: "#db2777", violet: "#7c3aed" }
+// Apple system colors for the charts
+const TONE_COLOR: Record<string, string> = { green: "#34c759", blue: "#0071e3", orange: "#ff9500", rose: "#ff2d55", violet: "#af52de" }
 
 export default function DashboardPage() {
   const session = useSession()
@@ -42,9 +43,9 @@ export default function DashboardPage() {
   const maxActivity = Math.max(1, ...byActivity.map((a) => a.total))
 
   const fleet = [
-    { label: "Disponibles", value: vehicules.filter((v) => v.status === "disponible").length, color: "#76b82a" },
-    { label: "En location", value: vehicules.filter((v) => v.status === "loue").length, color: "#26abe2" },
-    { label: "Maintenance", value: vehicules.filter((v) => ["maintenance", "hors_service"].includes(String(v.status))).length, color: "#f59e0b" },
+    { label: "Disponibles", value: vehicules.filter((v) => v.status === "disponible").length, color: "#34c759" },
+    { label: "En location", value: vehicules.filter((v) => v.status === "loue").length, color: "#0071e3" },
+    { label: "Maintenance", value: vehicules.filter((v) => ["maintenance", "hors_service"].includes(String(v.status))).length, color: "#ff9500" },
   ]
 
   type Event = { icon: Icon; tone: Tone; title: string; sub: string; time: string; href: string }

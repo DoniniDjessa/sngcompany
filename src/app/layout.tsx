@@ -1,11 +1,10 @@
 import type { Metadata } from "next"
-import { Outfit, Playfair_Display, Plus_Jakarta_Sans } from "next/font/google"
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 import { SITE } from "@/lib/site"
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["600", "700", "800", "900"], variable: "--font-outfit" })
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-jakarta" })
-const playfair = Playfair_Display({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-playfair" })
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" suppressHydrationWarning className={`${outfit.variable} ${jakarta.variable} ${playfair.variable}`}>
+    <html lang="fr" suppressHydrationWarning className={`${outfit.variable} ${jakarta.variable}`}>
       <body>
         <script
           dangerouslySetInnerHTML={{

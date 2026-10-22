@@ -1,79 +1,70 @@
 .widget {
   position: fixed;
-  left: 30px;
-  bottom: 30px;
+  left: 24px;
+  bottom: 24px;
   z-index: 9999;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  gap: 10px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .iconWrapper {
-  width: 62px;
-  height: 62px;
-  background: #25d366;
-  color: white;
-  border-radius: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--ink-contrast);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
-  animation: pulse 2s infinite;
+  box-shadow: var(--shadow-lg);
 }
 
+.iconWrapper svg { width: 26px; height: 26px; }
+
 .label {
-  background: var(--background);
+  padding: 9px 16px;
+  border-radius: 980px;
+  background: var(--card-bg);
   color: var(--text-main);
-  padding: 10px 20px;
-  border-radius: 0;
-  font-weight: 800;
-  font-size: 0.9rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--card-border);
-  transform: translateX(-10px);
+  font-weight: 600;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+  transform: translateX(-8px);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  white-space: nowrap;
 }
 
-.widget:hover { transform: scale(1.06); }
-.widget:hover .label { transform: translateX(0); opacity: 1; visibility: visible; }
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.45); }
-  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-}
+.widget:hover { transform: scale(1.05); }
+.widget:hover .label { transform: none; opacity: 1; visibility: visible; }
 
 .goTop {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  background: var(--navy);
-  color: white;
-  border-radius: 0;
-  font-size: 1.3rem;
-  font-weight: 800;
-  z-index: 999;
+  right: 24px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: 700;
   box-shadow: var(--shadow-lg);
-  transition: var(--transition);
+  z-index: 999;
   opacity: 0;
   visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
 }
 
-.goTop.visible { opacity: 1; visibility: visible; }
-.goTop:hover { background: var(--primary); transform: scale(1.1); }
+.goTop.visible { opacity: 1; visibility: visible; transform: none; }
+.goTop:hover { background: var(--ink); color: var(--ink-contrast); }
 
 @media (max-width: 768px) {
   .widget { left: 16px; bottom: 16px; }
   .label { display: none; }
   .goTop { right: 16px; bottom: 16px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .iconWrapper { animation: none; }
 }

@@ -296,6 +296,76 @@
 .paused .fill { animation-play-state: paused; }
 .paused .active .img { animation-play-state: paused; }
 
+/* ---------- top progress road ---------- */
+.road {
+  position: absolute;
+  z-index: 5;
+  top: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 16px;
+  border-radius: 980px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.roadLabel {
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: rgba(245, 245, 247, 0.85);
+}
+
+.roadLabel:last-child { color: rgba(245, 245, 247, 0.45); }
+
+.track {
+  position: relative;
+  width: clamp(160px, 26vw, 360px);
+  height: 2px;
+  border-radius: 980px;
+  background: repeating-linear-gradient(90deg, rgba(245, 245, 247, 0.35) 0 8px, transparent 8px 14px);
+}
+
+/* the line fills behind the car */
+.trail {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #f5f5f7;
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: progressX var(--d) linear forwards;
+}
+
+.runner {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  font-size: 1.55rem;
+  color: #f5f5f7;
+  transform: translate(-50%, -62%);
+  animation: drive var(--d) linear forwards;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* tiny suspension bounce while driving */
+.runner svg { animation: bounce 0.36s ease-in-out infinite alternate; }
+
+@keyframes progressX { to { transform: scaleX(1); } }
+@keyframes drive { to { left: 100%; } }
+@keyframes bounce { to { transform: translateY(-1.5px); } }
+
+.paused .trail,
+.paused .runner,
+.paused .runner svg { animation-play-state: paused; }
+
 /* ---------- scroll cue ---------- */
 .scroll {
   position: absolute;
@@ -334,6 +404,7 @@
   .text { font-size: 0.98rem; }
   .ghost { display: none; }
   .scroll { display: none; }
+  .road { top: 14px; gap: 10px; padding: 6px 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -341,5 +412,8 @@
   .active .img { animation: none; }
   /* no autoplay: the bar stays still */
   .fill { animation: none; transform: scaleY(1); }
+  .trail { animation: none; transform: scaleX(1); }
+  .runner { animation: none; left: 100%; }
+  .runner svg { animation: none; }
   .scroll svg { animation: none; }
 }

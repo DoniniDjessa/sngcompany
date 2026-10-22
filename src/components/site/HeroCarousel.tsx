@@ -1,12 +1,12 @@
 "use client"
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { ArrowRight, ChevronDown } from "@/components/icons"
+import { ArrowRight, Car, ChevronDown } from "@/components/icons"
 import type { HeroSlide } from "@/lib/content"
 import CmsImage from "./CmsImage"
 import styles from "./HeroCarousel.module.css"
 
-const DURATION = 6500 // ms per slide
+const DURATION = 4500 // ms per slide
 
 // Full-width hero carousel, one image per slide.
 // The incoming slide is uncovered like a curtain (from below going forward, from above going back),
@@ -91,6 +91,18 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
           </div>
         )
       })}
+
+      {/* top: a car drives along the line while the active slide plays */}
+      {count > 1 && (
+        <div className={styles.road} aria-hidden="true" style={{ ["--d" as string]: `${DURATION}ms` }}>
+          <span className={styles.roadLabel}>{String(index + 1).padStart(2, "0")}</span>
+          <span className={styles.track}>
+            <span key={index} className={styles.trail} />
+            <span key={`car-${index}`} className={styles.runner}><Car /></span>
+          </span>
+          <span className={styles.roadLabel}>{String(((index + 1) % count) + 1).padStart(2, "0")}</span>
+        </div>
+      )}
 
       {/* vertical navigation: counter + progress dots */}
       {count > 1 && (

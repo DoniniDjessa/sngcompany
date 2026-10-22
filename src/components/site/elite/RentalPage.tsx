@@ -2,7 +2,6 @@ import Image from "next/image"
 import { ArrowRight, Calendar, Car, Clock, Key, MapPin, Search, Shield, Users, Wallet } from "@/components/icons"
 import type { CompanyContent } from "@/lib/content"
 import { carPhoto, type RentalCar } from "@/lib/content-server"
-import { eliteSans, eliteSerif } from "@/lib/fonts-elite"
 import type { Service } from "@/lib/services"
 import { formatXOF } from "@/lib/site"
 import CmsImage from "../CmsImage"
@@ -17,7 +16,7 @@ const STEPS = [
   { icon: Car, title: "Profitez", text: "Récupérez votre véhicule ou faites-vous livrer, et roulez en toute sérénité." },
 ]
 
-// Vehicle rental page in the look of the SNG Elite Cars site (cream, black, orange, Playfair / Poppins),
+// Vehicle rental page in the colours of the SNG Elite Cars site (cream, black, orange) with the fonts of the home page,
 // inside the SNG Company layout. The shared sections (prestations, FAQ, contact, other activities)
 // come from the service page so they keep the look of the rest of the site.
 export default function RentalPage({ service: s, company, cars, prestations, faq, contact, others }: {
@@ -31,7 +30,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
 }) {
   const site = company.carsSiteUrl.replace(/\/$/, "")
   return (
-    <main className={`${styles.page} ${eliteSerif.variable} ${eliteSans.variable}`}>
+    <main className={styles.page}>
       {/* ---------- hero ---------- */}
       <section className={styles.hero}>
         <div className={styles.heroBg} aria-hidden="true">

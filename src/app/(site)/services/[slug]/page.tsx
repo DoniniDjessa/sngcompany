@@ -112,11 +112,30 @@ export default async function ServicePage({ params }: Props) {
   const othersSection = (
     <>
       <section className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
-        <div className="badge-premium">Découvrez aussi</div>
-        <div className={`${styles.otherServices} stagger`}>
-          {others.map((o) => (
-            <Link key={o.slug} href={`/services/${o.slug}`} className={styles.otherLink}>
-              <span><o.icon /></span> {o.name}
+        <div className={styles.othersHead}>
+          <div>
+            <div className="badge-premium">Découvrez aussi</div>
+            <h2 className="title-premium">Nos autres <span>activités.</span></h2>
+          </div>
+          <Link href="/#services" className="link-more">Toutes les activités <ArrowRight /></Link>
+        </div>
+        <div className={`${styles.others} stagger`}>
+          {others.map((o, i) => (
+            <Link key={o.slug} href={`/services/${o.slug}`} className={styles.otherCard}>
+              <span className={styles.otherMedia}>
+                {o.image ? (
+                  <CmsImage src={o.image} alt="" sizes="(max-width: 700px) 75vw, 300px" className={styles.otherImg} />
+                ) : (
+                  <span className={styles.otherFallback}><o.icon /></span>
+                )}
+              </span>
+              <span className={styles.otherIndex}>{String(i + 1).padStart(2, "0")}</span>
+              <span className={styles.otherText}>
+                <span className={styles.otherIcon}><o.icon /></span>
+                <strong>{o.name}</strong>
+                <small>{o.tagline}</small>
+              </span>
+              <span className={styles.otherArrow}><ArrowRight /></span>
             </Link>
           ))}
         </div>

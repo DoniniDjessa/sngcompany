@@ -839,38 +839,154 @@
   line-height: 1.7;
 }
 
-/* other activities */
-.otherServices {
+/* other activities: photo cards (black & white, colour on hover), swipeable on small screens */
+.othersHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.others {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
-.otherLink {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 18px;
-  padding: 26px;
-  border-radius: 0;
-  background: var(--surface-2);
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--text-main);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+.otherCard {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #0a0a0a;
+  color: #f5f5f7;
+  isolation: isolate;
 }
 
-.otherLink:hover { transform: scale(1.03); }
+.otherMedia { position: absolute; inset: 0; z-index: -2; }
 
-.otherLink > span {
-  font-size: 1.8rem;
-  display: inline-flex;
+.otherImg {
+  object-fit: cover;
+  filter: grayscale(1) brightness(0.8);
+  transition: filter 0.8s ease, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.otherFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7rem;
+  color: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(160deg, #2c2c2e 0%, #0a0a0a 100%);
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.6s ease;
+}
+
+.otherCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 35%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+.otherIndex {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.otherText {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.otherIcon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 1.05rem;
+}
+
+.otherText strong {
+  font-family: var(--font-primary);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.otherText small {
+  font-size: 0.85rem;
+  color: rgba(245, 245, 247, 0.75);
+}
+
+.otherArrow {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  opacity: 0;
+  transform: translate(-8px, 8px) scale(0.8);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+.otherCard:hover .otherImg { filter: none; transform: scale(1.08); }
+.otherCard:hover .otherFallback { transform: scale(1.1) rotate(-6deg); color: rgba(255, 255, 255, 0.16); }
+.otherCard:hover .otherText { transform: translateY(-6px); }
+.otherCard:hover .otherArrow { opacity: 1; transform: none; }
+
+@media (hover: none) {
+  .otherImg { filter: none; }
+  .otherArrow { opacity: 1; transform: none; }
+}
+
+@media (max-width: 1000px) {
+  .others {
+    display: flex;
+    gap: 12px;
+    margin: 0 -22px;
+    padding: 0 22px 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .others::-webkit-scrollbar { display: none; }
+
+  .otherCard { flex: 0 0 min(64vw, 260px); scroll-snap-align: start; }
 }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1100px) {
-  .featuresList,
-  .otherServices { grid-template-columns: repeat(2, 1fr); }
+  .featuresList { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 1024px) {
@@ -890,8 +1006,7 @@
   .section, .graySection, .graySectionAlt, .premiumSection { padding: 80px 18px; }
   .statsInner { grid-template-columns: 1fr 1fr; row-gap: 40px; }
   .statItem:nth-child(3) { border-left: none; }
-  .featuresList,
-  .otherServices { grid-template-columns: 1fr; }
+  .featuresList { grid-template-columns: 1fr; }
   .contactInfo,
   .contactForm { padding: 36px 26px; }
 }

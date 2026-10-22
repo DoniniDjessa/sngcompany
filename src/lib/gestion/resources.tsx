@@ -15,7 +15,7 @@ export interface Option { value: string; label: string; tone?: Tone }
 export interface Field {
   key: string
   label: string
-  type?: "text" | "number" | "money" | "date" | "time" | "select" | "textarea" | "tel" | "email" | "lookup" | "photos" | "documents" | "toggle"
+  type?: "text" | "number" | "money" | "date" | "time" | "select" | "textarea" | "tel" | "email" | "lookup" | "photos" | "documents" | "toggle" | "carPhotos"
   options?: Option[]
   /** suggestions from another table (client name, vehicle…) */
   lookup?: { collection: CollectionName; label: (r: Row) => string }
@@ -68,13 +68,23 @@ const sum = (rows: Row[], key: string) => rows.reduce((t, r) => t + num(r[key]),
 const count = (rows: Row[], key: string, ...values: string[]) => rows.filter((r) => values.includes(String(r[key]))).length
 const today = () => new Date().toISOString().slice(0, 10)
 
+/** Photos of a SNG Elite Cars car: a JSON array or a comma-separated list of URLs */
+export function carImages(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw.map(String)
+  if (typeof raw !== "string" || !raw.trim()) return []
+  try {
+    if (raw.trim().startsWith("[")) return (JSON.parse(raw) as string[]).map(String)
+  } catch {}
+  return raw.split(",").map((x) => x.trim()).filter(Boolean)
+}
+
 /** First photo of the row next to the cell content */
 function Thumbed({ row, children }: { row: Row; children: React.ReactNode }) {
-  const first = Array.isArray(row.photos) ? (row.photos[0] as string | undefined) : undefined
+  const first = Array.isArray(row.photos) ? (row.photos[0] as string | undefined) : row.images ? carImages(row.images)[0] : undefined
   return (
     <span className="cell-with-thumb">
       {/* eslint-disable-next-line @next/next/no-img-element -- signed R2 redirect */}
-      {first ? <img className="cell-thumb" src={photoUrl(first)} alt="" loading="lazy" /> : null}
+      {first ? <img className="cell-thumb" src={first.startsWith("http") ? first : photoUrl(first)} alt="" loading="lazy" /> : null}
       <span>{children}</span>
     </span>
   )
@@ -167,43 +177,52 @@ export const RESOURCES: Resource[] = [
     collection: "vehicules",
     title: "Flotte véhicules",
     singular: "véhicule",
-    description: "Le parc de location : disponibilité, tarifs et kilométrage.",
+    description: "La flotte SNG Elite Cars (même table que le site de location) : ce que vous modifiez ici apparaît aussitôt sur le site.",
     icon: Car,
-    searchKeys: ["plate", "brand", "model"],
-    statusKey: "status",
-    statuses: ASSET_STATUS,
-    filters: [{ key: "category", label: "Toutes catégories", options: opts([["berline", "Berline"], ["suv", "SUV / 4x4"], ["minibus", "Minibus"], ["pickup", "Pick-up"], ["prestige", "Prestige"]]) }],
+    searchKeys: ["brand", "model", "location", "color"],
+    statusKey: "listing_type",
+    statuses: opts([["rent", "Location", "info"], ["sell", "Vente", "navy"], ["both", "Location & vente", "primary"]]),
+    filters: [{ key: "transmission", label: "Toutes boîtes", options: opts([["Automatic", "Automatique"], ["Manual", "Manuelle"]]) }],
     columns: [
-      { key: "brand", label: "Véhicule", render: (r) => <Thumbed row={r}><span className="cell-main">{String(r.brand)} {String(r.model)}</span><span className="cell-sub">{String(r.year ?? "")} · {String(r.gearbox ?? "")}</span></Thumbed> },
-      { key: "plate" },
-      { key: "category" },
+      { key: "brand", label: "Véhicule", render: (r) => <Thumbed row={r}><span className="cell-main">{String(r.brand)} {String(r.model)}</span><span className="cell-sub">{String(r.year ?? "")}{r.color ? ` · ${r.color}` : ""}</span></Thumbed> },
+      { key: "listing_type" },
+      { key: "price_per_day", className: "num", render: (r) => (num(r.price_per_day) ? formatXOF(num(r.price_per_day)) : <span className="cell-sub">—</span>) },
+      { key: "price_sale", className: "num", hideSm: true, render: (r) => (num(r.price_sale) ? formatXOF(num(r.price_sale)) : <span className="cell-sub">—</span>) },
       { key: "seats", className: "num", hideSm: true },
-      { key: "mileage", className: "num", hideSm: true, render: (r) => `${num(r.mileage).toLocaleString("fr-FR")} km` },
-      { key: "price_day", className: "num" },
-      { key: "status" },
+      { key: "location", hideSm: true },
+      { key: "available", label: "Disponible", render: (r) => <span className={`badge ${r.available === false ? "tone-warning" : "tone-success"}`}>{r.available === false ? "Indisponible" : "Disponible"}</span> },
+      { key: "siteweb", label: "Site", render: (r) => <span className={`badge ${r.siteweb === false ? "tone-neutral" : "tone-primary"}`}>{r.siteweb === false ? "Masqué" : "En ligne"}</span> },
     ],
     fields: [
       { key: "brand", label: "Marque", required: true, section: "Véhicule" },
       { key: "model", label: "Modèle", required: true, section: "Véhicule" },
-      { key: "plate", label: "Immatriculation", required: true, placeholder: "AB-1234-CI", section: "Véhicule" },
+      { key: "variant", label: "Version", section: "Véhicule" },
       { key: "year", label: "Année", type: "number", section: "Véhicule" },
-      { key: "category", label: "Catégorie", type: "select", section: "Véhicule" },
-      { key: "gearbox", label: "Boîte", type: "select", options: opts([["automatique", "Automatique"], ["manuelle", "Manuelle"]]), section: "Véhicule" },
+      { key: "color", label: "Couleur", section: "Véhicule" },
       { key: "seats", label: "Places", type: "number", section: "Véhicule" },
-      { key: "mileage", label: "Kilométrage", type: "number", suffix: "KM", section: "Exploitation" },
-      { key: "price_day", label: "Tarif journalier", type: "money", required: true, section: "Exploitation" },
-      { key: "status", label: "Statut", type: "select", section: "Exploitation" },
-      { key: "insurance_end", label: "Fin d'assurance", type: "date", section: "Exploitation" },
-      { key: "next_service", label: "Prochaine vidange", type: "date", section: "Exploitation" },
-      { key: "photos", label: "Photos du véhicule", type: "photos", full: true, section: "Photos" },
+      { key: "transmission", label: "Boîte", type: "select", section: "Véhicule" },
+      { key: "fuel_type", label: "Carburant", type: "select", options: opts([["Gasoline", "Essence"], ["Diesel", "Diesel"], ["Hybrid", "Hybride"], ["Electric", "Électrique"]]), section: "Véhicule" },
+      { key: "mileage", label: "Kilométrage", type: "number", suffix: "KM", section: "Véhicule" },
+      { key: "location", label: "Lieu", placeholder: "Riviera, Cocody…", section: "Véhicule" },
+      { key: "listing_type", label: "Proposé en", type: "select", required: true, section: "Offre" },
+      { key: "price_per_day", label: "Prix par jour", type: "money", section: "Offre" },
+      { key: "price_sale", label: "Prix de vente", type: "money", section: "Offre" },
+      { key: "tag_text", label: "Étiquette (ex. Nouveau)", section: "Offre" },
+      { key: "available", label: "Disponible", type: "toggle", section: "Offre" },
+      { key: "siteweb", label: "Visible sur le site", type: "toggle", section: "Offre" },
+      { key: "description", label: "Description", type: "textarea", full: true, section: "Offre" },
+      { key: "images", label: "Photos (gérées sur SNG Elite Cars)", type: "carPhotos", full: true, section: "Photos" },
     ],
-    defaults: { status: "disponible", category: "berline", gearbox: "automatique", seats: 5 },
-    kpis: (rows) => [
-      { label: "Véhicules", value: String(rows.length), tone: "primary", icon: Car },
-      { label: "Disponibles", value: String(count(rows, "status", "disponible")), tone: "success", icon: Key },
-      { label: "En location", value: String(count(rows, "status", "loue")), note: `${Math.round((count(rows, "status", "loue") / Math.max(1, rows.length)) * 100)} % d'occupation`, tone: "info", icon: Truck },
-      { label: "Maintenance", value: String(count(rows, "status", "maintenance", "hors_service")), tone: "warning", icon: Wrench },
-    ],
+    defaults: { listing_type: "rent", transmission: "Automatic", fuel_type: "Gasoline", seats: 5, available: true, siteweb: true },
+    kpis: (rows) => {
+      const rentable = rows.filter((r) => r.listing_type !== "sell")
+      return [
+        { label: "Véhicules", value: String(rows.length), tone: "primary", icon: Car },
+        { label: "Disponibles", value: String(rows.filter((r) => r.available !== false).length), note: "à la location ou à la vente", tone: "success", icon: Key },
+        { label: "En location", value: String(rentable.length), note: rentable.some((r) => num(r.price_per_day)) ? `dès ${formatXOF(Math.min(...rentable.map((r) => num(r.price_per_day)).filter(Boolean)))} / jour` : undefined, tone: "info", icon: Truck },
+        { label: "Sur le site", value: String(rows.filter((r) => r.siteweb !== false).length), tone: "navy", icon: Wallet },
+      ]
+    },
   },
   {
     slug: "locations",
@@ -220,7 +239,7 @@ export const RESOURCES: Resource[] = [
     columns: [{ key: "ref" }, { key: "client" }, { key: "vehicle" }, { key: "debut" }, { key: "fin" }, { key: "driver", hideSm: true }, { key: "amount", className: "num" }, { key: "status" }],
     fields: [
       { key: "client", label: "Client", type: "lookup", lookup: clientLookup, required: true, full: true, section: "Contrat" },
-      { key: "vehicle", label: "Véhicule", type: "lookup", lookup: { collection: "vehicules", label: (r) => `${r.brand} ${r.model} · ${r.plate}` }, required: true, full: true, section: "Contrat" },
+      { key: "vehicle", label: "Véhicule", type: "lookup", lookup: { collection: "vehicules", label: (r) => `${r.brand} ${r.model}${r.year ? ` (${r.year})` : ""}` }, required: true, full: true, section: "Contrat" },
       { key: "debut", label: "Début", type: "date", required: true, section: "Contrat" },
       { key: "fin", label: "Fin", type: "date", required: true, section: "Contrat" },
       { key: "driver", label: "Chauffeur", type: "select", options: opts([["non", "Sans chauffeur"], ["oui", "Avec chauffeur"]]), section: "Contrat" },

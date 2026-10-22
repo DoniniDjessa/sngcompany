@@ -3,6 +3,7 @@ import { useEffect, useId, useRef, useState } from "react"
 import type { Icon } from "@/components/icons"
 import { Check, Download, FileText, Plus, X } from "@/components/icons"
 import { fileName, openFile, photoUrl, uploadFile } from "@/lib/gestion/files"
+import { carImages } from "@/lib/gestion/resources"
 import { toast } from "@/lib/gestion/toast"
 import type { Field, Kpi, Option, Tone } from "@/lib/gestion/resources"
 import { useToasts } from "@/lib/gestion/toast"
@@ -145,6 +146,19 @@ export function FieldInput({ field, options, value, onChange }: {
 }) {
   const listId = useId()
   const lookupRows = useCollection(field.lookup?.collection ?? "clients")
+  if (field.type === "carPhotos") {
+    const list = carImages(value)
+    return list.length ? (
+      <div className="files">
+        {list.map((src) => (
+          <a key={src} href={src} target="_blank" rel="noopener noreferrer" className="file-thumb">
+            {/* eslint-disable-next-line @next/next/no-img-element -- photos hosted by SNG Elite Cars */}
+            <img src={src} alt="" loading="lazy" />
+          </a>
+        ))}
+      </div>
+    ) : <p className="cell-sub">Aucune photo.</p>
+  }
   if (field.type === "toggle") {
     const on = value !== false
     return (

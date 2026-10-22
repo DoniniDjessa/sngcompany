@@ -10,7 +10,8 @@ export type Row = { id: string; created_at: string; [key: string]: unknown }
 export const TABLES = {
   clients: "sng-clients",
   demandes: "sng-demandes",
-  vehicules: "sng-vehicules",
+  /** the fleet is the SNG Elite Cars table, shared with the rental site */
+  vehicules: "cars",
   locations: "sng-locations",
   transports: "sng-transports",
   equipements: "sng-equipements",

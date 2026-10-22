@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { ArrowRight, Calendar, Car, Clock, Key, MapPin, Search, Shield, Users, Wallet } from "@/components/icons"
+import { ArrowRight, Calendar, Car, Clock, Droplets, Key, MapPin, Search, Settings, Shield, Users, Wallet } from "@/components/icons"
 import type { CompanyContent } from "@/lib/content"
 import { carPhoto, type RentalCar } from "@/lib/content-server"
 import type { Service } from "@/lib/services"
@@ -78,31 +78,41 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
             <a href={`${site}/nos-vehicules`} target="_blank" rel="noopener noreferrer" className={styles.headLink}>Voir toute la flotte <ArrowRight /></a>
           </div>
           <div className={`${styles.cars} stagger`}>
-            {cars.map((c) => (
-              <a key={c.id} href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.car}>
-                <div className={styles.carMedia}>
-                  {carPhoto(c) ? (
-                    <Image src={carPhoto(c)} alt={`${c.brand} ${c.model}`} fill sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 400px" className={styles.carImg} />
-                  ) : (
-                    <span className={styles.carPlaceholder}><Car /></span>
-                  )}
-                  <span className={styles.carTag}>Location</span>
-                </div>
-                <div className={styles.carBody}>
-                  <h3>{c.brand} {c.model}</h3>
-                  {c.location && <p className={styles.carPlace}><MapPin /> {c.location}</p>}
-                  <ul className={styles.carSpecs}>
-                    {c.year && <li>{c.year}</li>}
-                    {c.seats && <li>{c.seats} places</li>}
-                    {c.transmission && <li>{c.transmission === "Automatic" ? "Automatique" : c.transmission === "Manual" ? "Manuelle" : c.transmission}</li>}
-                  </ul>
-                  <div className={styles.carFoot}>
-                    {c.price_per_day ? <p><strong>{formatXOF(c.price_per_day)}</strong> / jour</p> : <p>Prix sur demande</p>}
-                    <span className={styles.carArrow}><ArrowRight /></span>
+            {cars.map((c) => {
+              const photo = carPhoto(c)
+              const gearbox = c.transmission === "Automatic" ? "Automatique" : c.transmission === "Manual" ? "Manuelle" : c.transmission
+              const fuel = { Gasoline: "Essence", Diesel: "Diesel", Hybrid: "Hybride", Electric: "Électrique" }[c.fuel_type ?? ""] ?? c.fuel_type
+              return (
+                <article key={c.id} className={styles.car}>
+                  <a href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.carMedia} aria-label={`${c.brand} ${c.model} : voir la fiche`}>
+                    {photo ? (
+                      <Image src={photo} alt={`${c.brand} ${c.model}`} fill sizes="(max-width: 640px) 85vw, (max-width: 1000px) 50vw, 420px" className={styles.carImg} />
+                    ) : (
+                      <span className={styles.carPlaceholder}><Car /></span>
+                    )}
+                    <span className={styles.carTag}>Location</span>
+                    {c.year && <span className={styles.carYear}>{c.year}</span>}
+                    <span className={styles.carPrice}>
+                      {c.price_per_day ? <><strong>{formatXOF(c.price_per_day)}</strong> / jour</> : "Prix sur demande"}
+                    </span>
+                  </a>
+                  <div className={styles.carBody}>
+                    <p className={styles.carBrand}>{c.brand}</p>
+                    <h3>{c.model}</h3>
+                    <ul className={styles.carSpecs}>
+                      {c.seats && <li><Users /> {c.seats} places</li>}
+                      {gearbox && <li><Settings /> {gearbox}</li>}
+                      {fuel && <li><Droplets /> {fuel}</li>}
+                    </ul>
+                    {c.location && <p className={styles.carPlace}><MapPin /> {c.location}</p>}
+                    <div className={styles.carActions}>
+                      <a href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.carBook}>Réserver</a>
+                      <a href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.carMore}>Détails <ArrowRight /></a>
+                    </div>
                   </div>
-                </div>
-              </a>
-            ))}
+                </article>
+              )
+            })}
           </div>
         </section>
       )}

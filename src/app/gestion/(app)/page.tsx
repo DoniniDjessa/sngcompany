@@ -43,9 +43,9 @@ export default function DashboardPage() {
   const maxActivity = Math.max(1, ...byActivity.map((a) => a.total))
 
   const fleet = [
-    { label: "Disponibles", value: vehicules.filter((v) => v.status === "disponible").length, color: "#34c759" },
-    { label: "En location", value: vehicules.filter((v) => v.status === "loue").length, color: "#0071e3" },
-    { label: "Maintenance", value: vehicules.filter((v) => ["maintenance", "hors_service"].includes(String(v.status))).length, color: "#ff9500" },
+    { label: "Disponibles", value: vehicules.filter((v) => v.available !== false).length, color: "#34c759" },
+    { label: "Indisponibles", value: vehicules.filter((v) => v.available === false).length, color: "#ff9500" },
+    { label: "Masqués du site", value: vehicules.filter((v) => v.siteweb === false).length, color: "#8e8e93" },
   ]
 
   type Event = { icon: Icon; tone: Tone; title: string; sub: string; time: string; href: string }

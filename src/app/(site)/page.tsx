@@ -31,7 +31,7 @@ export default async function Home() {
   return (
     <main className={styles.main}>
       {/* --- HERO CAROUSEL --- */}
-      <HeroCarousel slides={h.hero.slides} tone="orange" />
+      <HeroCarousel slides={h.hero.slides} tone="progress" />
 
       {/* --- ACTIVITIES --- */}
       <section id="services" className={styles.activities}>

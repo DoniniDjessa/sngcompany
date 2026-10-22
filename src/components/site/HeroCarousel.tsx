@@ -12,9 +12,9 @@ const DURATION = 4500 // ms per slide
 // The incoming slide is uncovered like a curtain (from below going forward, from above going back),
 // its photo settles from a zoom, then the text rises line by line. Vertical dots on the right double
 // as progress bars: when the active bar is full (CSS animation), the next slide comes.
-// `tone="orange"`: orange accents; `docked`: a block overlaps the bottom of the hero, the text moves up;
+// `tone="orange"`: orange accents (progress, small title, button); `tone="progress"`: only the progress in orange; `docked`: a block overlaps the bottom of the hero, the text moves up;
 // `next`: section the scroll cue leads to.
-export default function HeroCarousel({ slides, tone, docked, next = "services" }: { slides: HeroSlide[]; tone?: "orange"; docked?: boolean; next?: string }) {
+export default function HeroCarousel({ slides, tone, docked, next = "services" }: { slides: HeroSlide[]; tone?: "orange" | "progress"; docked?: boolean; next?: string }) {
   const [index, setIndex] = useState(0)
   const [prev, setPrev] = useState<number | null>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
@@ -45,7 +45,7 @@ export default function HeroCarousel({ slides, tone, docked, next = "services" }
 
   return (
     <section
-      className={`${styles.hero} ${tone === "orange" ? styles.orange : ""} ${docked ? styles.docked : ""}`}
+      className={`${styles.hero} ${tone ? styles.progressOrange : ""} ${tone === "orange" ? styles.orange : ""} ${docked ? styles.docked : ""}`}
       aria-roledescription="carrousel"
       aria-label="À la une"
       onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}

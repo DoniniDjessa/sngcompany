@@ -2,10 +2,9 @@
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { Lock } from "@/components/icons"
-import { signIn, useAuthError, useSession } from "@/lib/gestion/auth"
+import { adoptSession, signIn, useAuthError, useSession } from "@/lib/gestion/auth"
 import { SERVICES } from "@/lib/services"
 import { SITE } from "@/lib/site"
-import { supabase } from "@/lib/supabase"
 
 const DIGITS = 4
 
@@ -81,9 +80,9 @@ function CodeForm({ busy, setBusy, setError }: { busy: boolean; setBusy: (b: boo
       boxes.current[0]?.focus()
       return
     }
-    // the session of the quick-access account; the auth listener then checks the staff row
-    const { error } = await supabase.auth.setSession({ access_token: body.access_token, refresh_token: body.refresh_token })
-    if (error) setError(error.message)
+    // session of the quick-access account, then check that it belongs to the staff
+    const error = await adoptSession({ access_token: body.access_token, refresh_token: body.refresh_token })
+    if (error) setError(error)
     setBusy(false)
   }
 

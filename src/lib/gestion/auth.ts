@@ -40,7 +40,7 @@ function start() {
   supabase.auth.onAuthStateChange((event, auth) => {
     // deferred: Supabase calls inside this callback would wait on the auth lock
     if (event === "SIGNED_OUT") setTimeout(() => { clearStore(); set({ session: null }) })
-    else if (event === "SIGNED_IN" && auth?.user.id !== (state.session && state.session.userId)) setTimeout(() => resolve(auth))
+    else if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && auth && auth.user.id !== state.session?.userId) setTimeout(() => resolve(auth))
   })
 }
 
@@ -63,6 +63,16 @@ export async function signIn(email: string, password: string): Promise<string | 
   set({ error: null })
   const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password })
   if (error) return error.message === "Invalid login credentials" ? "E-mail ou mot de passe incorrect." : error.message
+  await resolve(data.session)
+  return state.error
+}
+
+/** Opens a session received from the server (quick access by code), then checks the staff row.
+ *  Done directly: setSession does not always emit the SIGNED_IN event the listener waits for. */
+export async function adoptSession(tokens: { access_token: string; refresh_token: string }): Promise<string | null> {
+  set({ error: null })
+  const { data, error } = await supabase.auth.setSession(tokens)
+  if (error || !data.session) return error?.message ?? "Session invalide."
   await resolve(data.session)
   return state.error
 }

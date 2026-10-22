@@ -456,45 +456,6 @@
   .whyCard { animation: none; }
 }
 
-/* ============ CAR BANNER ============ */
-.carBanner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--surface-2);
-  border-radius: 0;
-  overflow: hidden;
-}
-
-.carBannerText {
-  padding: 64px 56px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 16px;
-}
-
-.carBannerText h2 {
-  font-size: clamp(2rem, 3.4vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
-  color: var(--text-main);
-}
-
-.carBannerText > p:not(.eyebrow) {
-  color: var(--text-secondary);
-  font-size: 1.08rem;
-  line-height: 1.6;
-}
-
-.carBannerMedia {
-  position: relative;
-  min-height: 380px;
-}
-
 /* ============ CONTACT ============ */
 .contactGrid {
   max-width: 1200px;
@@ -915,7 +876,6 @@
 @media (max-width: 1024px) {
   /* small screens: the form comes before the contact details */
   .contactForm { order: -1; }
-  .carBanner,
   .contactGrid,
   .faqGrid { grid-template-columns: 1fr; }
   .faqGrid { gap: 30px; }
@@ -933,6 +893,5 @@
   .featuresList,
   .otherServices { grid-template-columns: 1fr; }
   .contactInfo,
-  .contactForm,
-  .carBannerText { padding: 36px 26px; }
+  .contactForm { padding: 36px 26px; }
 }

@@ -38,7 +38,7 @@ export interface HomeContent {
   about: { eyebrow: string; title: string; text: string; image: string; values: string[] }
   why: { title: string; items: { title: string; text: string }[] }
   steps: { eyebrow: string; title: string; items: { title: string; text: string }[] }
-  cars: { eyebrow: string; title: string; text: string; image: string }
+  cars: { eyebrow: string; title: string; text: string; image: string; gallery: { name: string; image: string }[] }
   contact: { eyebrow: string; title: string; text: string }
   commitments: { eyebrow: string; title: string; items: { value: string; label: string; text: string }[] }
   zones: { eyebrow: string; title: string; text: string; abidjan: string[]; interior: string[] }
@@ -140,6 +140,15 @@ export const DEFAULT_HOME: HomeContent = {
     title: "Toute notre flotte de location, en ligne.",
     text: "Berlines, SUV, minibus et véhicules de prestige : consultez le catalogue, les disponibilités et réservez sur notre site dédié.",
     image: "/images/honda-accord-abidjan.png",
+    gallery: [
+      { name: "Toyota Camry", image: "/images/luxury-toyota-camry-abidjan.png" },
+      { name: "Toyota Hiace", image: "/images/van.jpeg" },
+      { name: "Mercedes Classe C", image: "/images/mercedes.jpeg" },
+      { name: "Mitsubishi Pajero", image: "/images/mitsubishi.jpeg" },
+      { name: "Toyota Corolla", image: "/images/corolla.jpeg" },
+      { name: "Ford Ranger", image: "/images/ford.jpeg" },
+      { name: "Honda Accord", image: "/images/honda-accord-abidjan.png" },
+    ],
   },
   contact: {
     eyebrow: "Contact",
@@ -350,7 +359,8 @@ export const HOME_DOC: DocDef = {
         { key: "eyebrow", label: "Sur-titre", type: "text" },
         { key: "title", label: "Titre", type: "text" },
         { key: "text", label: "Texte", type: "textarea" },
-        { key: "image", label: "Photo", type: "image" },
+        { key: "image", label: "Photo principale (fenêtre du site)", type: "image" },
+        { key: "gallery", label: "Galerie de la flotte (bande défilante)", type: "list", itemLabel: "véhicule", fields: [{ key: "name", label: "Nom du véhicule", type: "text" }, { key: "image", label: "Photo", type: "image" }] },
       ],
     },
     {

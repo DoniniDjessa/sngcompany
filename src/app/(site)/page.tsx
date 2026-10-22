@@ -1,7 +1,8 @@
 import Link from "next/link"
-import { ArrowRight, Check, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
+import { ArrowRight, Check, Clock, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
 import ActivityTiles from "@/components/site/ActivityTiles"
 import CmsImage from "@/components/site/CmsImage"
+import FleetBanner from "@/components/site/FleetBanner"
 import HeroCarousel from "@/components/site/HeroCarousel"
 import HowItWorks from "@/components/site/HowItWorks"
 import { Commitments, Faq, Partners, ScrollText } from "@/components/site/HomeSections"
@@ -128,22 +129,8 @@ export default async function Home() {
         <Faq data={h.faq} />
       </section>
 
-      {/* --- CAR SITE --- */}
-      <section className={`${styles.section} reveal`}>
-        <div className={styles.carBanner}>
-          <div className={styles.carBannerText}>
-            <p className={styles.eyebrow}>{h.cars.eyebrow}</p>
-            <h2>{h.cars.title}</h2>
-            <p>{h.cars.text}</p>
-            <a href={company.carsSiteUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              Voir le catalogue <External />
-            </a>
-          </div>
-          <div className={`${styles.carBannerMedia} img-reveal`}>
-            <CmsImage src={h.cars.image} alt={h.cars.title} sizes="(max-width: 1024px) 100vw, 50vw" className={styles.cover} />
-          </div>
-        </div>
-      </section>
+      {/* --- SNG ELITE CARS: fleet showcase --- */}
+      <FleetBanner data={h.cars} siteUrl={company.carsSiteUrl} siteName={company.carsSiteName} />
 
       {/* --- CONTACT --- */}
       <section id="contact" className={`${styles.graySection} reveal`}>
@@ -174,6 +161,7 @@ export default async function Home() {
           { id: "pourquoi", label: "Pourquoi SNG" },
           { id: "etapes", label: "Comment ça marche" },
           { id: "faq", label: "Questions" },
+          { id: "flotte", label: "SNG Elite Cars" },
           { id: "contact", label: "Contact" },
         ]}
       />

@@ -3,6 +3,7 @@ import { ArrowRight, Check, Clock, External, Mail, MapPin, Phone, Shield, Trendi
 import ActivityTiles from "@/components/site/ActivityTiles"
 import CmsImage from "@/components/site/CmsImage"
 import HeroCarousel from "@/components/site/HeroCarousel"
+import HowItWorks from "@/components/site/HowItWorks"
 import { Commitments, Faq, Partners, ScrollText } from "@/components/site/HomeSections"
 import RoadThread from "@/components/site/RoadThread"
 import ServedZones from "@/components/site/ServedZones"
@@ -112,22 +113,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* --- HOW IT WORKS --- */}
-      <section id="etapes" className={`${styles.darkSection} reveal`}>
-        <div className={styles.sectionHead}>
-          <p className={styles.eyebrow}>{h.steps.eyebrow}</p>
-          <h2 className={styles.sectionTitle}>{h.steps.title}</h2>
-        </div>
-        <ol className={`${styles.steps} stagger`}>
-          {h.steps.items.map((s, i) => (
-            <li key={s.title}>
-              <span className={styles.stepNum}>{i + 1}</span>
-              <h4>{s.title}</h4>
-              <p>{s.text}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {/* --- HOW IT WORKS: scroll-driven journey --- */}
+      <HowItWorks eyebrow={h.steps.eyebrow} title={h.steps.title} items={h.steps.items} />
 
       {/* --- PARTNERS (only once some are added) --- */}
       {h.partners.items.length > 0 && (

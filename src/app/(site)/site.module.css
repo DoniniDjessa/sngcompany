@@ -51,8 +51,7 @@
 
 /* ============ SECTIONS ============ */
 .section,
-.graySection,
-.darkSection {
+.graySection {
   padding: 120px 22px;
 }
 
@@ -238,13 +237,6 @@
   .aboutPhoto img, .aboutBadge, .aboutValues li::after { transition: none; transform: none; opacity: 1; }
 }
 
-.darkSection {
-  background: #000;
-  color: #f5f5f7;
-}
-
-.darkSection .eyebrow { color: #86868b; }
-.darkSection .sectionTitle { color: #f5f5f7; }
 
 .sectionHead {
   max-width: 820px;
@@ -462,43 +454,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .whyCard { animation: none; }
-}
-
-/* ============ STEPS ============ */
-.steps {
-  list-style: none;
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
-}
-
-.stepNum {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1.5px solid #424245;
-  font-family: var(--font-primary);
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: #f5f5f7;
-}
-
-.steps h4 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin: 22px 0 8px;
-  color: #f5f5f7;
-}
-
-.steps p {
-  color: #a1a1a6;
-  font-size: 1rem;
-  line-height: 1.6;
 }
 
 /* ============ CAR BANNER ============ */
@@ -954,7 +909,6 @@
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1100px) {
   .featuresList,
-  .steps,
   .otherServices { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -973,11 +927,10 @@
 
 @media (max-width: 768px) {
   .main { padding-top: 52px; }
-  .section, .graySection, .graySectionAlt, .darkSection, .premiumSection { padding: 80px 18px; }
+  .section, .graySection, .graySectionAlt, .premiumSection { padding: 80px 18px; }
   .statsInner { grid-template-columns: 1fr 1fr; row-gap: 40px; }
   .statItem:nth-child(3) { border-left: none; }
   .featuresList,
-  .steps,
   .otherServices { grid-template-columns: 1fr; }
   .contactInfo,
   .contactForm,

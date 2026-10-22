@@ -1,0 +1,237 @@
+.how {
+  position: relative;
+  background: #000;
+  color: #f5f5f7;
+}
+
+.eyebrow {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 600;
+  color: #86868b;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-family: var(--font-primary);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.stepLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #86868b;
+  margin-bottom: 6px;
+}
+
+.step h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.step p {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: #a1a1a6;
+}
+
+/* steps are dim until the car reaches them */
+.stepText {
+  opacity: 0.32;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.on .stepText { opacity: 1; transform: none; }
+
+.dot {
+  position: relative;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border: 1.5px solid #424245;
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 1rem;
+  color: #86868b;
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+.on .dot {
+  background: #f5f5f7;
+  border-color: #f5f5f7;
+  color: #1d1d1f;
+  transform: scale(1.1);
+}
+
+.track {
+  position: absolute;
+  list-style: none;
+  pointer-events: none;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: #f5f5f7;
+}
+
+.carH,
+.carV {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  color: #f5f5f7;
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.35));
+}
+
+/* the finish line */
+.finish {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+
+.finishOn { opacity: 1; transform: none; pointer-events: auto; }
+
+.finish > span { font-weight: 700; color: #a1a1a6; }
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 980px;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-weight: 700;
+  transition: transform 0.25s ease;
+}
+
+.cta:hover { transform: translateY(-2px); }
+
+/* ---------- desktop: pinned section, horizontal road ---------- */
+@media (min-width: 900px) {
+  .how { height: calc(100vh + var(--n) * 38vh); }
+
+  .pin {
+    position: sticky;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 64px;
+    padding: 0 22px;
+  }
+
+  .head { text-align: center; }
+
+  .road {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .steps {
+    position: relative;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+    gap: 24px;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  /* road from the centre of the first column to the centre of the last one */
+  .track {
+    top: 21px;
+    left: calc(50% / var(--n));
+    right: calc(50% / var(--n));
+    height: 2px;
+    background: repeating-linear-gradient(90deg, #424245 0 10px, transparent 10px 18px);
+  }
+
+  .fill { transform-origin: left; transform: scaleX(var(--p)); }
+
+  .carH {
+    top: 0;
+    left: calc(var(--p) * 100%);
+    font-size: 1.7rem;
+    transform: translate(-36%, -78%);
+  }
+
+  .carV { display: none; }
+}
+
+/* ---------- small screens: vertical road along the steps ---------- */
+@media (max-width: 899px) {
+  .pin { padding: 80px 18px 70px; }
+
+  .head { margin-bottom: 40px; }
+
+  .steps {
+    position: relative;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .stepText { padding-top: 4px; }
+
+  .track {
+    left: 21px;
+    top: 22px;
+    bottom: 22px;
+    width: 2px;
+    background: repeating-linear-gradient(180deg, #424245 0 8px, transparent 8px 14px);
+  }
+
+  .fill { transform-origin: top; transform: scaleY(var(--p)); }
+
+  .carH { display: none; }
+
+  .carV {
+    left: 50%;
+    top: calc(var(--p) * 100%);
+    font-size: 1.6rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .finish { margin-top: 44px; justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepText, .dot, .finish { transition: none; }
+}

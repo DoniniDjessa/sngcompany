@@ -12,7 +12,8 @@ const DURATION = 4500 // ms per slide
 // The incoming slide is uncovered like a curtain (from below going forward, from above going back),
 // its photo settles from a zoom, then the text rises line by line. Vertical dots on the right double
 // as progress bars: when the active bar is full (CSS animation), the next slide comes.
-export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
+// `tone="orange"`: accents in the orange of the rental pages; `next`: section the scroll cue leads to.
+export default function HeroCarousel({ slides, tone, next = "services" }: { slides: HeroSlide[]; tone?: "orange"; next?: string }) {
   const [index, setIndex] = useState(0)
   const [prev, setPrev] = useState<number | null>(null)
   const [paused, setPaused] = useState(false)
@@ -44,7 +45,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
   return (
     <section
-      className={`${styles.hero} ${paused ? styles.paused : ""}`}
+      className={`${styles.hero} ${tone === "orange" ? styles.orange : ""} ${paused ? styles.paused : ""}`}
       aria-roledescription="carrousel"
       aria-label="À la une"
       onMouseEnter={() => setPaused(true)}
@@ -128,7 +129,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         </nav>
       )}
 
-      <a href="#services" className={styles.scroll} aria-label="Faire défiler">
+      <a href={`#${next}`} className={styles.scroll} aria-label="Faire défiler">
         <span>Défiler</span>
         <ChevronDown />
       </a>

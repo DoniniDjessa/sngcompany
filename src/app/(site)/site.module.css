@@ -958,7 +958,7 @@
   transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1.4);
 }
 
-.otherCard:hover .otherImg { filter: none; transform: scale(1.08); }
+.otherCard:hover .otherImg { filter: none; transform: scale(1.03); }
 .otherCard:hover .otherFallback { transform: scale(1.1) rotate(-6deg); color: rgba(255, 255, 255, 0.16); }
 .otherCard:hover .otherText { transform: translateY(-6px); }
 .otherCard:hover .otherArrow { opacity: 1; transform: none; }

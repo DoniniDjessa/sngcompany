@@ -392,10 +392,21 @@
   50% { transform: translateY(6px); opacity: 1; }
 }
 
+/* ---------- orange variant (rental pages) ---------- */
+/* the search block overlaps the bottom of the hero */
+.orange .content { bottom: calc(clamp(70px, 12vh, 130px) + 40px); }
+.orange .eyebrow { color: #fb923c; }
+.orange .eyebrow span,
+.orange .fill,
+.orange .trail { background: #ea580c; }
+.orange .cta { background: #ea580c; color: #fff; }
+.orange .cta:hover { background: #f5f5f7; color: #1d1d1f; }
+
 /* ---------- small screens ---------- */
 @media (max-width: 768px) {
   .hero { height: calc(100svh - var(--header-height)); min-height: 520px; }
   .content { left: 20px; right: 56px; bottom: 76px; }
+  .orange .content { bottom: 96px; }
   .shade {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0.15) 100%);
   }

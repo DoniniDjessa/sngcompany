@@ -254,3 +254,13 @@ input, textarea, select {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
 }
+
+/* read by screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

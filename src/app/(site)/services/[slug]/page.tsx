@@ -36,7 +36,7 @@ export default async function ServicePage({ params }: Props) {
   const prestationsSection = (
     <>
       {/* prestations */}
-      <section className={`${styles.premiumSection} reveal`}>
+      <section id="prestations" className={`${styles.premiumSection} reveal`}>
         <div className={styles.prestaGrid}>
           <div className={styles.prestaHead}>
             <div className="badge-premium">Nos prestations</div>
@@ -69,7 +69,7 @@ export default async function ServicePage({ params }: Props) {
     <>
       {/* FAQ */}
       {s.faqs.length > 0 && (
-        <section className={`${styles.premiumSection} reveal`}>
+        <section id="faq" className={`${styles.premiumSection} reveal`}>
           <div className={styles.faqGrid}>
             <div>
               <div className="badge-premium">Questions fréquentes</div>
@@ -111,7 +111,7 @@ export default async function ServicePage({ params }: Props) {
   )
   const othersSection = (
     <>
-      <section className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
+      <section id="autres" className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
         <div className={styles.othersHead}>
           <div>
             <div className="badge-premium">Découvrez aussi</div>

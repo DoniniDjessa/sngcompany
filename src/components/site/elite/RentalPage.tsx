@@ -1,9 +1,11 @@
 import Link from "next/link"
 import { ArrowRight, Calendar, Car, Clock, Key, Search, Shield, Users, Wallet } from "@/components/icons"
-import type { CompanyContent } from "@/lib/content"
+import type { CompanyContent, HeroSlide } from "@/lib/content"
 import type { RentalCar } from "@/lib/cars"
 import type { Service } from "@/lib/services"
 import CmsImage from "../CmsImage"
+import HeroCarousel from "../HeroCarousel"
+import RoadThread from "../RoadThread"
 import CarCard from "./CarCard"
 import RentalSearch from "./RentalSearch"
 import styles from "./Rental.module.css"
@@ -14,6 +16,56 @@ const STEPS = [
   { icon: Search, title: "Recherchez", text: "Trouvez le véhicule idéal parmi notre flotte en Côte d'Ivoire." },
   { icon: Calendar, title: "Réservez", text: "Choisissez vos dates, avec ou sans chauffeur : nous confirmons rapidement." },
   { icon: Car, title: "Profitez", text: "Récupérez votre véhicule ou faites-vous livrer, et roulez en toute sérénité." },
+]
+
+const STATIONS = [
+  { id: "recherche", label: "Recherche" },
+  { id: "selection", label: "Sélection" },
+  { id: "prestations", label: "Prestations" },
+  { id: "bienvenue", label: "SNG Elite Cars" },
+  { id: "etapes", label: "Comment ça marche" },
+  { id: "faq", label: "Questions" },
+  { id: "contact", label: "Contact" },
+  { id: "autres", label: "Autres activités" },
+]
+
+const slides = (s: Service): HeroSlide[] => [
+  {
+    image: "/images/bg-cars.webp",
+    eyebrow: "SNG Elite Cars",
+    title: "Roulez prestige,",
+    subtitle: "payez malin.",
+    text: s.intro,
+    cta: "Voir nos véhicules",
+    link: "/vehicules",
+  },
+  {
+    image: "/images/luxury-toyota-camry-abidjan.png",
+    eyebrow: "Avec ou sans chauffeur",
+    title: "Chaque trajet,",
+    subtitle: "en toute sérénité.",
+    text: "Un chauffeur professionnel pour vos rendez-vous, vos événements et vos transferts aéroport.",
+    cta: "Réserver un véhicule",
+    link: "/vehicules?offre=location",
+  },
+  {
+    image: "/images/mitsubishi.jpeg",
+    eyebrow: "SUV & pick-up",
+    title: "Partout en",
+    subtitle: "Côte d'Ivoire.",
+    text: "Des véhicules robustes et entretenus pour vos missions à Abidjan comme à l'intérieur du pays.",
+    cta: "Voir la flotte",
+    link: "/vehicules",
+  },
+  {
+    image: "/images/honda-accord-abidjan.png",
+    eyebrow: "Entreprises",
+    title: "Votre flotte,",
+    subtitle: "sans les soucis.",
+    text: "Location longue durée, mise à disposition et contrats sur mesure pour les entreprises.",
+    cta: "Demander un devis",
+    link: "/contact?service=location-vehicules",
+  },
 ]
 
 // Vehicle rental page in the colours of the SNG Elite Cars site (cream, black, orange) with the fonts of the home page,
@@ -30,15 +82,14 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
 }) {
   return (
     <main className={styles.page}>
-      {/* ---------- hero ---------- */}
-      <section className={styles.hero}>
-        <div className={styles.heroBg} aria-hidden="true">
-          <CmsImage src="/images/bg-car.webp" alt="" priority sizes="100vw" className={styles.cover} />
-        </div>
-        <div className={styles.heroInner}>
-          <p className={styles.kicker}>Plus qu&apos;un trajet, une expérience</p>
-          <h1 className={styles.heroTitle}>{s.name}</h1>
-          <p className={styles.heroText}>{s.intro}</p>
+      {/* ---------- hero: the carousel of the home page, orange accents ---------- */}
+      <h1 className="sr-only">{s.name}</h1>
+      <HeroCarousel slides={slides(s)} tone="orange" next="recherche" />
+
+      {/* ---------- search, docked on the bottom of the hero ---------- */}
+      <section id="recherche" className={styles.dock}>
+        <div className={styles.dockInner}>
+          <p className={styles.dockTitle}><span />Trouvez votre véhicule</p>
           <RentalSearch />
           <div className={styles.heroLinks}>
             <Link href="/vehicules?offre=location"><Key /> Location à la journée</Link>
@@ -68,7 +119,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
 
       {/* ---------- most requested cars (live from SNG Elite Cars) ---------- */}
       {cars.length > 0 && (
-        <section className={`${styles.block} reveal`}>
+        <section id="selection" className={`${styles.block} reveal`}>
           <div className={styles.blockHead}>
             <div>
               <p className={styles.eyebrow}>Sélection</p>
@@ -86,7 +137,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       {prestations}
 
       {/* ---------- welcome ---------- */}
-      <section className={styles.welcome}>
+      <section id="bienvenue" className={styles.welcome}>
         <div className={`${styles.welcomeInner} reveal`}>
           <div className={styles.welcomeMedia}>
             <div className={styles.welcomePhoto}>
@@ -111,7 +162,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       </section>
 
       {/* ---------- how it works ---------- */}
-      <section className={`${styles.block} reveal`}>
+      <section id="etapes" className={`${styles.block} reveal`}>
         <div className={styles.center}>
           <p className={styles.eyebrow}>Simple et rapide</p>
           <h2 className={styles.h2}>Comment ça marche</h2>
@@ -131,6 +182,11 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       {faq}
       {contact}
       {others}
+
+      {/* the road of the home page, in orange: the car drives down the stations of the page */}
+      <div className={styles.road}>
+        <RoadThread stations={STATIONS.filter((st) => st.id !== "selection" || cars.length > 0)} />
+      </div>
     </main>
   )
 }

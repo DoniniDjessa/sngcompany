@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import { Car } from "@/components/icons"
+import { CarTop } from "@/components/icons"
 import styles from "./RoadThread.module.css"
 
 // The road as the thread of the page: a vertical line fixed on the left traces itself as you scroll,
-// the little car drives down with you and lights up each "station" (section) it passes.
+// the little car (seen from above, nose down) drives down with you and lights up each "station" (section) it passes.
 // Stations are placed at the position of their section in the page; a click on one drives there.
 export default function RoadThread({ stations }: { stations: { id: string; label: string }[] }) {
   const [progress, setProgress] = useState(0)
@@ -60,7 +60,7 @@ export default function RoadThread({ stations }: { stations: { id: string; label
             <span className={styles.stationLabel}>{m.label}</span>
           </button>
         ))}
-        <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><Car /></span>
+        <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><CarTop /></span>
       </div>
     </aside>
   )

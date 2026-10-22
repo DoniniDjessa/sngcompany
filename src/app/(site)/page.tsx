@@ -34,21 +34,36 @@ export default async function Home() {
         <Commitments data={h.commitments} />
       </section>
 
-      {/* --- ABOUT --- */}
-      <section id="a-propos" className={`${styles.section} reveal`}>
-        <div className={styles.sectionHead}>
-          <p className={styles.eyebrow}>{h.about.eyebrow}</p>
-          <h2 className={styles.sectionTitle}>{h.about.title}</h2>
-          <ScrollText text={h.about.text} className={styles.aboutText} />
-        </div>
-        {h.about.image && (
-          <div className={`${styles.aboutMedia} img-reveal`}>
-            <CmsImage src={h.about.image} alt={h.about.title} sizes="(max-width: 1100px) 100vw, 1100px" className={styles.cover} />
+      {/* --- ABOUT: editorial split, sticky photo + statement revealed while scrolling --- */}
+      <section id="a-propos" className={`${styles.about} reveal`}>
+        <span className={styles.aboutMark} aria-hidden="true">SNG</span>
+        <div className={styles.aboutGrid}>
+          {h.about.image && (
+            <div className={styles.aboutVisual}>
+              <div className={styles.aboutPhoto}>
+                <CmsImage src={h.about.image} alt={h.about.title} sizes="(max-width: 1000px) 100vw, 45vw" className={styles.cover} />
+              </div>
+              <div className={styles.aboutBadge}>
+                <strong>{company.name}</strong>
+                <span>Né de {company.carsSiteName}</span>
+              </div>
+            </div>
+          )}
+          <div className={styles.aboutBody}>
+            <p className={styles.eyebrow}>{h.about.eyebrow}</p>
+            <h2 className={styles.aboutTitle}>{h.about.title}</h2>
+            <ScrollText text={h.about.text} className={styles.aboutText} />
+            <ul className={`${styles.aboutValues} stagger`}>
+              {h.about.values.map((v, i) => (
+                <li key={v}>
+                  <span className={styles.aboutCheck}><Check /></span>
+                  <span className={styles.aboutValue}>{v}</span>
+                  <small>{String(i + 1).padStart(2, "0")}</small>
+                </li>
+              ))}
+            </ul>
           </div>
-        )}
-        <ul className={`${styles.values} stagger`}>
-          {h.about.values.map((v) => <li key={v}><Check /> {v}</li>)}
-        </ul>
+        </div>
       </section>
 
       {/* --- SERVED ZONES --- */}

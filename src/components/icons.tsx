@@ -66,3 +66,32 @@ export const Chat: Icon = (p) => svg(p, <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"
 export const Building: Icon = (p) => svg(p, <><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></>)
 export const Lock: Icon = (p) => svg(p, <><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>)
 export const Filter: Icon = (p) => svg(p, <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />)
+
+/** Car seen from above, front pointing down (for vertical roads) */
+export const CarTop: Icon = (p) =>
+  svg(p, (
+    <>
+      <rect x="6" y="2" width="12" height="20" rx="4" />
+      <path d="M8.2 15.2h7.6l-1-2.4H9.2z" />
+      <path d="M8.8 6.3h6.4l.8 2H8z" />
+      <path d="M7.5 21.2h2.5" />
+      <path d="M14 21.2h2.5" />
+      <path d="M4.3 4.5v3" />
+      <path d="M19.7 4.5v3" />
+      <path d="M4.3 15.5v3" />
+      <path d="M19.7 15.5v3" />
+    </>
+  ))
+
+/** Sports car in profile, facing right */
+export const SportCar: Icon = (p) =>
+  svg(p, (
+    <>
+      <path d="M2.5 15.5H4.6" />
+      <path d="M9.4 15.5h5.2" />
+      <path d="M19.4 15.5h1.6c.6 0 1-.4 1-1v-1.8c0-.7-.5-1.3-1.2-1.5l-2.6-.6-2.7-2.7a3 3 0 0 0-2.1-.9H9.6c-.8 0-1.6.4-2.1 1L5.6 10.4l-2.2.6c-.5.2-.9.7-.9 1.2v3.3" />
+      <path d="M8.3 10.4h8.4" />
+      <circle cx="7" cy="15.5" r="2.4" />
+      <circle cx="17" cy="15.5" r="2.4" />
+    </>
+  ))

@@ -88,7 +88,7 @@
   border-radius: 50%;
   background: var(--ink);
   color: var(--ink-contrast);
-  font-size: 1rem;
+  font-size: 1.15rem;
   transform: translate(-50%, -50%);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   transition: top 0.12s linear;

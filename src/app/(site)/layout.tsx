@@ -10,6 +10,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const clientServices = JSON.parse(JSON.stringify(services)) as ClientService[]
   return (
     <SiteProvider value={{ company, services: clientServices }}>
+      {/* first visit of the session: flag the intro before the page paints */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{if(!sessionStorage.getItem('sng-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('sng-intro');}catch(e){}})();`,
+        }}
+      />
       <Navbar />
       {children}
       <Footer company={company} services={services} />

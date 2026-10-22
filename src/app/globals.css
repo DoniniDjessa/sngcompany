@@ -41,7 +41,6 @@
   /* fonts loaded by next/font in app/layout.tsx */
   --font-primary: var(--font-outfit), sans-serif;      /* big titles */
   --font-secondary: var(--font-jakarta), sans-serif;   /* text, small titles, labels, buttons */
-  --font-hero: var(--font-boldonse), var(--font-primary); /* hero carousel title */
 
   --transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.04);

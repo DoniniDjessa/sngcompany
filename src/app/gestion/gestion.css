@@ -1503,3 +1503,33 @@ kbd {
   .editor-nav a { white-space: nowrap; }
   .editor-fields { grid-template-columns: 1fr; }
 }
+
+/* ---------- access code (login) ---------- */
+.code-boxes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.code-box {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(var(--border-strong));
+  border-radius: var(--radius-card);
+  background: rgb(var(--bg-input));
+  color: rgb(var(--text-strong));
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.code-box:focus {
+  border-color: rgb(var(--c-primary));
+  box-shadow: 0 0 0 0.2rem rgb(var(--c-primary) / 0.12);
+  transform: translateY(-2px);
+}
+
+.code-box:disabled { opacity: 0.6; }

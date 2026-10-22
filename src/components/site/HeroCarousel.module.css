@@ -102,21 +102,19 @@
   transition: transform 0.9s var(--ease) 0.7s;
 }
 
-/* Boldonse: very wide and heavy, so smaller sizes and a looser line height */
 .title {
-  font-family: var(--font-hero);
-  font-size: clamp(1.9rem, 4.6vw, 4.4rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.42;
-  text-transform: none;
+  font-family: var(--font-primary);
+  font-size: clamp(2.6rem, 6.4vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
 }
 
 /* each line rises from behind a mask */
 .line {
   display: block;
   overflow: hidden;
-  padding: 0.04em 0 0.2em;
+  padding-bottom: 0.08em;
 }
 
 .line > span {
@@ -408,6 +406,7 @@
   .ghost { display: none; }
   .scroll { display: none; }
   .road { top: 14px; gap: 10px; padding: 6px 12px; }
+  .track { width: 62vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {

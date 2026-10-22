@@ -30,7 +30,6 @@ export default function Footer({ company, services }: { company: CompanyContent;
               <li><Link href="/#a-propos">À propos</Link></li>
               <li><Link href="/contact">Nous contacter</Link></li>
               <li><a href={company.carsSiteUrl} target="_blank" rel="noopener noreferrer">{company.carsSiteName}</a></li>
-              <li><Link href="/gestion">Espace gestion</Link></li>
             </ul>
           </div>
 

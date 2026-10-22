@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import { Boldonse, Outfit, Plus_Jakarta_Sans } from "next/font/google"
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google"
 import "./globals.css"
 import { SITE } from "@/lib/site"
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["600", "700", "800", "900"], variable: "--font-outfit" })
-const boldonse = Boldonse({ subsets: ["latin"], weight: "400", variable: "--font-boldonse" })
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-jakarta" })
 
 export const metadata: Metadata = {
@@ -39,11 +38,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" suppressHydrationWarning className={`${outfit.variable} ${jakarta.variable} ${boldonse.variable}`}>
+    <html lang="fr" suppressHydrationWarning className={`${outfit.variable} ${jakarta.variable}`}>
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var d=document.documentElement;try{var t=localStorage.getItem('theme');if(t)d.setAttribute('data-theme',t);}catch(e){}try{if(location.pathname.indexOf('/gestion')!==0&&!sessionStorage.getItem('sng-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('sng-intro');}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
           }}
         />
         {children}

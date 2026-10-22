@@ -5,7 +5,6 @@ import type { RentalCar } from "@/lib/cars"
 import type { Service } from "@/lib/services"
 import CmsImage from "../CmsImage"
 import HeroCarousel from "../HeroCarousel"
-import RoadThread from "../RoadThread"
 import CarCard from "./CarCard"
 import RentalSearch from "./RentalSearch"
 import styles from "./Rental.module.css"
@@ -16,17 +15,6 @@ const STEPS = [
   { icon: Search, title: "Recherchez", text: "Trouvez le véhicule idéal parmi notre flotte en Côte d'Ivoire." },
   { icon: Calendar, title: "Réservez", text: "Choisissez vos dates, avec ou sans chauffeur : nous confirmons rapidement." },
   { icon: Car, title: "Profitez", text: "Récupérez votre véhicule ou faites-vous livrer, et roulez en toute sérénité." },
-]
-
-const STATIONS = [
-  { id: "recherche", label: "Recherche" },
-  { id: "selection", label: "Sélection" },
-  { id: "prestations", label: "Prestations" },
-  { id: "bienvenue", label: "SNG Elite Cars" },
-  { id: "etapes", label: "Comment ça marche" },
-  { id: "faq", label: "Questions" },
-  { id: "contact", label: "Contact" },
-  { id: "autres", label: "Autres activités" },
 ]
 
 const slides = (s: Service): HeroSlide[] => [
@@ -87,7 +75,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       <HeroCarousel slides={slides(s)} tone="orange" docked next="recherche" />
 
       {/* ---------- search, docked on the bottom of the hero ---------- */}
-      <section id="recherche" className={styles.dock}>
+      <section id="recherche" data-station="Recherche" className={styles.dock}>
         <div className={styles.dockInner}>
           <p className={styles.dockTitle}><span />Trouvez votre véhicule</p>
           <RentalSearch />
@@ -119,7 +107,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
 
       {/* ---------- most requested cars (live from SNG Elite Cars) ---------- */}
       {cars.length > 0 && (
-        <section id="selection" className={`${styles.block} reveal`}>
+        <section id="selection" data-station="Sélection" className={`${styles.block} reveal`}>
           <div className={styles.blockHead}>
             <div>
               <p className={styles.eyebrow}>Sélection</p>
@@ -137,7 +125,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       {prestations}
 
       {/* ---------- welcome ---------- */}
-      <section id="bienvenue" className={styles.welcome}>
+      <section id="bienvenue" data-station="SNG Elite Cars" className={styles.welcome}>
         <div className={`${styles.welcomeInner} reveal`}>
           <div className={styles.welcomeMedia}>
             <div className={styles.welcomePhoto}>
@@ -162,7 +150,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       </section>
 
       {/* ---------- how it works ---------- */}
-      <section id="etapes" className={`${styles.block} reveal`}>
+      <section id="etapes" data-station="Comment ça marche" className={`${styles.block} reveal`}>
         <div className={styles.center}>
           <p className={styles.eyebrow}>Simple et rapide</p>
           <h2 className={styles.h2}>Comment ça marche</h2>
@@ -182,9 +170,6 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       {faq}
       {contact}
       {others}
-
-      {/* the road of the home page, in orange: the car drives down the stations of the page */}
-      <RoadThread tone="orange" stations={STATIONS.filter((st) => st.id !== "selection" || cars.length > 0)} />
     </main>
   )
 }

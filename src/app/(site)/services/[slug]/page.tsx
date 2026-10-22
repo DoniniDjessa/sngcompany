@@ -7,6 +7,8 @@ import Catalogue from "@/components/site/Catalogue"
 import CmsImage from "@/components/site/CmsImage"
 import QuoteForm from "@/components/site/QuoteForm"
 import RentalPage from "@/components/site/elite/RentalPage"
+import StackedCards from "@/components/site/transport/StackedCards"
+import TransportHero from "@/components/site/transport/TransportHero"
 import { telHref } from "@/lib/content"
 import { getCatalogue, getContent, getRentalCars, getService } from "@/lib/content-server"
 import { SERVICES } from "@/lib/services"
@@ -36,7 +38,7 @@ export default async function ServicePage({ params }: Props) {
   const prestationsSection = (
     <>
       {/* prestations */}
-      <section id="prestations" className={`${styles.premiumSection} reveal`}>
+      <section id="prestations" data-station="Prestations" className={`${styles.premiumSection} reveal`}>
         <div className={styles.prestaGrid}>
           <div className={styles.prestaHead}>
             <div className="badge-premium">Nos prestations</div>
@@ -69,7 +71,7 @@ export default async function ServicePage({ params }: Props) {
     <>
       {/* FAQ */}
       {s.faqs.length > 0 && (
-        <section id="faq" className={`${styles.premiumSection} reveal`}>
+        <section id="faq" data-station="Questions" className={`${styles.premiumSection} reveal`}>
           <div className={styles.faqGrid}>
             <div>
               <div className="badge-premium">Questions fréquentes</div>
@@ -93,7 +95,7 @@ export default async function ServicePage({ params }: Props) {
   )
   const contactSection = (
     <>
-      <section id="contact" className={`${styles.premiumSection} reveal`}>
+      <section id="contact" data-station="Contact" className={`${styles.premiumSection} reveal`}>
         <div className={styles.contactGrid}>
           <div className={styles.contactInfo}>
             <p className={styles.eyebrow}>Contact</p>
@@ -111,7 +113,7 @@ export default async function ServicePage({ params }: Props) {
   )
   const othersSection = (
     <>
-      <section id="autres" className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
+      <section id="autres" data-station="Autres activités" className={`${styles.premiumSection} reveal`} style={{ paddingTop: 0 }}>
         <div className={styles.othersHead}>
           <div>
             <div className="badge-premium">Découvrez aussi</div>
@@ -158,6 +160,21 @@ export default async function ServicePage({ params }: Props) {
     )
   }
 
+  if (s.slug === "transport-logistique") {
+    return (
+      <main className={styles.main}>
+        <TransportHero service={s} />
+        <section id="atouts" data-station="Nos atouts">
+          <StackedCards eyebrow="Nos atouts" title="Pourquoi nous confier" muted="vos biens." items={s.features} icons={["users", "truck", "pin", "globe"]} />
+        </section>
+        {prestationsSection}
+        {faqSection}
+        {contactSection}
+        {othersSection}
+      </main>
+    )
+  }
+
   return (
     <main className={styles.main}>
       <section className={styles.pageHero}>
@@ -186,7 +203,7 @@ export default async function ServicePage({ params }: Props) {
       </section>
 
       {/* points forts */}
-      <section className="reveal">
+      <section id="atouts" data-station="Nos atouts" className="reveal">
         <div className={`${styles.featuresList} stagger`}>
           {s.features.map((f) => (
             <div key={f.title} className={styles.featureItem}>
@@ -200,7 +217,7 @@ export default async function ServicePage({ params }: Props) {
 
       {/* catalogue (équipements) */}
       {isShop && (
-        <section id="catalogue" className={`${styles.premiumSection} reveal`}>
+        <section id="catalogue" data-station="Catalogue" className={`${styles.premiumSection} reveal`}>
           <div className={styles.sectionHeaderPremium}>
             <div>
               <div className="badge-premium">Catalogue</div>

@@ -12,7 +12,7 @@ export default function FleetBanner({ data, siteUrl, siteName }: { data: HomeCon
   const loop = gallery.length < 6 ? [...gallery, ...gallery] : gallery
 
   return (
-    <section id="flotte" className={styles.fleet} aria-labelledby="fleet-title">
+    <section id="flotte" data-station={siteName} className={styles.fleet} aria-labelledby="fleet-title">
       <div className={styles.inner}>
         <div className={styles.text}>
           <p className={styles.eyebrow}>{data.eyebrow}</p>

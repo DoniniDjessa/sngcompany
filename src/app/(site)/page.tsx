@@ -6,7 +6,6 @@ import FleetBanner from "@/components/site/FleetBanner"
 import HeroCarousel from "@/components/site/HeroCarousel"
 import HowItWorks from "@/components/site/HowItWorks"
 import { Commitments, Faq, Partners, ScrollText } from "@/components/site/HomeSections"
-import RoadThread from "@/components/site/RoadThread"
 import ServedZones from "@/components/site/ServedZones"
 import QuoteForm from "@/components/site/QuoteForm"
 import { telHref } from "@/lib/content"
@@ -34,7 +33,7 @@ export default async function Home() {
       <HeroCarousel slides={h.hero.slides} tone="progress" />
 
       {/* --- ACTIVITIES --- */}
-      <section id="services" className={styles.activities}>
+      <section id="services" data-station="Activités" className={styles.activities}>
         <div className={`${styles.activitiesHead} reveal`}>
           <h2 className={styles.sectionTitle}>Nos activités.</h2>
           <p>Survolez une activité pour en découvrir plus.</p>
@@ -43,12 +42,12 @@ export default async function Home() {
       </section>
 
       {/* --- COMMITMENTS --- */}
-      <section id="engagements" className={`${styles.section} reveal`}>
+      <section id="engagements" data-station="Engagements" className={`${styles.section} reveal`}>
         <Commitments data={h.commitments} />
       </section>
 
       {/* --- ABOUT: editorial split, sticky photo + statement revealed while scrolling --- */}
-      <section id="a-propos" className={`${styles.about} reveal`}>
+      <section id="a-propos" data-station="Qui sommes-nous" className={`${styles.about} reveal`}>
         <span className={styles.aboutMark} aria-hidden="true">SNG</span>
         <div className={styles.aboutGrid}>
           {h.about.image && (
@@ -80,12 +79,12 @@ export default async function Home() {
       </section>
 
       {/* --- SERVED ZONES --- */}
-      <section id="zones" className={`${styles.graySectionAlt} reveal`}>
+      <section id="zones" data-station="Zones desservies" className={`${styles.graySectionAlt} reveal`}>
         <ServedZones {...h.zones} />
       </section>
 
       {/* --- WHY US: sticky intro + cards that stack on top of each other while scrolling --- */}
-      <section id="pourquoi" className={styles.why}>
+      <section id="pourquoi" data-station="Pourquoi SNG" className={styles.why}>
         <div className={styles.whyGrid}>
           <div className={styles.whyIntro}>
             <p className={styles.eyebrow}>Nos atouts</p>
@@ -125,7 +124,7 @@ export default async function Home() {
       )}
 
       {/* --- FAQ --- */}
-      <section id="faq" className={`${styles.graySection} reveal`}>
+      <section id="faq" data-station="Questions" className={`${styles.graySection} reveal`}>
         <Faq data={h.faq} />
       </section>
 
@@ -133,7 +132,7 @@ export default async function Home() {
       <FleetBanner data={h.cars} siteUrl={company.carsSiteUrl} siteName={company.carsSiteName} />
 
       {/* --- CONTACT --- */}
-      <section id="contact" className={`${styles.graySection} reveal`}>
+      <section id="contact" data-station="Contact" className={`${styles.graySection} reveal`}>
         <div className={styles.contactGrid}>
           <div className={styles.contactInfo}>
             <p className={styles.eyebrow}>{h.contact.eyebrow}</p>
@@ -152,20 +151,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <RoadThread
-        tone="orange"
-        stations={[
-          { id: "services", label: "Activités" },
-          { id: "engagements", label: "Engagements" },
-          { id: "a-propos", label: "Qui sommes-nous" },
-          { id: "zones", label: "Zones desservies" },
-          { id: "pourquoi", label: "Pourquoi SNG" },
-          { id: "etapes", label: "Comment ça marche" },
-          { id: "faq", label: "Questions" },
-          { id: "flotte", label: "SNG Elite Cars" },
-          { id: "contact", label: "Contact" },
-        ]}
-      />
     </main>
   )
 }

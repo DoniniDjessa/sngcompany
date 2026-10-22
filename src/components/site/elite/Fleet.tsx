@@ -42,7 +42,7 @@ export default function Fleet({ cars, initial }: { cars: RentalCar[]; initial: {
   const query = period ? `?du=${start}&au=${end}` : ""
 
   return (
-    <section className={styles.fleet}>
+    <section id="flotte" data-station="Véhicules" className={styles.fleet}>
       <div className={styles.bar}>
         <div className={styles.offers} role="radiogroup" aria-label="Type d'offre">
           {OFFERS.map(([v, label]) => (

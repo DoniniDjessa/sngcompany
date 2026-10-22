@@ -33,7 +33,7 @@ export default async function ContactPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <section className={styles.premiumSection}>
+      <section id="formulaire" data-station="Nous écrire" className={styles.premiumSection}>
         <div className={styles.contactGrid}>
           <div className={styles.contactInfo}>
             <div className="badge-premium">Besoin d&apos;aide ?</div>

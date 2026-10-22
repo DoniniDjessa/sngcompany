@@ -51,7 +51,7 @@ export default async function VehiclePage({ params, searchParams }: Props) {
           <Link href="/services/location-vehicules">Location de véhicules</Link> / <Link href="/vehicules">Nos véhicules</Link> / <span>{car.brand} {car.model}</span>
         </nav>
 
-        <div className={styles.detailGrid}>
+        <div id="vehicule" data-station="Le véhicule" className={styles.detailGrid}>
           <div className={styles.detailMain}>
             <Gallery photos={carPhotos(car)} name={`${car.brand} ${car.model}`} tag={car.tag_text} />
 
@@ -95,7 +95,7 @@ export default async function VehiclePage({ params, searchParams }: Props) {
       </div>
 
       {others.length > 0 && (
-        <section className={rental.block}>
+        <section id="autres-vehicules" data-station="Autres véhicules" className={rental.block}>
           <div className={rental.blockHead}>
             <div>
               <p className={rental.eyebrow}>Vous aimerez aussi</p>

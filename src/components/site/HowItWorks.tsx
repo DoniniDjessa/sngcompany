@@ -53,7 +53,7 @@ export default function HowItWorks({ eyebrow, title, items }: {
   const done = p >= 0.985
 
   return (
-    <section id="etapes" ref={section} className={styles.how} style={{ ["--n" as string]: n, ["--p" as string]: p }}>
+    <section id="etapes" data-station="Comment ça marche" ref={section} className={styles.how} style={{ ["--n" as string]: n, ["--p" as string]: p }}>
       <div className={styles.pin}>
         <div className={styles.head}>
           <p className={styles.eyebrow}>{eyebrow}</p>

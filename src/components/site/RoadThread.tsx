@@ -1,12 +1,15 @@
 "use client"
+import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { CarSide, CarTopFill } from "@/components/icons"
 import styles from "./RoadThread.module.css"
 
 // The road as the thread of the page: a vertical line fixed on the left traces itself as you scroll,
 // the little car (seen from above, nose down) drives down with you and lights up each "station" (section) it passes.
-// Stations are placed at the position of their section in the page; a click on one drives there.
-export default function RoadThread({ stations, tone }: { stations: { id: string; label: string }[]; tone?: "orange" }) {
+// Stations are the sections of the page marked with data-station="Label", placed at their position in the page;
+// a click on one drives there. Rendered once by the site layout: it follows every page.
+export default function RoadThread({ tone }: { tone?: "orange" }) {
+  const pathname = usePathname()
   const [progress, setProgress] = useState(0)
   const [marks, setMarks] = useState<{ id: string; label: string; at: number }[]>([])
   const [visible, setVisible] = useState(false)
@@ -20,11 +23,13 @@ export default function RoadThread({ stations, tone }: { stations: { id: string;
       const y = window.scrollY
       setProgress(max > 0 ? Math.min(1, y / max) : 0)
       setVisible(y > window.innerHeight * 0.55)
+      const sections = [...document.querySelectorAll<HTMLElement>("[data-station]")]
       setMarks(
-        stations
-          .map((s) => {
-            const el = document.getElementById(s.id)
-            if (!el || max <= 0) return null
+        sections
+          .map((el, i) => {
+            if (max <= 0) return null
+            if (!el.id) el.id = `etape-${i + 1}`
+            const s = { id: el.id, label: el.dataset.station ?? "" }
             // the section counts as reached when its top passes the middle of the screen
             const top = el.getBoundingClientRect().top + y - window.innerHeight / 2
             return { ...s, at: Math.min(1, Math.max(0, top / max)) }
@@ -42,7 +47,7 @@ export default function RoadThread({ stations, tone }: { stations: { id: string;
       cancelAnimationFrame(frame.current)
       frame.current = 0 // a later run of the effect (strict mode, new page) must be able to schedule again
     }
-  }, [stations])
+  }, [pathname])
 
   // section the reader is in: the last station already passed
   const current = [...marks].reverse().find((m) => progress >= m.at - 0.002)

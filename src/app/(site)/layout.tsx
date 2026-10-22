@@ -1,5 +1,6 @@
 import Navbar from "@/components/site/Navbar"
 import Footer from "@/components/site/Footer"
+import RoadThread from "@/components/site/RoadThread"
 import { GoToTop, Headlights, Intro, RevealOnScroll, WhatsAppWidget } from "@/components/site/Extras"
 import { SiteProvider, type ClientService } from "@/components/site/SiteContext"
 import { getContent } from "@/lib/content-server"
@@ -19,6 +20,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Navbar />
       {children}
       <Footer company={company} services={services} />
+      <RoadThread tone="orange" />
       <WhatsAppWidget />
       <GoToTop />
       <RevealOnScroll />

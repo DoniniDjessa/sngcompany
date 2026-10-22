@@ -611,3 +611,5 @@
 @media (prefers-reduced-motion: reduce) {
   .heroBg, .heroInner > * { animation: none; }
 }
+
+.carBody h3 small { font-size: 0.6em; font-weight: 500; letter-spacing: 0; color: #737373; }

@@ -1,5 +1,6 @@
 import { cache } from "react"
 import { CONTENT_TAG, DEFAULT_COMPANY, DEFAULT_HOME, mergeContent, serviceDefaults } from "./content"
+import type { RentalCar } from "./cars"
 import { SERVICES, type Service, type ServiceSlug } from "./services"
 
 // Server side reads of the public data (anon key + row level security), cached by Next and
@@ -57,33 +58,24 @@ export async function getCatalogue(): Promise<CatalogueItem[]> {
   return (await rest<CatalogueItem[]>(`sng-equipements?select=${cols}&published=eq.true&order=category.asc,name.asc`, "sng-catalogue", 60)) ?? []
 }
 
-export interface RentalCar {
-  id: string
-  brand: string
-  model: string
-  year: number | null
-  price_per_day: number | null
-  seats: number | null
-  transmission: string | null
-  fuel_type: string | null
-  location: string | null
-  images: string | string[] | null
-}
-
-/** First photo of a car of the SNG Elite Cars table ("images" is a JSON array or a comma-separated list) */
-export function carPhoto(car: Pick<RentalCar, "images">) {
-  const raw = car.images
-  if (Array.isArray(raw)) return raw[0] ?? ""
-  if (!raw) return ""
-  try {
-    if (raw.trim().startsWith("[")) return (JSON.parse(raw) as string[])[0] ?? ""
-  } catch {}
-  return raw.split(",")[0].trim()
-}
+const CAR_COLS = "id,brand,model,variant,year,color,price_per_day,price_sale,mileage,seats,transmission,fuel_type,location,description,listing_type,tag_text,busy_start_date,busy_end_date,images"
 
 /** Rental cars published on the SNG Elite Cars site (shared "cars" table), best rated first */
 export async function getRentalCars(limit = 6): Promise<RentalCar[]> {
-  const cols = "id,brand,model,year,price_per_day,seats,transmission,fuel_type,location,images"
-  const query = `cars?select=${cols}&available=eq.true&siteweb=eq.true&listing_type=in.(rent,both)&order=average_rating.desc.nullslast,created_at.desc&limit=${limit}`
+  const query = `cars?select=${CAR_COLS}&available=eq.true&siteweb=eq.true&listing_type=in.(rent,both)&order=average_rating.desc.nullslast,created_at.desc&limit=${limit}`
   return (await rest<RentalCar[]>(query, "sng-cars", 300)) ?? []
 }
+
+/** Every car published on the site, for rent or for sale */
+export async function getFleet(): Promise<RentalCar[]> {
+  const query = `cars?select=${CAR_COLS}&available=eq.true&siteweb=eq.true&order=average_rating.desc.nullslast,created_at.desc`
+  return (await rest<RentalCar[]>(query, "sng-cars", 300)) ?? []
+}
+
+export async function getCar(id: string): Promise<RentalCar | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null
+  const rows = await rest<RentalCar[]>(`cars?select=${CAR_COLS}&id=eq.${id}&siteweb=eq.true&limit=1`, "sng-cars", 300)
+  return rows?.[0] ?? null
+}
+
+export { carPhoto, carPhotos, type RentalCar } from "./cars"

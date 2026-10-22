@@ -1,10 +1,10 @@
-import Image from "next/image"
-import { ArrowRight, Calendar, Car, Clock, Droplets, Key, MapPin, Search, Settings, Shield, Users, Wallet } from "@/components/icons"
+import Link from "next/link"
+import { ArrowRight, Calendar, Car, Clock, Key, Search, Shield, Users, Wallet } from "@/components/icons"
 import type { CompanyContent } from "@/lib/content"
-import { carPhoto, type RentalCar } from "@/lib/content-server"
+import type { RentalCar } from "@/lib/cars"
 import type { Service } from "@/lib/services"
-import { formatXOF } from "@/lib/site"
 import CmsImage from "../CmsImage"
+import CarCard from "./CarCard"
 import RentalSearch from "./RentalSearch"
 import styles from "./Rental.module.css"
 
@@ -28,7 +28,6 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
   contact: React.ReactNode
   others: React.ReactNode
 }) {
-  const site = company.carsSiteUrl.replace(/\/$/, "")
   return (
     <main className={styles.page}>
       {/* ---------- hero ---------- */}
@@ -40,11 +39,11 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
           <p className={styles.kicker}>Plus qu&apos;un trajet, une expérience</p>
           <h1 className={styles.heroTitle}>{s.name}</h1>
           <p className={styles.heroText}>{s.intro}</p>
-          <RentalSearch siteUrl={site} />
+          <RentalSearch />
           <div className={styles.heroLinks}>
-            <a href={`${site}/location`} target="_blank" rel="noopener noreferrer"><Key /> Location à la journée</a>
+            <Link href="/vehicules?offre=location"><Key /> Location à la journée</Link>
             <a href="#contact"><Users /> Avec chauffeur</a>
-            <a href={`${site}/nos-vehicules`} target="_blank" rel="noopener noreferrer"><Car /> Toute la flotte</a>
+            <Link href="/vehicules"><Car /> Toute la flotte</Link>
           </div>
         </div>
       </section>
@@ -75,44 +74,10 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
               <p className={styles.eyebrow}>Sélection</p>
               <h2 className={styles.h2}>Nos véhicules les plus demandés</h2>
             </div>
-            <a href={`${site}/nos-vehicules`} target="_blank" rel="noopener noreferrer" className={styles.headLink}>Voir toute la flotte <ArrowRight /></a>
+            <Link href="/vehicules" className={styles.headLink}>Voir toute la flotte <ArrowRight /></Link>
           </div>
           <div className={`${styles.cars} stagger`}>
-            {cars.map((c) => {
-              const photo = carPhoto(c)
-              const gearbox = c.transmission === "Automatic" ? "Automatique" : c.transmission === "Manual" ? "Manuelle" : c.transmission
-              const fuel = { Gasoline: "Essence", Diesel: "Diesel", Hybrid: "Hybride", Electric: "Électrique" }[c.fuel_type ?? ""] ?? c.fuel_type
-              return (
-                <article key={c.id} className={styles.car}>
-                  <a href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.carMedia} aria-label={`${c.brand} ${c.model} : voir la fiche`}>
-                    {photo ? (
-                      <Image src={photo} alt={`${c.brand} ${c.model}`} fill sizes="(max-width: 640px) 85vw, (max-width: 1000px) 50vw, 420px" className={styles.carImg} />
-                    ) : (
-                      <span className={styles.carPlaceholder}><Car /></span>
-                    )}
-                    <span className={styles.carTag}>Location</span>
-                    {c.year && <span className={styles.carYear}>{c.year}</span>}
-                    <span className={styles.carPrice}>
-                      {c.price_per_day ? <><strong>{formatXOF(c.price_per_day)}</strong> / jour</> : "Prix sur demande"}
-                    </span>
-                  </a>
-                  <div className={styles.carBody}>
-                    <p className={styles.carBrand}>{c.brand}</p>
-                    <h3>{c.model}</h3>
-                    <ul className={styles.carSpecs}>
-                      {c.seats && <li><Users /> {c.seats} places</li>}
-                      {gearbox && <li><Settings /> {gearbox}</li>}
-                      {fuel && <li><Droplets /> {fuel}</li>}
-                    </ul>
-                    {c.location && <p className={styles.carPlace}><MapPin /> {c.location}</p>}
-                    <div className={styles.carActions}>
-                      <a href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.carBook}>Réserver</a>
-                      <a href={`${site}/car/${c.id}`} target="_blank" rel="noopener noreferrer" className={styles.carMore}>Détails <ArrowRight /></a>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
+            {cars.map((c) => <CarCard key={c.id} car={c} />)}
           </div>
         </section>
       )}
@@ -138,7 +103,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
               <p className={styles.strong}>Avec {company.carsSiteName}, louez plus qu&apos;une voiture : vivez une expérience.</p>
             </div>
             <div className={styles.welcomeActions}>
-              <a href={`${site}/location`} target="_blank" rel="noopener noreferrer" className={styles.darkBtn}><Key /> Louer un véhicule</a>
+              <Link href="/vehicules?offre=location" className={styles.darkBtn}><Key /> Louer un véhicule</Link>
               <a href="#contact" className={styles.lineBtn}>Nous contacter</a>
             </div>
           </div>

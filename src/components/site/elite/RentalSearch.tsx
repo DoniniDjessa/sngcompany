@@ -1,10 +1,12 @@
 "use client"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Search } from "@/components/icons"
 import styles from "./Rental.module.css"
 
-// Search bar of the hero (as on SNG Elite Cars): city + dates, opens the available cars on the rental site
-export default function RentalSearch({ siteUrl }: { siteUrl: string }) {
+// Search bar of the hero (as on SNG Elite Cars): city + dates, opens the cars free on that period
+export default function RentalSearch() {
+  const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const today = new Date().toISOString().slice(0, 10)
 
@@ -15,9 +17,9 @@ export default function RentalSearch({ siteUrl }: { siteUrl: string }) {
     const startDate = String(form.get("startDate"))
     const endDate = String(form.get("endDate"))
     if (startDate >= endDate) return setError("La date de retour doit être après la date de départ.")
-    const params = new URLSearchParams({ startDate, endDate, availability: "true" })
-    if (city) params.set("city", city)
-    window.open(`${siteUrl.replace(/\/$/, "")}/nos-vehicules?${params}`, "_blank", "noopener")
+    const params = new URLSearchParams({ offre: "location", du: startDate, au: endDate })
+    if (city) params.set("ville", city)
+    router.push(`/vehicules?${params}`)
   }
 
   return (

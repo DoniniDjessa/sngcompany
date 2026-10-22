@@ -1,4 +1,5 @@
-import { ArrowRight, External } from "@/components/icons"
+import Link from "next/link"
+import { ArrowRight } from "@/components/icons"
 import type { HomeContent } from "@/lib/content"
 import CmsImage from "./CmsImage"
 import styles from "./FleetBanner.module.css"
@@ -18,17 +19,17 @@ export default function FleetBanner({ data, siteUrl, siteName }: { data: HomeCon
           <h2 id="fleet-title" className={styles.title}>{data.title}</h2>
           <p className={styles.lead}>{data.text}</p>
           <div className={styles.actions}>
-            <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={styles.cta}>
-              Voir le catalogue <External />
-            </a>
-            <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={styles.link}>
+            <Link href="/vehicules" className={styles.cta}>
+              Voir nos véhicules <ArrowRight />
+            </Link>
+            <Link href="/vehicules?offre=location" className={styles.link}>
               Réserver un véhicule <ArrowRight />
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* browser window: address typed in, the car slides into the frame */}
-        <a href={siteUrl} target="_blank" rel="noopener noreferrer" className={styles.window} aria-label={`Ouvrir ${siteName}`}>
+        <Link href="/vehicules" className={styles.window} aria-label={`Voir les véhicules ${siteName}`}>
           <div className={styles.bar} aria-hidden="true">
             <span className={styles.lights}><i /><i /><i /></span>
             <span className={styles.address}>
@@ -41,7 +42,7 @@ export default function FleetBanner({ data, siteUrl, siteName }: { data: HomeCon
             </div>
             <span className={styles.badge}>{siteName}</span>
           </div>
-        </a>
+        </Link>
       </div>
 
       {gallery.length > 0 && (
@@ -51,12 +52,12 @@ export default function FleetBanner({ data, siteUrl, siteName }: { data: HomeCon
               <ul key={copy} aria-hidden={copy === 1}>
                 {loop.map((g, i) => (
                   <li key={i}>
-                    <a href={siteUrl} target="_blank" rel="noopener noreferrer" tabIndex={copy === 1 ? -1 : 0}>
+                    <Link href="/vehicules" tabIndex={copy === 1 ? -1 : 0}>
                       <span className={styles.thumb}>
                         <CmsImage src={g.image} alt={g.name} sizes="260px" className={styles.thumbImg} />
                       </span>
                       <span className={styles.name}>{g.name}</span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

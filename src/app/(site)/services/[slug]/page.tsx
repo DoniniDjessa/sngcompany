@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowRight, Check, External } from "@/components/icons"
+import { ArrowRight, Check } from "@/components/icons"
 import BeforeAfter from "@/components/site/BeforeAfter"
 import Catalogue from "@/components/site/Catalogue"
 import CmsImage from "@/components/site/CmsImage"
@@ -42,9 +42,9 @@ export default async function ServicePage({ params }: Props) {
             <div className="badge-premium">Nos prestations</div>
             <h2 className="title-premium">{s.tagline}.</h2>
             {s.slug === "location-vehicules" && (
-              <a href={company.carsSiteUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
-                Catalogue {company.carsSiteName} <External />
-              </a>
+              <Link href="/vehicules" className="btn-outline">
+                Voir nos véhicules <ArrowRight />
+              </Link>
             )}
           </div>
           <ol className={`${styles.prestations} stagger`}>

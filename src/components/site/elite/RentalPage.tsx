@@ -84,7 +84,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
     <main className={styles.page}>
       {/* ---------- hero: the carousel of the home page, orange accents ---------- */}
       <h1 className="sr-only">{s.name}</h1>
-      <HeroCarousel slides={slides(s)} tone="orange" next="recherche" />
+      <HeroCarousel slides={slides(s)} tone="orange" docked next="recherche" />
 
       {/* ---------- search, docked on the bottom of the hero ---------- */}
       <section id="recherche" className={styles.dock}>

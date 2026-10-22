@@ -293,9 +293,6 @@
   to { transform: scaleY(1); }
 }
 
-.paused .fill { animation-play-state: paused; }
-.paused .active .img { animation-play-state: paused; }
-
 /* ---------- top progress road ---------- */
 .road {
   position: absolute;
@@ -362,10 +359,6 @@
 @keyframes progressX { to { transform: scaleX(1); } }
 @keyframes drive { to { left: 100%; } }
 @keyframes bounce { to { transform: translateY(-1.5px); } }
-
-.paused .trail,
-.paused .runner,
-.paused .runner svg { animation-play-state: paused; }
 
 /* ---------- scroll cue ---------- */
 .scroll {

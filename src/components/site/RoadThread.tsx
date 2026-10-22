@@ -6,7 +6,7 @@ import styles from "./RoadThread.module.css"
 // The road as the thread of the page: a vertical line fixed on the left traces itself as you scroll,
 // the little car (seen from above, nose down) drives down with you and lights up each "station" (section) it passes.
 // Stations are placed at the position of their section in the page; a click on one drives there.
-export default function RoadThread({ stations }: { stations: { id: string; label: string }[] }) {
+export default function RoadThread({ stations, tone }: { stations: { id: string; label: string }[]; tone?: "orange" }) {
   const [progress, setProgress] = useState(0)
   const [marks, setMarks] = useState<{ id: string; label: string; at: number }[]>([])
   const [visible, setVisible] = useState(false)
@@ -49,7 +49,7 @@ export default function RoadThread({ stations }: { stations: { id: string; label
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
 
   return (
-    <>
+    <div className={tone === "orange" ? styles.orange : undefined}>
     {/* small screens: the road lies across the top, under the menu */}
     <div className={`${styles.mobileBar} ${visible ? styles.visible : ""}`} aria-hidden="true">
       <span key={current?.id} className={styles.mobileLabel}>{current?.label ?? ""}</span>
@@ -75,6 +75,6 @@ export default function RoadThread({ stations }: { stations: { id: string; label
         <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><CarTopFill /></span>
       </div>
     </aside>
-    </>
+    </div>
   )
 }

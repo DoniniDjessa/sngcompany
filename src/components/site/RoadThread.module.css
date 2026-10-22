@@ -166,3 +166,6 @@
 @media (prefers-reduced-motion: reduce) {
   .road, .car { transition: none; }
 }
+
+/* orange road (home and rental pages) */
+.orange { display: contents; --ink: #ea580c; --ink-contrast: #fff; }

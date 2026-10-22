@@ -16,7 +16,6 @@ const DURATION = 4500 // ms per slide
 export default function HeroCarousel({ slides, tone, next = "services" }: { slides: HeroSlide[]; tone?: "orange"; next?: string }) {
   const [index, setIndex] = useState(0)
   const [prev, setPrev] = useState<number | null>(null)
-  const [paused, setPaused] = useState(false)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const count = slides.length
 
@@ -45,11 +44,9 @@ export default function HeroCarousel({ slides, tone, next = "services" }: { slid
 
   return (
     <section
-      className={`${styles.hero} ${tone === "orange" ? styles.orange : ""} ${paused ? styles.paused : ""}`}
+      className={`${styles.hero} ${tone === "orange" ? styles.orange : ""}`}
       aria-roledescription="carrousel"
       aria-label="À la une"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
       onTouchEnd={(e) => {
         if (!touch.current) return

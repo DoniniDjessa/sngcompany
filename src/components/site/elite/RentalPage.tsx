@@ -184,9 +184,7 @@ export default function RentalPage({ service: s, company, cars, prestations, faq
       {others}
 
       {/* the road of the home page, in orange: the car drives down the stations of the page */}
-      <div className={styles.road}>
-        <RoadThread stations={STATIONS.filter((st) => st.id !== "selection" || cars.length > 0)} />
-      </div>
+      <RoadThread tone="orange" stations={STATIONS.filter((st) => st.id !== "selection" || cars.length > 0)} />
     </main>
   )
 }

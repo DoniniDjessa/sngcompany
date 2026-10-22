@@ -576,9 +576,6 @@
   .block, .welcomeInner { padding: 64px 18px; }
 }
 
-/* the road of the home page in the orange of this page */
-.road { display: contents; --ink: var(--orange); --ink-contrast: #fff; }
-
 @media (prefers-reduced-motion: reduce) {
   .dockInner { animation: none; }
 }

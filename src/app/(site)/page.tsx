@@ -153,6 +153,7 @@ export default async function Home() {
         </div>
       </section>
       <RoadThread
+        tone="orange"
         stations={[
           { id: "services", label: "Activités" },
           { id: "engagements", label: "Engagements" },

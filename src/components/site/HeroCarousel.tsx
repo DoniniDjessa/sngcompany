@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { ArrowRight, ChevronDown, SportCar } from "@/components/icons"
+import { ArrowRight, CarSide, ChevronDown } from "@/components/icons"
 import type { HeroSlide } from "@/lib/content"
 import CmsImage from "./CmsImage"
 import styles from "./HeroCarousel.module.css"
@@ -98,7 +98,7 @@ export default function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
           <span className={styles.roadLabel}>{String(index + 1).padStart(2, "0")}</span>
           <span className={styles.track}>
             <span key={index} className={styles.trail} />
-            <span key={`car-${index}`} className={styles.runner}><SportCar /></span>
+            <span key={`car-${index}`} className={styles.runner}><CarSide beam /></span>
           </span>
           <span className={styles.roadLabel}>{String(((index + 1) % count) + 1).padStart(2, "0")}</span>
         </div>

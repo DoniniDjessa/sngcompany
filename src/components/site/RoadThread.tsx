@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import { CarTop, SportCar } from "@/components/icons"
+import { CarSide, CarTopFill } from "@/components/icons"
 import styles from "./RoadThread.module.css"
 
 // The road as the thread of the page: a vertical line fixed on the left traces itself as you scroll,
@@ -55,7 +55,7 @@ export default function RoadThread({ stations }: { stations: { id: string; label
       <span key={current?.id} className={styles.mobileLabel}>{current?.label ?? ""}</span>
       <span className={styles.mobileTrack}>
         <span className={styles.mobileFill} style={{ transform: `scaleX(${progress})` }} />
-        <span className={styles.mobileCar} style={{ left: `${progress * 100}%` }}><SportCar /></span>
+        <span className={styles.mobileCar} style={{ left: `${progress * 100}%` }}><CarSide /></span>
       </span>
     </div>
     <aside className={`${styles.road} ${visible ? styles.visible : ""}`} aria-label="Sections de la page">
@@ -72,7 +72,7 @@ export default function RoadThread({ stations }: { stations: { id: string; label
             <span className={styles.stationLabel}>{m.label}</span>
           </button>
         ))}
-        <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><CarTop /></span>
+        <span className={styles.car} style={{ top: `${progress * 100}%` }} aria-hidden="true"><CarTopFill /></span>
       </div>
     </aside>
     </>

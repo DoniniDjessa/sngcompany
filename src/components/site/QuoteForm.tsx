@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRight, Box, Car, Check, ChevronLeft } from "@/components/icons"
+import { ArrowRight, Box, CarSide, Check, ChevronLeft } from "@/components/icons"
 import type { ServiceSlug } from "@/lib/services"
 import { supabase } from "@/lib/supabase"
 import { useSite } from "./SiteContext"
@@ -74,7 +74,7 @@ export default function QuoteForm({ service: initial }: { service?: ServiceSlug 
             <span className={styles.stationLabel}>{label}</span>
           </button>
         ))}
-        <span className={`${styles.car} ${sentRef ? styles.carArrived : ""}`} aria-hidden="true"><Car /></span>
+        <span className={`${styles.car} ${sentRef ? styles.carArrived : ""}`} aria-hidden="true"><CarSide /></span>
       </div>
 
       {sentRef ? (

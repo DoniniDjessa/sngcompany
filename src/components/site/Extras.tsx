@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Car } from "@/components/icons"
+import { CarSide } from "@/components/icons"
 import { useSite } from "./SiteContext"
 import styles from "./Extras.module.css"
 
@@ -78,7 +78,7 @@ export function Intro() {
       <div className={styles.introCurtain} />
       <div className={styles.introRoad} />
       {/* the car rides just ahead of the edge of the curtain */}
-      <span className={styles.introCar}><Car /></span>
+      <span className={styles.introCar}><CarSide /></span>
     </div>
   )
 }

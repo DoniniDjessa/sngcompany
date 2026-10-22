@@ -67,31 +67,31 @@ export const Building: Icon = (p) => svg(p, <><path d="M6 22V4a2 2 0 0 1 2-2h8a2
 export const Lock: Icon = (p) => svg(p, <><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>)
 export const Filter: Icon = (p) => svg(p, <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />)
 
-/** Car seen from above, front pointing down (for vertical roads) */
-export const CarTop: Icon = (p) =>
-  svg(p, (
-    <>
-      <rect x="6" y="2" width="12" height="20" rx="4" />
-      <path d="M8.2 15.2h7.6l-1-2.4H9.2z" />
-      <path d="M8.8 6.3h6.4l.8 2H8z" />
-      <path d="M7.5 21.2h2.5" />
-      <path d="M14 21.2h2.5" />
-      <path d="M4.3 4.5v3" />
-      <path d="M19.7 4.5v3" />
-      <path d="M4.3 15.5v3" />
-      <path d="M19.7 15.5v3" />
-    </>
-  ))
 
-/** Sports car in profile, facing right */
-export const SportCar: Icon = (p) =>
-  svg(p, (
-    <>
-      <path d="M2.5 15.5H4.6" />
-      <path d="M9.4 15.5h5.2" />
-      <path d="M19.4 15.5h1.6c.6 0 1-.4 1-1v-1.8c0-.7-.5-1.3-1.2-1.5l-2.6-.6-2.7-2.7a3 3 0 0 0-2.1-.9H9.6c-.8 0-1.6.4-2.1 1L5.6 10.4l-2.2.6c-.5.2-.9.7-.9 1.2v3.3" />
-      <path d="M8.3 10.4h8.4" />
-      <circle cx="7" cy="15.5" r="2.4" />
-      <circle cx="17" cy="15.5" r="2.4" />
-    </>
-  ))
+
+/** Filled coupé in profile, facing right; `beam` adds the headlight cone in front */
+export const CarSide = ({ beam = false, ...p }: IconProps & { beam?: boolean }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox={beam ? "0 0 64 20" : "0 0 48 20"} width="2.4em" height="1em" fill="currentColor" aria-hidden="true" {...p}>
+    {beam && <path d="M46.5 10.2 64 5v12.6l-17.5-5.4z" opacity="0.22" />}
+    <path
+      fillRule="evenodd"
+      d="M3 13.6c0-1.7 1.1-2.8 2.9-3.2L12 9.2l5.3-4.5a5.6 5.6 0 0 1 3.7-1.3h8.6c1.5 0 2.9.6 3.9 1.6l4 4 5.6 1c1.8.3 3 1.6 3 3.4V15c0 .6-.4 1-1 1h-3.3a4.6 4.6 0 0 0-9 0H16.3a4.6 4.6 0 0 0-9 0H4c-.6 0-1-.4-1-1zM18.8 9l3-3.2c.4-.4.9-.6 1.4-.6h2.5V9zm8.6 0V5.2h2.4c.7 0 1.3.3 1.8.8l3 3z"
+    />
+    <path fillRule="evenodd" d="M11.8 12.6a3.4 3.4 0 1 1 0 6.8 3.4 3.4 0 0 1 0-6.8m0 2.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4m25.4-2.2a3.4 3.4 0 1 1 0 6.8 3.4 3.4 0 0 1 0-6.8m0 2.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4" />
+    <rect x="43.6" y="10.9" width="2.6" height="1.5" rx="0.75" opacity="0.55" />
+  </svg>
+)
+
+/** Filled car seen from above, nose pointing down (vertical roads) */
+export const CarTopFill = (p: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 36" width="0.56em" height="1em" fill="currentColor" aria-hidden="true" {...p}>
+    <path
+      fillRule="evenodd"
+      d="M8 1h4c3.3 0 6 2.7 6 6v22c0 3.3-2.7 6-6 6H8c-3.3 0-6-2.7-6-6V7c0-3.3 2.7-6 6-6M5.2 9.2h9.6l-1.2 3H6.4zm-.6 14.8h10.8l-1.6-4.2H6.2zM5 26.2h10v1.4H5z"
+    />
+    <rect x="0" y="19.4" width="2.4" height="1.6" rx="0.8" />
+    <rect x="17.6" y="19.4" width="2.4" height="1.6" rx="0.8" />
+    <rect x="4" y="33" width="3" height="1" rx="0.5" opacity="0.5" />
+    <rect x="13" y="33" width="3" height="1" rx="0.5" opacity="0.5" />
+  </svg>
+)

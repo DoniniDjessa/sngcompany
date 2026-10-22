@@ -1,0 +1,263 @@
+/* ==========================================
+   SNG COMPANY — brand tokens (APEM-CI color way)
+   ========================================== */
+:root {
+  --primary: #76b82a;
+  --primary-light: #94d648;
+  --primary-dark: #5a8f20;
+  --green: #22c55e;
+
+  --secondary: #26abe2;
+  --secondary-dark: #1d88b5;
+
+  --navy: #1e3a8a;
+  --navy-deep: #0f1f4d;
+  --forest: #064e3b;
+  --brand-gradient: linear-gradient(135deg, #064e3b 0%, #1e3a8a 100%);
+
+  --off-white: #f8fafc;
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.06);
+  --text-main: #1e3a8a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --brand-blue: #1e3a8a;
+  --bg-soft: #f0f9ff;
+
+  --max-width: 1400px;
+  --header-height: 100px;
+  --top-bar-height: 40px;
+
+  /* fonts loaded by next/font in app/layout.tsx */
+  --font-primary: var(--font-outfit), sans-serif;          /* big titles */
+  --font-secondary: var(--font-jakarta), sans-serif;       /* text, labels, buttons */
+  --font-serif: var(--font-playfair), Georgia, serif;      /* small titles */
+
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.12);
+
+  --btn-gradient: linear-gradient(135deg, var(--primary) 0%, #3b5c15 100%);
+  --btn-gradient-hover: linear-gradient(135deg, #3b5c15 0%, var(--primary-dark) 100%);
+
+  /* Activity tones */
+  --tone-green: #22c55e;
+  --tone-blue: #26abe2;
+  --tone-orange: #f97316;
+  --tone-rose: #db2777;
+  --tone-violet: #7c3aed;
+}
+
+[data-theme='dark'] {
+  --background: #0f172a;
+  --foreground: #ffffff;
+  --card-bg: #1e293b;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --text-main: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --off-white: #1e293b;
+  --brand-blue: #ffffff;
+  --bg-soft: #1e293b;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-secondary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+h1, h2 {
+  font-family: var(--font-primary);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+/* ---------- Shared site components ---------- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 1rem; }
+}
+
+.btn-primary {
+  background: var(--btn-gradient);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 0;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: var(--transition);
+  box-shadow: 0 10px 20px rgba(118, 184, 42, 0.2);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--btn-gradient-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(118, 184, 42, 0.3);
+}
+
+.btn-outline {
+  border: 2px solid var(--brand-blue);
+  color: var(--brand-blue);
+  padding: 14px 30px;
+  border-radius: 0;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: var(--transition);
+}
+
+.btn-outline:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: white;
+  transform: translateY(-3px);
+}
+
+.badge-premium {
+  display: flex;
+  align-items: center;
+  color: var(--green);
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.badge-premium::before {
+  content: '';
+  width: 40px;
+  height: 4px;
+  background: var(--green);
+  margin-right: 15px;
+}
+
+.title-premium {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  font-weight: 900;
+  color: var(--brand-blue);
+  line-height: 1.1;
+}
+
+.title-premium span {
+  color: var(--green);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* children of a .stagger grid come in one after the other when the section is revealed */
+.reveal .stagger > * {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.reveal.active .stagger > * {
+  animation: staggerIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.reveal.active .stagger > :nth-child(1) { animation-delay: 0.05s; }
+.reveal.active .stagger > :nth-child(2) { animation-delay: 0.17s; }
+.reveal.active .stagger > :nth-child(3) { animation-delay: 0.29s; }
+.reveal.active .stagger > :nth-child(4) { animation-delay: 0.41s; }
+.reveal.active .stagger > :nth-child(5) { animation-delay: 0.53s; }
+.reveal.active .stagger > :nth-child(6) { animation-delay: 0.65s; }
+
+@keyframes staggerIn { to { opacity: 1; transform: none; } }
+
+/* images uncover from left to right when their section is revealed */
+.reveal .img-reveal { clip-path: inset(0 100% 0 0); transition: clip-path 1.2s cubic-bezier(0.7, 0, 0.2, 1) 0.15s; }
+.reveal.active .img-reveal { clip-path: inset(0 0 0 0); }
+
+/* light sweep across primary buttons on hover */
+.btn-primary { position: relative; overflow: hidden; }
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+}
+.btn-primary:hover::after { animation: shine 0.8s ease; }
+@keyframes shine { to { left: 130%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal .stagger > * { opacity: 1; transform: none; transition: none; animation: none; }
+  .reveal .img-reveal { clip-path: none; }
+}
+
+::-webkit-scrollbar { width: 10px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--off-white); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }

@@ -1,4 +1,5 @@
-import { Check, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
+import Link from "next/link"
+import { ArrowRight, Check, Clock, External, Mail, MapPin, Phone, Shield, TrendingUp, Users } from "@/components/icons"
 import ActivityTiles from "@/components/site/ActivityTiles"
 import CmsImage from "@/components/site/CmsImage"
 import HeroCarousel from "@/components/site/HeroCarousel"
@@ -71,22 +72,33 @@ export default async function Home() {
         <ServedZones {...h.zones} />
       </section>
 
-      {/* --- WHY US --- */}
-      <section className={`${styles.graySection} reveal`}>
-        <div className={styles.sectionHead}>
-          <h2 className={styles.sectionTitle}>{h.why.title}</h2>
-        </div>
-        <div className={`${styles.featureGrid} stagger`}>
-          {h.why.items.map((w, i) => {
-            const Icon = WHY_ICONS[i % WHY_ICONS.length]
-            return (
-              <div key={w.title} className={styles.featureCard}>
-                <span className={styles.featureIcon}><Icon /></span>
-                <h3>{w.title}</h3>
-                <p>{w.text}</p>
-              </div>
-            )
-          })}
+      {/* --- WHY US: sticky intro + cards that stack on top of each other while scrolling --- */}
+      <section id="pourquoi" className={styles.why}>
+        <div className={styles.whyGrid}>
+          <div className={`${styles.whyIntro} reveal`}>
+            <p className={styles.eyebrow}>Nos atouts</p>
+            <h2 className={styles.whyTitle}>{h.why.title}</h2>
+            <p className={styles.whyLead}>
+              {h.why.items.length} raisons de confier vos déplacements, votre matériel et vos commandes à une seule équipe.
+            </p>
+            <Link href="/contact" className="btn-primary">Nous contacter <ArrowRight /></Link>
+          </div>
+          <ol className={styles.whyStack}>
+            {h.why.items.map((w, i) => {
+              const Icon = WHY_ICONS[i % WHY_ICONS.length]
+              return (
+                <li key={w.title} className={`${styles.whyCard} ${i % 2 ? styles.whyLight : ""}`} style={{ ["--i" as string]: i }}>
+                  <span className={styles.whyNum} aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.whyIcon}><Icon /></span>
+                  <div className={styles.whyText}>
+                    <h3>{w.title}</h3>
+                    <p>{w.text}</p>
+                  </div>
+                  <span className={styles.whyCount}>{i + 1} / {h.why.items.length}</span>
+                </li>
+              )
+            })}
+          </ol>
         </div>
       </section>
 
@@ -162,6 +174,7 @@ export default async function Home() {
           { id: "engagements", label: "Engagements" },
           { id: "a-propos", label: "Qui sommes-nous" },
           { id: "zones", label: "Zones desservies" },
+          { id: "pourquoi", label: "Pourquoi SNG" },
           { id: "etapes", label: "Comment ça marche" },
           { id: "faq", label: "Questions" },
           { id: "contact", label: "Contact" },

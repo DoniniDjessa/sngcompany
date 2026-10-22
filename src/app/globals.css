@@ -81,7 +81,9 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* clip, not hidden: "hidden" on both html and body turns body into a scroll container
+     and breaks position: sticky everywhere */
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
